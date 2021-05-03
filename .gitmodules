@@ -1,0 +1,3 @@
+[submodule "dataview/external/ParamBin"]
+	path = dataview/external/ParamBin
+	url = https://github.com/whalenpt/ParamBin.git
