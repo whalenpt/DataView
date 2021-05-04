@@ -5,13 +5,14 @@
 #include <QFileSystemModel>
 #include <QModelIndex>
 #include <QStringList>
+#include <filesystem>
 
 class DragListView : public QListView
 {
 public:
-    DragListView(const QString& c_target_path,QWidget* parent = 0);
-    QString getTargetPath() {return target_path;}
-    void setTargetPath(const QString& c_target_path);
+    DragListView(const std::filesystem::path& dirpath,QWidget* parent = 0);
+    std::filesystem::path getTargetDirPath() {return m_target_dirpath;}
+    void setTargetDirPath(const std::filesystem::path& dirpath);
     void getFileNames(QStringList& slist);
     static QString fileMimeType() {return QStringLiteral("filename");}
     bool isDir(QModelIndex& index);
@@ -22,12 +23,9 @@ protected:
 private slots:
     void openDataFile();
 
-//private:
-//    void mousePressEvent(QMouseEvent* event) override;
-
 private:
-    QString target_path;
-    QFileSystemModel* file_model;
+    std::filesystem::path m_target_dirpath;
+    QFileSystemModel* m_file_model;
 };
 
 

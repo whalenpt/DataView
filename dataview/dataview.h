@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QModelIndex>
 #include <QCloseEvent>
+#include <filesystem>
 #include "dataview_global.h"
 
 class GraphFrame;
@@ -20,7 +21,7 @@ class DATAVIEWSHARED_EXPORT DataView : public QDialog
 
 public:
     explicit DataView(QWidget *parent = 0);
-    void setTargetPath(const QString& c_target_path);
+    void setTargetDirPath(const std::filesystem::path& path);
     ~DataView();
 
 private slots:
@@ -29,15 +30,13 @@ private slots:
 
 private:
 
-    QLabel* dir_name;
-    QPushButton* dir_pushButton;
-    DragListView* list_view;
-    GraphFrame* graph_frame;
-    QString target_path;
+    std::filesystem::path m_target_dirpath;
+    GraphFrame* m_graph_frame;
+    DragListView* m_list_view;
+    QLabel* m_dir_name;
+    QPushButton* m_dir_pushButton;
 
     void init();
-//    void writeSettings();
-//    void readSettings();
 };
 
 #endif // DATAVIEW_H

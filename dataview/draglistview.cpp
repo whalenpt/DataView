@@ -1,27 +1,25 @@
 #include "draglistview.h"
 
 #include <QDrag>
-//#include <QDragEnterEvent>
 #include <QMimeData>
+#include <QByteArray>
 #include <QDropEvent>
 #include <QModelIndex>
 #include <QDebug>
 #include <QAction>
+#include <filesystem>
 
-DragListView::DragListView(const QString& c_target_path,QWidget* parent) :
-    QListView(parent),
-    target_path(c_target_path)
+DragListView::DragListView(const std::filesystem::path& dirpath,QWidget* parent) :
+    QListView(parent)
 {
     setDragEnabled(true);
     setDropIndicatorShown(true);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    file_model = new QFileSystemModel(this);
-    file_model->setRootPath(target_path);
-    file_model->setFilter(QDir::NoDotAndDotDot|QDir::Files);
-
-    setModel(file_model);
-    setRootIndex(file_model->index(target_path));
+    m_file_model = new QFileSystemModel(this);
+    m_file_model->setFilter(QDir::NoDotAndDotDot|QDir::Files);
+    setModel(m_file_model);
+    setTargetDirPath(dirpath);
 
     QAction* open_data_action = new QAction("Open data file");
     addAction(open_data_action);
@@ -34,14 +32,6 @@ void DragListView::openDataFile()
 {
     qDebug() << "Open data file action";
 }
-
-//void DragListView::mousePressEvent(QMouseEvent* event)
-//{
-//    if(event->button() == Qt::RightButton)
-//        emit rightMouseClick();
-//    else
-//        QListView::mousePressEvent(event);
-//}
 
 void DragListView::startDrag(Qt::DropActions /*supportedActions*/)
 {
@@ -64,19 +54,23 @@ void DragListView::getFileNames(QStringList& slist){
     QModelIndexList ilist = selectionModel()->selectedIndexes();
     foreach(const QModelIndex& index,ilist){
         QString local_file_name = index.data(Qt::DisplayRole).toString();
-        QString file_name = target_path + local_file_name;
-        slist.append(file_name);
+        std::filesystem::path full_path = m_target_dirpath / std::filesystem::path(local_file_name.toStdString());
+        slist.append(QString::fromStdString(full_path.string()));
     }
 }
 
-void DragListView::setTargetPath(const QString& c_target_path) {
-    target_path = c_target_path;
-    setRootIndex(file_model->index(target_path));
+void DragListView::setTargetDirPath(const std::filesystem::path& dirpath) {
+    m_target_dirpath = dirpath;
+    m_file_model->setRootPath(QString::fromStdString(m_target_dirpath.string()));
+    setRootIndex(m_file_model->index(QString::fromStdString(m_target_dirpath.string())));
 }
 
 bool DragListView::isDir(QModelIndex& index)
 {
-    if(file_model->isDir(index))
+    if(m_file_model->isDir(index))
         return true;
     return false;
 }
+
+
+

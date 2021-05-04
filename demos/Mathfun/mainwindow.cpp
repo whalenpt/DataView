@@ -5,6 +5,7 @@
 #include <QCloseEvent>
 #include <QString>
 #include <QDebug>
+#include <filesystem>
 
 const QString WINDOWSIZE_SETTING("MainWindow/size");
 const QString WINDOWPOS_SETTING("MainWindow/pos");
@@ -13,12 +14,12 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       m_data_view(new DataView)
 {
-    m_data_view->setTargetPath("/Users/pmacbook/Projects/Qt/UPPE/tests/ArgonShock");
+    m_data_view->setTargetDirPath(std::filesystem::path("/Users/pmacbook/Projects/Qt/UPPE/tests/ArgonShock"));
     connect(m_data_view,&DataView::accepted,this,&MainWindow::writeSettings);
     readSettings();
     setCentralWidget(m_data_view);
-//    qDebug() << "Set DataView to main window.";
 }
+
 void MainWindow::closeEvent(QCloseEvent* event)
 {
     writeSettings();
@@ -38,7 +39,6 @@ void MainWindow::writeSettings()
     settings.setValue(WINDOWSIZE_SETTING,size());
     settings.setValue(WINDOWPOS_SETTING,pos());
 }
-
 
 MainWindow::~MainWindow()
 {
