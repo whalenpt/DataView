@@ -2,22 +2,15 @@
 #define TWOCOL_LOG_H
 
 #include <QWidget>
-#include <QtCharts/QChart>
-#include <QtCharts/QChartView>
-#include <QtCharts/QValueAxis>
-#include <QtCharts/QLogValueAxis>
-#include <QtCharts/QLineSeries>
-#include <QDragEnterEvent>
-#include <QDropEvent>
 #include <QStringList>
-#include <vector>
 #include <string>
-#include <fstream>
-#include <parambin.hpp>
-#include "dropchartview.h"
-#include "graphframe.h"
 
 class GraphFrame;
+class QChart;
+class DropChartView;
+class QLineSeries;
+class QValueAxis;
+class QLogValueAxis;
 
 class TwoColLog : public QWidget
 {
@@ -30,12 +23,12 @@ public:
 
 private:
     GraphFrame* parent_frame;
-    QtCharts::QChart* createTwoColChart();
+    QChart* createTwoColChart();
     DropChartView* view;
-    QtCharts::QChart* chart;
-    QtCharts::QLineSeries* series;
-    QtCharts::QValueAxis* axisX;
-    QtCharts::QLogValueAxis* axisY;
+    QChart* chart;
+    QLineSeries* series;
+    QValueAxis* axisX;
+    QLogValueAxis* axisY;
 };
 
-#endif // LOGTWOCOL_H
+#endif // TWOCOL_LOG_H

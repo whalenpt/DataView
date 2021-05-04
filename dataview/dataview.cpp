@@ -1,5 +1,6 @@
 
-#include <QtWidgets>
+#include <QWidget>
+#include <QFileDialog>  
 #include <QFile>
 #include <QString>
 #include <map>

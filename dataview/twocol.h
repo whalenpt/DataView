@@ -1,11 +1,7 @@
-#ifndef TWOCOLGRAPH_H
-#define TWOCOLGRAPH_H
+#ifndef TWOCOL_H
+#define TWOCOL_H
 
 #include <QWidget>
-#include <QtCharts/QChart>
-#include <QtCharts/QChartView>
-#include <QtCharts/QValueAxis>
-#include <QtCharts/QLineSeries>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QStringList>
@@ -13,10 +9,12 @@
 #include <string>
 #include <fstream>
 #include <parambin.hpp>
-#include "dropchartview.h"
-#include "graphframe.h"
 
 class GraphFrame;
+class QChart;
+class DropChartView;
+class QLineSeries;
+class QValueAxis;
 
 class TwoCol : public QWidget
 {
@@ -29,15 +27,14 @@ public:
 
 private:
     GraphFrame* parent_frame;
-    QtCharts::QChart* createTwoColChart();
+    QChart* createTwoColChart();
 
-//    QtCharts::QChartView* view;
     DropChartView* view;
-    QtCharts::QChart* chart;
-    QtCharts::QLineSeries* series;
-    QtCharts::QValueAxis* axisX;
-    QtCharts::QValueAxis* axisY;
+    QChart* chart;
+    QLineSeries* series;
+    QValueAxis* axisX;
+    QValueAxis* axisY;
 };
 
-#endif // TWOCOLGRAPH_H
+#endif // TWOCOL_H
 

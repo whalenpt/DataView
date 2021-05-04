@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.18)
 find_package(Qt6 COMPONENTS Core REQUIRED)
 find_package(Qt6 COMPONENTS Gui REQUIRED)
 find_package(Qt6 COMPONENTS Widgets REQUIRED)
-find_package(Qt5 COMPONENTS Charts REQUIRED)
+find_package(Qt6 COMPONENTS Charts REQUIRED)
 
 add_subdirectory(external/ParamBin/ParamBin)
 add_subdirectory(pwutils)
@@ -41,9 +41,9 @@ target_link_libraries(dataview
 	PRIVATE Qt6::Core
 	PRIVATE Qt6::Gui
 	PRIVATE Qt6::Widgets
-	PRIVATE Qt5::Charts
-	PRIVATE ParamBin::parambin
-	PRIVATE ParamBin::pwutils
+	PRIVATE Qt6::Charts
+	PRIVATE ParamBin::parambin_static
+	PRIVATE pw::pwutils_static
 )
 
 target_include_directories(dataview 

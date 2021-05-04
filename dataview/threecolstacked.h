@@ -1,22 +1,17 @@
-#ifndef THREECOLSTACKEDGRAPHS_H
-#define THREECOLSTACKEDGRAPHS_H
+#ifndef THREECOLSTACKED_H
+#define THREECOLSTACKED_H
 
 #include <QWidget>
-#include <QtCharts/QChart>
-#include <QtCharts/QChartView>
-#include <QtCharts/QValueAxis>
-#include <QtCharts/QLineSeries>
-#include <QDragEnterEvent>
-#include <QDropEvent>
 #include <QStringList>
 #include <vector>
 #include <string>
-#include <fstream>
 #include <parambin.hpp>
-#include "dropchartview.h"
-#include "graphframe.h"
 
 class GraphFrame;
+class DropChartView;
+class QLineSeries;
+class QChart;
+class QValueAxis;
 
 class ThreeColStacked : public QWidget
 {
@@ -34,16 +29,16 @@ private:
     QWidget* createThreeColWidget();
     QWidget* three_col_widget;
 
-    QtCharts::QLineSeries* three_col_series1;
-    QtCharts::QLineSeries* three_col_series2;
+    QLineSeries* three_col_series1;
+    QLineSeries* three_col_series2;
     DropChartView* three_col_view1;
     DropChartView* three_col_view2;
-    QtCharts::QChart* three_col_chart1;
-    QtCharts::QChart* three_col_chart2;
-    QtCharts::QValueAxis* axisX1;
-    QtCharts::QValueAxis* axisX2;
-    QtCharts::QValueAxis* axisY1;
-    QtCharts::QValueAxis* axisY2;
+    QChart* three_col_chart1;
+    QChart* three_col_chart2;
+    QValueAxis* axisX1;
+    QValueAxis* axisX2;
+    QValueAxis* axisY1;
+    QValueAxis* axisY2;
 };
 
 #endif // THREECOLSTACKEDGRAPHS_H

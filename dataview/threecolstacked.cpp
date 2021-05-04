@@ -1,13 +1,15 @@
 #include "threecolstacked.h"
-#include "fileaux.h"
-#include "draglistview.h"
+#include "graphframe.h"
 #include "dropchartview.h"
-#include <QByteArray>
-#include <QDataStream>
+#include "fileaux.h"
+
+#include <QWidget>
+#include <QChart>
+#include <QLineSeries>
+#include <QValueAxis>
 #include <QString>
-#include <QMimeData>
 #include <QVBoxLayout>
-#include <QDebug>
+//#include <QDebug>
 #include <vector>
 #include <pwutils/pwmath.h>
 #include <parambin.hpp>
@@ -25,10 +27,10 @@ ThreeColStacked::ThreeColStacked(GraphFrame* c_parent_frame) : QWidget(c_parent_
 QWidget* ThreeColStacked::createThreeColWidget()
 {
     QWidget* widget = new QWidget();
-    three_col_chart1 = new QtCharts::QChart();
+    three_col_chart1 = new QChart();
     three_col_chart1->legend()->hide();
     three_col_chart1->createDefaultAxes();
-    three_col_series1 = new QtCharts::QLineSeries();
+    three_col_series1 = new QLineSeries();
     three_col_chart1->addSeries(three_col_series1);
 
     three_col_view1 = new DropChartView(three_col_chart1);
@@ -40,8 +42,8 @@ QWidget* ThreeColStacked::createThreeColWidget()
 //        parent_frame,SLOT(graph(const std::string&)));
 
 
-    three_col_series2 = new QtCharts::QLineSeries();
-    three_col_chart2 = new QtCharts::QChart();
+    three_col_series2 = new QLineSeries();
+    three_col_chart2 = new QChart();
     three_col_chart2->legend()->hide();
     three_col_chart2->addSeries(three_col_series2);
     three_col_chart2->createDefaultAxes();
@@ -53,22 +55,22 @@ QWidget* ThreeColStacked::createThreeColWidget()
 //    connect(three_col_view2,SIGNAL(fileDrop(const std::string&)),
 //        parent_frame,SLOT(graph(const std::string&)));
 
-    axisX1 = new QtCharts::QValueAxis;
+    axisX1 = new QValueAxis;
     axisX1->setTickCount(4);
     axisX1->setLabelFormat("%.1e");
     three_col_chart1->setAxisX(axisX1,three_col_series1);
 
-    axisX2 = new QtCharts::QValueAxis;
+    axisX2 = new QValueAxis;
     axisX2->setTickCount(4);
     axisX2->setLabelFormat("%.1e");
     three_col_chart2->setAxisX(axisX2,three_col_series2);
 
-    axisY1 = new QtCharts::QValueAxis;
+    axisY1 = new QValueAxis;
     axisY1->setTickCount(4);
     axisY1->setLabelFormat("%.1e");
     three_col_chart1->setAxisY(axisY1,three_col_series1);
 
-    axisY2 = new QtCharts::QValueAxis;
+    axisY2 = new QValueAxis;
     axisY2->setTickCount(4);
     axisY2->setLabelFormat("%.1e");
     three_col_chart2->setAxisY(axisY2,three_col_series2);

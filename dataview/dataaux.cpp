@@ -3,15 +3,15 @@
 
 #include <string>
 #include <QString>
-#include <QtCharts/QLineSeries>
-#include <QtCharts/QValueAxis>
-#include <QtCharts/QLogValueAxis>
+#include <QLineSeries>
+#include <QValueAxis>
+#include <QLogValueAxis>
 #include <pwutils/pwmath.h>
 #include <parambin.hpp>
 
 namespace dataaux{
 
-void twoColFileToSeries(const std::string& fname,QtCharts::QLineSeries& series,ParamBin& bin)
+void twoColFileToSeries(const std::string& fname,QLineSeries& series,ParamBin& bin)
 {
     series.clear();
     std::vector<double> x;
@@ -40,13 +40,13 @@ void twoColFileToSeries(const std::string& fname,QtCharts::QLineSeries& series,P
     bin.set("max_yval",max_yval);
 }
 
-void setSeriesName(const std::string& fname,QtCharts::QLineSeries& series)
+void setSeriesName(const std::string& fname,QLineSeries& series)
 {
     QString full_filename = QString::fromStdString(fname);
     series.setName(fileaux::getLocalFileName(full_filename));
 }
 
-void formatAxisX(const ParamBin& bin,QtCharts::QValueAxis& axis)
+void formatAxisX(const ParamBin& bin,QValueAxis& axis)
 {
     axis.setRange(bin.getDbl("min_xval"),bin.getDbl("max_xval"));
     if(bin.inBin("xlabel")){
@@ -58,7 +58,7 @@ void formatAxisX(const ParamBin& bin,QtCharts::QValueAxis& axis)
     }
 }
 
-void formatAxisY(const ParamBin& bin,QtCharts::QValueAxis& axis)
+void formatAxisY(const ParamBin& bin,QValueAxis& axis)
 {
     axis.setRange(bin.getDbl("min_yval"),bin.getDbl("max_yval"));
     if(bin.inBin("ylabel")){
@@ -70,7 +70,7 @@ void formatAxisY(const ParamBin& bin,QtCharts::QValueAxis& axis)
     }
 }
 
-void formatAxisLogY(const ParamBin& bin,QtCharts::QLogValueAxis& axis)
+void formatAxisLogY(const ParamBin& bin,QLogValueAxis& axis)
 {
     axis.setRange(bin.getDbl("min_yval"),bin.getDbl("max_yval"));
     if(bin.inBin("ylabel")){

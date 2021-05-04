@@ -1,15 +1,22 @@
 #include "graphframe.h"
 #include "draglistview.h"
 
+#include <QWidget>
+#include <QFrame>
 #include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QDragMoveEvent>
 #include <QMimeData>
+#include <QTextEdit>
 #include <QMessageBox>
-#include <QDebug>
+#include <QStackedLayout>
+
+//#include <QDebug>
 #include <vector>
 #include <parambin.hpp>
 #include "fileaux.h"
-#include "mtwocol.h"
-#include "logtwocol.h"
+#include "twocol_m.h"
+#include "twocol_log.h"
 
 
 GraphFrame::GraphFrame(QWidget* parent) : QFrame(parent)

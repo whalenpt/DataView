@@ -1,14 +1,19 @@
 #include "twocol_m_log.h"
-#include "fileaux.h"
-#include "draglistview.h"
+#include "graphframe.h"
 #include "dropchartview.h"
-#include <QByteArray>
-#include <QDataStream>
-#include <QString>
-#include <QMimeData>
+#include "fileaux.h"
+
+#include <QWidget>
+#include <QPainter>
 #include <QVBoxLayout>
-#include <QDebug>
-#include <vector>
+#include <QStringList>
+#include <QString>
+
+#include <QChart>
+#include <QValueAxis>
+#include <QLogValueAxis>
+#include <QLineSeries>
+
 #include <pwutils/pwmath.h>
 #include <parambin.hpp>
 
@@ -25,17 +30,17 @@ TwoColMLog::TwoColMLog(GraphFrame* c_parent_frame) : QWidget(c_parent_frame),
     setLayout(vbox);
 }
 
-QtCharts::QChart* TwoColMLog::createChart()
+QChart* TwoColMLog::createChart()
 {
-    chart = new QtCharts::QChart();
+    chart = new QChart();
     chart->legend()->setVisible(true);
 
-    axisX = new QtCharts::QValueAxis;
+    axisX = new QValueAxis;
     axisX->setTickCount(4);
     axisX->setLabelFormat("%.1e");
     chart->setAxisX(axisX);
 
-    axisY = new QtCharts::QLogValueAxis;
+    axisY = new QLogValueAxis;
     axisY->setLabelFormat("%.1e");
     chart->setAxisY(axisY);
 
@@ -45,7 +50,7 @@ QtCharts::QChart* TwoColMLog::createChart()
 ParamBin TwoColMLog::createLineSeries(const QString& fname,
                          double& minx,double& maxx,double& miny,double& maxy)
 {
-    QtCharts::QLineSeries* series = new QtCharts::QLineSeries();
+    QLineSeries* series = new QLineSeries();
     series->setName(fileaux::getLocalFileName(fname));
     std::vector<double> x;
     std::vector<double> y;

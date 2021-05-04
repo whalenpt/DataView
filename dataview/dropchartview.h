@@ -1,20 +1,21 @@
 #ifndef DROPCHARTVIEW_H
 #define DROPCHARTVIEW_H
 
-#include <QtCharts/QChart>
-#include <QtCharts/QChartView>
-#include <QDragEnterEvent>
-#include <QDropEvent>
-#include <QDragMoveEvent>
-#include <QMimeData>
+#include <QChartView>
 #include <QStringList>
 
-class DropChartView : public QtCharts::QChartView
+class QDragEnterEvent;
+class QDropEvent;
+class QDragMoveEvent;
+class QChart;
+class QWidget;
+
+class DropChartView : public QChartView
 {
     Q_OBJECT
 
 public:
-    DropChartView(QtCharts::QChart* chart,QWidget* parent=0);
+    DropChartView(QChart* chart,QWidget* parent=0);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
@@ -22,7 +23,6 @@ protected:
     void dragMoveEvent(QDragMoveEvent* event) Q_DECL_OVERRIDE;
 
 signals:
-    //void fileDrop(const std::string& filename);
     void fileDrop(const QStringList& filenames);
 
 };

@@ -1,13 +1,15 @@
 #include "twocol_log.h"
+#include "graphframe.h"
 #include "dataaux.h"
-#include "draglistview.h"
 #include "dropchartview.h"
-#include <QByteArray>
-#include <QDataStream>
+#include <QWidget>
+#include <QChart>
+#include <QLineSeries>
+#include <QValueAxis>
+#include <QLogValueAxis>
 #include <QString>
-#include <QMimeData>
 #include <QVBoxLayout>
-#include <QDebug>
+//#include <QDebug>
 #include <vector>
 #include <pwutils/pwmath.h>
 #include <parambin.hpp>
@@ -25,20 +27,20 @@ TwoColLog::TwoColLog(GraphFrame* c_parent_frame) : QWidget(c_parent_frame),
     setLayout(vbox);
 }
 
-QtCharts::QChart* TwoColLog::createTwoColChart()
+QChart* TwoColLog::createTwoColChart()
 {
-    series = new QtCharts::QLineSeries();
-    chart = new QtCharts::QChart();
+    series = new QLineSeries();
+    chart = new QChart();
     chart->legend()->setVisible(true);
     chart->addSeries(series);
 
-    axisX = new QtCharts::QValueAxis;
+    axisX = new QValueAxis;
     axisX->setTickCount(4);
     axisX->setLabelFormat("%.1e");
     chart->addAxis(axisX,Qt::AlignBottom);
     series->attachAxis(axisX);
 
-    axisY = new QtCharts::QLogValueAxis;
+    axisY = new QLogValueAxis;
     axisY->setLabelFormat("%.1e");
     chart->addAxis(axisY,Qt::AlignLeft);
     series->attachAxis(axisY);
@@ -46,11 +48,11 @@ QtCharts::QChart* TwoColLog::createTwoColChart()
 }
 
 void TwoColLog::graph(const QStringList& fnames){
-    if(fnames.length()>1){
-        qDebug() << QString("TwoColLog::graph does not handle multiple file names");
-    }
-    else
-        graph(fnames[0].toStdString());
+    graph(fnames[0].toStdString());
+//    if(fnames.length()>1){
+//        qDebug() << QString("TwoColLog::graph does not handle multiple file names");
+//    }
+//    else
 }
 
 void TwoColLog::graph(const std::string& fname){

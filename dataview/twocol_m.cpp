@@ -1,14 +1,17 @@
 #include "twocol_m.h"
 #include "fileaux.h"
-#include "draglistview.h"
 #include "dropchartview.h"
-#include <QByteArray>
-#include <QDataStream>
+#include "graphframe.h"
+
+#include <QWidget>
+#include <QPainter>
+#include <QChart>
+#include <QValueAxis>
+#include <QLineSeries>
 #include <QString>
-#include <QMimeData>
+#include <QStringList>
 #include <QVBoxLayout>
-#include <QDebug>
-#include <vector>
+//#include <QDebug>
 #include <pwutils/pwmath.h>
 #include <parambin.hpp>
 
@@ -25,17 +28,17 @@ TwoColM::TwoColM(GraphFrame* c_parent_frame) : QWidget(c_parent_frame),
     setLayout(vbox);
 }
 
-QtCharts::QChart* TwoColM::createChart()
+QChart* TwoColM::createChart()
 {
-    chart = new QtCharts::QChart();
+    chart = new QChart();
     chart->legend()->setVisible(true);
 
-    axisX = new QtCharts::QValueAxis;
+    axisX = new QValueAxis;
     axisX->setTickCount(4);
     axisX->setLabelFormat("%.1e");
     chart->setAxisX(axisX);
 
-    axisY = new QtCharts::QValueAxis;
+    axisY = new QValueAxis;
     axisY->setTickCount(4);
     axisY->setLabelFormat("%.1e");
     chart->setAxisY(axisY);
@@ -45,7 +48,7 @@ QtCharts::QChart* TwoColM::createChart()
 ParamBin TwoColM::createLineSeries(const QString& fname,
                          double& minx,double& maxx,double& miny,double& maxy)
 {
-    QtCharts::QLineSeries* series = new QtCharts::QLineSeries();
+    QLineSeries* series = new QLineSeries();
     series->setName(fileaux::getLocalFileName(fname));
     std::vector<double> x;
     std::vector<double> y;

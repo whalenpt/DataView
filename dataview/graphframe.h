@@ -1,27 +1,15 @@
 #ifndef GRAPHFRAME_H
 #define GRAPHFRAME_H
 
-#include <QFrame>
-#include <QStackedLayout>
-#include <QTextEdit>
 #include <QWidget>
-#include <QtCharts/QChart>
-#include <QtCharts/QChartView>
-#include <QtCharts/QLineSeries>
-#include <QtCharts/QValueAxis>
-#include <QDropEvent>
-#include <QDragEnterEvent>
-#include <QDragMoveEvent>
 #include <QStringList>
-#include <vector>
+#include <QFrame>
 #include <string>
-#include <fstream>
-#include <parambin.hpp>
 #include "twocol.h"
 #include "threecolstacked.h"
-#include "mtwocol.h"
-#include "logtwocol.h"
-#include "mlogtwocol.h"
+#include "twocol_m.h"
+#include "twocol_log.h"
+#include "twocol_m_log.h"
 
 using StrMap = std::map<std::string,std::string>;
 
@@ -30,6 +18,8 @@ class ThreeColStacked;
 class TwoColM;
 class TwoColLog;
 class TwoColMLog;
+class QTextEdit;
+class QStackedLayout;
 
 class GraphFrame : public QFrame
 {

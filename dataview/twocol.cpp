@@ -1,15 +1,19 @@
 #include "twocol.h"
+#include "graphframe.h"
 #include "dataaux.h"
-#include "draglistview.h"
 #include "dropchartview.h"
-#include <QByteArray>
-#include <QDataStream>
+
+#include <QWidget>
+#include <QPainter>
+#include <QChart>
+#include <QValueAxis>
+#include <QLineSeries>
 #include <QString>
-#include <QMimeData>
 #include <QVBoxLayout>
-#include <QDebug>
 #include <vector>
 #include <parambin.hpp>
+
+//#include <QDebug>
 
 TwoCol::TwoCol(GraphFrame* c_parent_frame) : QWidget(c_parent_frame),
     parent_frame(c_parent_frame)
@@ -24,20 +28,20 @@ TwoCol::TwoCol(GraphFrame* c_parent_frame) : QWidget(c_parent_frame),
     setLayout(vbox);
 }
 
-QtCharts::QChart* TwoCol::createTwoColChart()
+QChart* TwoCol::createTwoColChart()
 {
-    series = new QtCharts::QLineSeries();
-    chart = new QtCharts::QChart();
+    series = new QLineSeries();
+    chart = new QChart();
     chart->legend()->setVisible(true);
     chart->addSeries(series);
     chart->createDefaultAxes();
 
-    axisX = new QtCharts::QValueAxis;
+    axisX = new QValueAxis;
     axisX->setTickCount(4);
     axisX->setLabelFormat("%.1e");
     chart->setAxisX(axisX,series);
 
-    axisY = new QtCharts::QValueAxis;
+    axisY = new QValueAxis;
     axisY->setTickCount(4);
     axisY->setLabelFormat("%.1e");
     chart->setAxisY(axisY,series);
