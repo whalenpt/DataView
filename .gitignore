@@ -1,2 +1,7 @@
 [Bb]uild
+[Bb]uild*
+.cmake
+CMakeCache.txt
+CMakeFiles
+*.user
 

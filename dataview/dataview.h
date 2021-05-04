@@ -10,8 +10,6 @@
 #include <QModelIndex>
 #include <QCloseEvent>
 #include "dataview_global.h"
-//#include "graphframe.h"
-//#include "draglistview.h"
 
 class GraphFrame;
 class DragListView;
@@ -24,9 +22,6 @@ public:
     explicit DataView(QWidget *parent = 0);
     void setTargetPath(const QString& c_target_path);
     ~DataView();
-
-//protected:
-//    void closeEvent(QCloseEvent *event);
 
 private slots:
     void graphIfFile(QModelIndex index);
