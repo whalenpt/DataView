@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.19)
 find_package(Qt6 COMPONENTS Core REQUIRED)
 find_package(Qt6 COMPONENTS Gui REQUIRED)
 find_package(Qt6 COMPONENTS Widgets REQUIRED)
-find_package(Qt6 COMPONENTS QtCharts REQUIRED)
+find_package(Qt5 COMPONENTS Charts REQUIRED)
+
+add_subdirectory(external/ParamBin/ParamBin)
+add_subdirectory(pwutils)
 
 set(SOURCE_LIST
 	dataaux.cpp
@@ -38,12 +41,16 @@ target_link_libraries(dataview
 	PRIVATE Qt6::Core
 	PRIVATE Qt6::Gui
 	PRIVATE Qt6::Widgets
-	PRIVATE Qt6::QtCharts
+	PRIVATE Qt5::Charts
+	PRIVATE ParamBin::parambin
+	PRIVATE ParamBin::pwutils
 )
+
+target_include_directories(dataview 
+	PUBLIC external/ParamBin/ParamBin/include
+	PUBLIC pwutils/include
+)
+
 target_compile_definitions(dataview PRIVATE DATAVIEW_LIBRARY)
-
-
-
-
 
 
