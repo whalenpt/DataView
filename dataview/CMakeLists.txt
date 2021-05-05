@@ -1,8 +1,17 @@
 cmake_minimum_required(VERSION 3.18)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 find_package(Qt6 COMPONENTS Core REQUIRED)
 find_package(Qt6 COMPONENTS Gui REQUIRED)
 find_package(Qt6 COMPONENTS Widgets REQUIRED)
-find_package(Qt6 COMPONENTS Charts REQUIRED)
+find_package(Qt6 6.1.0 COMPONENTS Charts REQUIRED)
 
 add_subdirectory(external/ParamBin/ParamBin)
 add_subdirectory(pwutils)
