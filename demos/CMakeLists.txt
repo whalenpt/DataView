@@ -1,1 +1,1 @@
-add_subdirectory(Mathfun)
+add_subdirectory(Optics)

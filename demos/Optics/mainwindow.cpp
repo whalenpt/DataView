@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       m_data_view(new DataView)
 {
-    m_data_view->setTargetDirPath(std::filesystem::path("/Users/pmacbook/Projects/Qt/UPPE/tests/ArgonShock"));
+    m_data_view->setTargetDirPath(std::filesystem::path("data"));
     connect(m_data_view,&DataView::accepted,this,&MainWindow::writeSettings);
     readSettings();
     setCentralWidget(m_data_view);

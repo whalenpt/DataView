@@ -1,0 +1,74 @@
+
+Coordinate Dependency:                  T               
+Propagation Distance:                   3.5             
+Sim Title:                              Argon           
+Simulation Name:                        ArgonShock      
+Target Directory:                       ArgonShock      
+
+INPUT PULSE:
+
+  Carrier Frequency:                    4.709129e14     
+  Carrier Wavelength:                   4.0e-6          
+  Intensity:                            5.0e16          
+
+  T:
+
+    Pulse Width:                        20.0e-15        
+    Shape:                              gauss           
+
+MEDIUM:
+
+  Maximum Frequency:                    1.448963e16     
+  Maximum Wavelength:                   17.0e-6         
+  Minimum Frequency:                    1.10803e14      
+  Minimum Wavelength:                   0.13e-6         
+  Reference Frequency:                  4.709129e14     
+  Reference Wavelength:                 4.0e-6          
+  Susceptibility File:                  argonchi.tab    
+  k0:                                   1.571232e6      
+  k1:                                   0               
+  k2:                                   0               
+  k3:                                   0               
+  n0:                                   1.000278        
+  n2:                                   9.7e-24         
+  vg:                                   2.997092e8      
+
+NUMERICAL GRID:
+
+
+  T:
+
+    Maximum:                            240.0e-15       
+    Minimum:                            -240.0e-15      
+    Number of Points:                   4096            
+
+NUMERICAL SOLVER:
+
+  Method:                               etd35           
+
+  ETD35:
+
+    Contour Points:                     32              
+    Initial Step Size:                  0.035           
+    Mode Cutoff:                        0.01            
+    Relative Error Tolerance:           1.0e-4          
+    Step Size Decrement Threshold:      0.85            
+    Step Size Increment Threshold:      1.25            
+
+REPORT:
+
+  Primary Scale:                        Lcsd            
+
+  REPORTING FILES:
+
+    Envelope:                           on              
+    Field:                              on              
+    Peak Intensity:                     on              
+    Spectrum:                           on              
+
+  REPORTING FREQUENCY:
+
+    Maximum File Reports:               200             
+    Steps Per Output:                   2               
+
+
