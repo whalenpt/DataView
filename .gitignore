@@ -9,3 +9,9 @@ etc
 *.json
 [Bb]uild
 Makefile
+.cmake*
+CMakeCache*
+*.user
+*.usr
+CMakeFiles
+[Bb]uild-*
