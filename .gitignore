@@ -1,7 +1,11 @@
+.DS_Store
+*.m
+*.swp
+*.swo
+tests
+data
+etc
+*.sh
+*.json
 [Bb]uild
-[Bb]uild*
-.cmake
-CMakeCache.txt
-CMakeFiles
-*.user
-
+Makefile
