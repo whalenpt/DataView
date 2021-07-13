@@ -7,6 +7,8 @@
 #include <QModelIndex>
 #include <QDebug>
 #include <QAction>
+#include <QDesktopServices>
+#include <QMessageBox>
 #include <filesystem>
 
 DragListView::DragListView(const std::filesystem::path& dirpath,QWidget* parent) :
@@ -28,11 +30,8 @@ DragListView::DragListView(const std::filesystem::path& dirpath,QWidget* parent)
     connect(open_data_action,&QAction::triggered,this,&DragListView::openDataFile);
 }
 
-#include <QDesktopServices>
-#include <QMessageBox>
 void DragListView::openDataFile()
 {
-    qDebug() << "Open data file action";
     QStringList list;
     getFileNames(list);
     if(list.size() > 10){
@@ -49,13 +48,6 @@ void DragListView::openDataFile()
     for(auto& item : list){
         QDesktopServices::openUrl(QUrl::fromLocalFile(item));
     }
-//    if(!m_list_view->isDir(index)){
-//        QStringList slist;
-//        m_list_view->getFileNames(slist);
-//        std::string fname = slist[0].toStdString();
-//        m_graph_frame->graphOneFile(fname);
-//    }
-//
 }
 
 void DragListView::startDrag(Qt::DropActions /*supportedActions*/)
