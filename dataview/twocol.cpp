@@ -39,12 +39,12 @@ QChart* TwoCol::createTwoColChart()
     axisX = new QValueAxis;
     axisX->setTickCount(4);
     axisX->setLabelFormat("%.1e");
-    chart->setAxisX(axisX,series);
+    chart->addAxis(axisX,Qt::AlignBottom);
 
     axisY = new QValueAxis;
     axisY->setTickCount(4);
     axisY->setLabelFormat("%.1e");
-    chart->setAxisY(axisY,series);
+    chart->addAxis(axisY,Qt::AlignLeft);
     return chart;
 }
 

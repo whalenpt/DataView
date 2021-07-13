@@ -11,7 +11,7 @@
 #include <QVBoxLayout>
 //#include <QDebug>
 #include <vector>
-#include <pwutils/pwmath.h>
+#include <pwutils/pwmath.hpp>
 #include <parambin.hpp>
 
 ThreeColStacked::ThreeColStacked(GraphFrame* c_parent_frame) : QWidget(c_parent_frame),
@@ -58,22 +58,22 @@ QWidget* ThreeColStacked::createThreeColWidget()
     axisX1 = new QValueAxis;
     axisX1->setTickCount(4);
     axisX1->setLabelFormat("%.1e");
-    three_col_chart1->setAxisX(axisX1,three_col_series1);
+    three_col_chart1->addAxis(axisX1,Qt::AlignBottom);
 
     axisX2 = new QValueAxis;
     axisX2->setTickCount(4);
     axisX2->setLabelFormat("%.1e");
-    three_col_chart2->setAxisX(axisX2,three_col_series2);
+    three_col_chart2->addAxis(axisX2,Qt::AlignBottom);
 
     axisY1 = new QValueAxis;
     axisY1->setTickCount(4);
     axisY1->setLabelFormat("%.1e");
-    three_col_chart1->setAxisY(axisY1,three_col_series1);
+    three_col_chart1->addAxis(axisY1,Qt::AlignLeft);
 
     axisY2 = new QValueAxis;
     axisY2->setTickCount(4);
     axisY2->setLabelFormat("%.1e");
-    three_col_chart2->setAxisY(axisY2,three_col_series2);
+    three_col_chart2->addAxis(axisY2,Qt::AlignLeft);
 
     QVBoxLayout* vbox = new QVBoxLayout();
     vbox->addWidget(three_col_view1);
@@ -98,12 +98,12 @@ void ThreeColStacked::graph(const std::string& fname){
     std::vector<double> y2;
     ParamBin bin = readThreeColDoubles(fname,x,y1,y2);
 
-    double min_xval = pw::getMin(x);
-    double max_xval = pw::getMax(x);
-    double min_yval1 = pw::getMin(y1);
-    double max_yval1 = pw::getMax(y1);
-    double min_yval2 = pw::getMin(y2);
-    double max_yval2 = pw::getMax(y2);
+    double min_xval = pw::min(x);
+    double max_xval = pw::max(x);
+    double min_yval1 = pw::min(y1);
+    double max_yval1 = pw::max(y1);
+    double min_yval2 = pw::min(y2);
+    double max_yval2 = pw::max(y2);
     // Workaround QValueAxis setRange issue handling small numbers
     if(fabs(min_xval) < 1.0e-12 || fabs(max_xval) < 1.0e-12){
        double mult_fact = 1.0e15;

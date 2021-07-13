@@ -6,7 +6,7 @@
 #include <QLineSeries>
 #include <QValueAxis>
 #include <QLogValueAxis>
-#include <pwutils/pwmath.h>
+#include <pwutils/pwmath.hpp>
 #include <parambin.hpp>
 
 namespace dataaux{
@@ -17,10 +17,10 @@ void twoColFileToSeries(const std::string& fname,QLineSeries& series,ParamBin& b
     std::vector<double> x;
     std::vector<double> y;
     bin = fileaux::readTwoColDoubles(fname,x,y);
-    double min_xval = pw::getMin(x);
-    double max_xval = pw::getMax(x);
-    double min_yval = pw::getMin(y);
-    double max_yval = pw::getMax(y);
+    double min_xval = pw::min(x);
+    double max_xval = pw::max(x);
+    double min_yval = pw::min(y);
+    double max_yval = pw::max(y);
 
     // Workaround QValueAxis setRange issue handling small numbers
     if(fabs(max_xval - min_xval) < 1.0e-12){

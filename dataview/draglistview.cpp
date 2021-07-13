@@ -28,9 +28,34 @@ DragListView::DragListView(const std::filesystem::path& dirpath,QWidget* parent)
     connect(open_data_action,&QAction::triggered,this,&DragListView::openDataFile);
 }
 
+#include <QDesktopServices>
+#include <QMessageBox>
 void DragListView::openDataFile()
 {
     qDebug() << "Open data file action";
+    QStringList list;
+    getFileNames(list);
+    if(list.size() > 10){
+        QMessageBox lottadata_msgbox;
+        lottadata_msgbox.setText(QString("Are you sure you want to open %1 data files at once?")\
+                .arg(QString::number(list.size())));
+        lottadata_msgbox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        lottadata_msgbox.setDefaultButton(QMessageBox::No);
+        lottadata_msgbox.setIcon(QMessageBox::Warning);
+        int ret = lottadata_msgbox.exec();
+        if(ret == QMessageBox::No)
+            return;
+    } 
+    for(auto& item : list){
+        QDesktopServices::openUrl(QUrl::fromLocalFile(item));
+    }
+//    if(!m_list_view->isDir(index)){
+//        QStringList slist;
+//        m_list_view->getFileNames(slist);
+//        std::string fname = slist[0].toStdString();
+//        m_graph_frame->graphOneFile(fname);
+//    }
+//
 }
 
 void DragListView::startDrag(Qt::DropActions /*supportedActions*/)

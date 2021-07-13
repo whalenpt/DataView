@@ -11,7 +11,7 @@
 #include <QVBoxLayout>
 //#include <QDebug>
 #include <vector>
-#include <pwutils/pwmath.h>
+#include <pwutils/pwmath.hpp>
 #include <parambin.hpp>
 
 TwoColLog::TwoColLog(GraphFrame* c_parent_frame) : QWidget(c_parent_frame),
@@ -69,10 +69,10 @@ void TwoColLog::graph(const std::string& fname){
 //    std::vector<double> y;
 //    ParamBin bin = fileaux::readTwoColDoubles(fname,x,y);
 //
-//    double min_xval = 0.95*pw::getMin(x);
-//    double max_xval = 1.05*pw::getMax(x);
-//    double min_yval = 0.95*pw::getMin(y);
-//    double max_yval = 1.05*pw::getMax(y);
+//    double min_xval = 0.95*pw::min(x);
+//    double max_xval = 1.05*pw::max(x);
+//    double min_yval = 0.95*pw::min(y);
+//    double max_yval = 1.05*pw::max(y);
 
 //    // Workaround QValueAxis setRange issue handling small numbers
 //    if(fabs(min_xval) < 1.0e-12 || fabs(max_xval) < 1.0e-12){

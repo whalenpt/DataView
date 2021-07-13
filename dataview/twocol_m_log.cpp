@@ -14,7 +14,7 @@
 #include <QLogValueAxis>
 #include <QLineSeries>
 
-#include <pwutils/pwmath.h>
+#include <pwutils/pwmath.hpp>
 #include <parambin.hpp>
 
 TwoColMLog::TwoColMLog(GraphFrame* c_parent_frame) : QWidget(c_parent_frame),
@@ -38,11 +38,11 @@ QChart* TwoColMLog::createChart()
     axisX = new QValueAxis;
     axisX->setTickCount(4);
     axisX->setLabelFormat("%.1e");
-    chart->setAxisX(axisX);
+    chart->addAxis(axisX,Qt::AlignBottom);
 
     axisY = new QLogValueAxis;
     axisY->setLabelFormat("%.1e");
-    chart->setAxisY(axisY);
+    chart->addAxis(axisY,Qt::AlignLeft);
 
     return chart;
 }
@@ -57,8 +57,8 @@ ParamBin TwoColMLog::createLineSeries(const QString& fname,
     ParamBin bin = fileaux::readTwoColDoubles(fname.toStdString(),x,y);
     minx = x[0];
     maxx = x[x.size()-1];
-    miny = pw::getMin(y);
-    maxy = pw::getMax(y);
+    miny = pw::min(y);
+    maxy = pw::max(y);
 
     // Workaround QValueAxis setRange issue handling small numbers
     if(fabs(minx) < 1.0e-12 || fabs(maxx) < 1.0e-12){
@@ -106,10 +106,10 @@ void TwoColMLog::graph(const QStringList& fnames){
         min_yval_vec.push_back(miny);
         max_yval_vec.push_back(maxy);
     }
-    double min_xval = pw::getMin(min_xval_vec);
-    double max_xval = pw::getMax(max_xval_vec);
-    double min_yval = pw::getMin(min_yval_vec);
-    double max_yval = pw::getMax(max_yval_vec);
+    double min_xval = pw::min(min_xval_vec);
+    double max_xval = pw::max(max_xval_vec);
+    double min_yval = pw::min(min_yval_vec);
+    double max_yval = pw::max(max_yval_vec);
 
     axisX->setRange(min_xval,max_xval);
     if(bin.inBin("xlabel")){
