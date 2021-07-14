@@ -13,9 +13,15 @@ find_package(Qt6 COMPONENTS Gui REQUIRED)
 find_package(Qt6 COMPONENTS Widgets REQUIRED)
 find_package(Qt6 6.1.0 COMPONENTS Charts REQUIRED)
 
-# Build ParamBin and pwutils libraries statically
-set(PARAMBIN_STATIC ON CACHE BOOL "Build ParamBin as static (ON) or shared library (OFF)")
-set(PWUTILS_STATIC ON CACHE BOOL "Build pwutils as static (ON) or shared library (OFF)")
+#Build ParamBin and pwutils libraries statically
+if(NOT DATAVIEW_STATIC)
+    set(PARAMBIN_STATIC OFF CACHE BOOL "Build ParamBin as static (ON) or shared library (OFF)")
+    set(PWUTILS_STATIC OFF CACHE BOOL "Build pwutils as static (ON) or shared library (OFF)")
+else()
+    set(PARAMBIN_STATIC ON CACHE BOOL "Build ParamBin as static (ON) or shared library (OFF)")
+    set(PWUTILS_STATIC ON CACHE BOOL "Build pwutils as static (ON) or shared library (OFF)")
+endif()
+
 add_subdirectory(external/ParamBin)
 add_subdirectory(external/pwutils)
 
@@ -48,7 +54,7 @@ set(HEADER_LIST
 	twocol_m_log.h
 )
 
-add_library(dataview SHARED ${SOURCE_LIST} ${HEADER_LIST})
+add_library(dataview ${SOURCE_LIST} ${HEADER_LIST})
 target_link_libraries(dataview
 	PRIVATE Qt6::Core
 	PRIVATE Qt6::Gui
@@ -57,11 +63,6 @@ target_link_libraries(dataview
 	PUBLIC ParamBin::parambin
 	PUBLIC pw::pwutils
 )
-
-#target_include_directories(dataview 
-#	PUBLIC external/ParamBin/include
-#	PUBLIC external/pwutils/include
-#)
 
 target_compile_definitions(dataview PRIVATE DATAVIEW_LIBRARY)
 
