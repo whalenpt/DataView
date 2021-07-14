@@ -13,7 +13,7 @@
 #include <QVBoxLayout>
 //#include <QDebug>
 #include <pwutils/pwmath.hpp>
-#include <parambin.hpp>
+#include <ParamBin/parambin.hpp>
 
 TwoColM::TwoColM(GraphFrame* c_parent_frame) : QWidget(c_parent_frame),
     parent_frame(c_parent_frame)

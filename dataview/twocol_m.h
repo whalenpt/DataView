@@ -5,7 +5,7 @@
 #include <QString>
 #include <QStringList>
 #include <vector>
-#include <parambin.hpp>
+#include <ParamBin/parambin.hpp>
 
 class GraphFrame;
 class QChart;

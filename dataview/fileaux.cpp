@@ -8,7 +8,7 @@
 #include <fstream>
 #include <pwutils/pwstrings.h>
 #include <pwutils/pwmath.hpp>
-#include <parambin.hpp>
+#include <ParamBin/parambin.hpp>
 
 namespace fileaux{
 

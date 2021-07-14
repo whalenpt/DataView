@@ -4,7 +4,7 @@
 #include <QString>
 #include <string>
 #include <fstream>
-#include <parambin.hpp>
+#include <ParamBin/parambin.hpp>
 #include <vector>
 
 namespace fileaux{

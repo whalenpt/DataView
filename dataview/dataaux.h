@@ -2,7 +2,7 @@
 #define DATAAUX_H
 
 #include <string>
-#include <parambin.hpp>
+#include <ParamBin/parambin.hpp>
 #include <QLineSeries>
 #include <QValueAxis>
 #include <QLogValueAxis>

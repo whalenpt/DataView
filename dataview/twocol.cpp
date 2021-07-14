@@ -11,7 +11,7 @@
 #include <QString>
 #include <QVBoxLayout>
 #include <vector>
-#include <parambin.hpp>
+#include <ParamBin/parambin.hpp>
 
 //#include <QDebug>
 

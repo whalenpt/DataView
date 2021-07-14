@@ -7,7 +7,7 @@
 #include <QValueAxis>
 #include <QLogValueAxis>
 #include <pwutils/pwmath.hpp>
-#include <parambin.hpp>
+#include <ParamBin/parambin.hpp>
 
 namespace dataaux{
 

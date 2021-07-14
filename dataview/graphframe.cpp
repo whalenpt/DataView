@@ -13,7 +13,7 @@
 
 //#include <QDebug>
 #include <vector>
-#include <parambin.hpp>
+#include <ParamBin/parambin.hpp>
 #include "fileaux.h"
 #include "twocol_m.h"
 #include "twocol_log.h"

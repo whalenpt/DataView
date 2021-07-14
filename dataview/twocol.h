@@ -8,7 +8,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <parambin.hpp>
+#include <ParamBin/parambin.hpp>
 
 class GraphFrame;
 class QChart;

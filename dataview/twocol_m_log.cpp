@@ -15,7 +15,7 @@
 #include <QLineSeries>
 
 #include <pwutils/pwmath.hpp>
-#include <parambin.hpp>
+#include <ParamBin/parambin.hpp>
 
 TwoColMLog::TwoColMLog(GraphFrame* c_parent_frame) : QWidget(c_parent_frame),
     parent_frame(c_parent_frame)

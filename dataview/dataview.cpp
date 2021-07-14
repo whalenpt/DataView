@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 #include <filesystem>
-#include <parambin.hpp>
+#include <ParamBin/parambin.hpp>
 #include "draglistview.h"
 #include "dataview.h"
 #include "graphframe.h"

@@ -13,8 +13,11 @@ find_package(Qt6 COMPONENTS Gui REQUIRED)
 find_package(Qt6 COMPONENTS Widgets REQUIRED)
 find_package(Qt6 6.1.0 COMPONENTS Charts REQUIRED)
 
-add_subdirectory(external/ParamBin/ParamBin)
-add_subdirectory(pwutils)
+# Build ParamBin and pwutils libraries statically
+set(PARAMBIN_STATIC ON CACHE BOOL "Build ParamBin as static (ON) or shared library (OFF)")
+set(PWUTILS_STATIC ON CACHE BOOL "Build pwutils as static (ON) or shared library (OFF)")
+add_subdirectory(external/ParamBin)
+add_subdirectory(external/pwutils)
 
 set(SOURCE_LIST
 	dataaux.cpp
@@ -51,14 +54,14 @@ target_link_libraries(dataview
 	PRIVATE Qt6::Gui
 	PRIVATE Qt6::Widgets
 	PRIVATE Qt6::Charts
-	PRIVATE ParamBin::parambin_static
-	PRIVATE pw::pwutils_static
+	PUBLIC ParamBin::parambin
+	PUBLIC pw::pwutils
 )
 
-target_include_directories(dataview 
-	PUBLIC external/ParamBin/ParamBin/include
-	PUBLIC pwutils/include
-)
+#target_include_directories(dataview 
+#	PUBLIC external/ParamBin/include
+#	PUBLIC external/pwutils/include
+#)
 
 target_compile_definitions(dataview PRIVATE DATAVIEW_LIBRARY)
 
