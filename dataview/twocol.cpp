@@ -8,6 +8,7 @@
 #include <QChart>
 #include <QValueAxis>
 #include <QLineSeries>
+#include <QAbstractSeries>
 #include <QString>
 #include <QVBoxLayout>
 #include <vector>
@@ -34,24 +35,24 @@ QChart* TwoCol::createTwoColChart()
     chart = new QChart();
     chart->legend()->setVisible(true);
     chart->addSeries(series);
-    chart->createDefaultAxes();
 
     axisX = new QValueAxis;
     axisX->setTickCount(4);
     axisX->setLabelFormat("%.1e");
     chart->addAxis(axisX,Qt::AlignBottom);
+    series->attachAxis(axisX);
 
     axisY = new QValueAxis;
     axisY->setTickCount(4);
     axisY->setLabelFormat("%.1e");
     chart->addAxis(axisY,Qt::AlignLeft);
+    series->attachAxis(axisY);
     return chart;
 }
 
 void TwoCol::graph(const QStringList& fnames){
-    if(fnames.length()>1){
+    if(fnames.length()>1)
         qDebug() << QString("TwoCol::graph does not handle multiple file names");
-    }
     else
         graph(fnames[0].toStdString());
 }
