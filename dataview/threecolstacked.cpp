@@ -29,7 +29,6 @@ QWidget* ThreeColStacked::createThreeColWidget()
     QWidget* widget = new QWidget();
     three_col_chart1 = new QChart();
     three_col_chart1->legend()->hide();
-    three_col_chart1->createDefaultAxes();
     three_col_series1 = new QLineSeries();
     three_col_chart1->addSeries(three_col_series1);
 
@@ -46,7 +45,6 @@ QWidget* ThreeColStacked::createThreeColWidget()
     three_col_chart2 = new QChart();
     three_col_chart2->legend()->hide();
     three_col_chart2->addSeries(three_col_series2);
-    three_col_chart2->createDefaultAxes();
     three_col_view2 = new DropChartView(three_col_chart2);
     three_col_view2->setRenderHint(QPainter::Antialiasing);
     connect(three_col_view2,SIGNAL(fileDrop(const QStringList&)),
