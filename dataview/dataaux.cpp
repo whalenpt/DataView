@@ -70,6 +70,18 @@ void formatAxisY(const ParamBin& bin,QValueAxis& axis)
     }
 }
 
+void formatAxisLogX(const ParamBin& bin,QLogValueAxis& axis)
+{
+    axis.setRange(bin.getDbl("min_xval"),bin.getDbl("max_xval"));
+    if(bin.inBin("xlabel")){
+        std::string xlabel = bin.getStr("xlabel");
+        if(bin.inBin("xunit_str")){
+            xlabel = xlabel + " (" + bin.getStr("xunit_str") + ")";
+        }
+        axis.setTitleText(QString::fromStdString(xlabel));
+    }
+}
+
 void formatAxisLogY(const ParamBin& bin,QLogValueAxis& axis)
 {
     axis.setRange(bin.getDbl("min_yval"),bin.getDbl("max_yval"));

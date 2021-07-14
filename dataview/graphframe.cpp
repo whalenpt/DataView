@@ -28,7 +28,6 @@ GraphFrame::GraphFrame(QWidget* parent) : QFrame(parent)
     two_col = new TwoCol(this);
     three_col = new ThreeColStacked(this);
     m_two_col = new TwoColM(this);
-    log_two_col = new TwoColLog(this);
     m_log_two_col = new TwoColMLog(this);
 
     frame_layout = new QStackedLayout();
@@ -36,7 +35,6 @@ GraphFrame::GraphFrame(QWidget* parent) : QFrame(parent)
     frame_layout->addWidget(two_col);
     frame_layout->addWidget(m_two_col);
     frame_layout->addWidget(three_col);
-    frame_layout->addWidget(log_two_col);
     frame_layout->addWidget(m_log_two_col);
     setLayout(frame_layout);
 }
@@ -112,11 +110,11 @@ void GraphFrame::graphOneFile(const std::string& fname){
         fileSignatures[fname] = fileaux::readSignature(fname);
     std::string file_sig = fileSignatures[fname];
     if(file_sig == "two_col_data"){
-        two_col->graph(fname);
+        two_col->graph(fname,AxesType::Standard);
         frame_layout->setCurrentWidget(two_col);
     } else if(file_sig == "two_col_logy_data"){
-        log_two_col->graph(fname);
-        frame_layout->setCurrentWidget(log_two_col);
+        two_col->graph(fname,AxesType::Semilogy);
+        frame_layout->setCurrentWidget(two_col);
     }
     else if(file_sig == "three_col_data"){
         three_col->graph(fname);

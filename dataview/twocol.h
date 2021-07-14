@@ -15,25 +15,33 @@ class QChart;
 class DropChartView;
 class QLineSeries;
 class QValueAxis;
+class QLogValueAxis;
+
+enum class AxesType {Standard,Semilogy,Semilogx,Loglog};
 
 class TwoCol : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit TwoCol(GraphFrame* c_parent_frame);
-    void graph(const std::string& fname);
-    void graph(const QStringList& fnames);
+    explicit TwoCol(GraphFrame* parent_frame);
+    void graph(const std::string& fname,AxesType axes_type = AxesType::Standard);
+    void graph(const QStringList& fnames,AxesType axes_type = AxesType::Standard);
+    void setAxes(AxesType axes_type);
 
 private:
-    GraphFrame* parent_frame;
-    QChart* createTwoColChart();
-
-    DropChartView* view;
-    QChart* chart;
-    QLineSeries* series;
-    QValueAxis* axisX;
-    QValueAxis* axisY;
+    void initChart();
+    void initAxes();
+    void formatAxes(const ParamBin& bin);
+    GraphFrame* m_parent_frame;
+    DropChartView* m_view;
+    QChart* m_chart;
+    QLineSeries* m_series;
+    QValueAxis* m_axisX;
+    QValueAxis* m_axisY;
+    QLogValueAxis* m_axislogX;
+    QLogValueAxis* m_axislogY;
+    AxesType m_axes_type;
 };
 
 #endif // TWOCOL_H

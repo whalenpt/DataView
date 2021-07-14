@@ -8,7 +8,6 @@
 #include "twocol.h"
 #include "threecolstacked.h"
 #include "twocol_m.h"
-#include "twocol_log.h"
 #include "twocol_m_log.h"
 
 using StrMap = std::map<std::string,std::string>;
@@ -16,7 +15,6 @@ using StrMap = std::map<std::string,std::string>;
 class TwoCol;
 class ThreeColStacked;
 class TwoColM;
-class TwoColLog;
 class TwoColMLog;
 class QTextEdit;
 class QStackedLayout;
@@ -44,7 +42,6 @@ private:
     TwoCol* two_col;
     ThreeColStacked* three_col;
     TwoColM* m_two_col;
-    TwoColLog* log_two_col;
     TwoColMLog* m_log_two_col;
 
     StrMap fileSignatures;
