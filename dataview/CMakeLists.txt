@@ -36,7 +36,6 @@ set(SOURCE_LIST
 	threecolstacked.cpp
 	twocol.cpp
 	twocol_m.cpp
-	twocol_m_log.cpp
 )
 
 set(HEADER_LIST
@@ -51,7 +50,6 @@ set(HEADER_LIST
 	threecolstacked.h
 	twocol.h
 	twocol_m.h
-	twocol_m_log.h
 )
 
 add_library(dataview ${SOURCE_LIST} ${HEADER_LIST})
