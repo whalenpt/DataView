@@ -10,7 +10,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
 if(NOT DATAVIEW_STATIC)
     set(BUILD_SHARED_LIBS ON)
     message(STATUS "Building shared DataView library")
