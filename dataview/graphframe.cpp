@@ -16,7 +16,6 @@
 #include <ParamBin/parambin.hpp>
 #include "fileaux.h"
 #include "twocol_m.h"
-#include "twocol_log.h"
 
 
 GraphFrame::GraphFrame(QWidget* parent) : QFrame(parent)

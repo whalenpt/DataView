@@ -6,12 +6,15 @@
 #include <QStringList>
 #include <vector>
 #include <ParamBin/parambin.hpp>
+#include "axesaux.h"
+#include "dataaux.h"
 
 class GraphFrame;
 class QChart;
 class DropChartView;
 class QLineSeries;
 class QValueAxis;
+class QLogValueAxis;
 
 class TwoColM : public QWidget
 {
@@ -19,18 +22,25 @@ class TwoColM : public QWidget
 
 public:
     explicit TwoColM(GraphFrame* c_parent_frame);
-    void graph(const QStringList& fnames);
+    void graph(const QStringList& fnames,AxesType axes_type = AxesType::Standard);
+    void setAxes(AxesType axes_type);
 
 private:
-    GraphFrame* parent_frame;
-    QChart* createChart();
-    ParamBin createLineSeries(const QString& fname,double& minx,double& maxx,double& miny,double& maxy);
-    void clearLineSeries();
-    DropChartView* view;
-    QChart* chart;
-    std::vector<QLineSeries*> line_series_vec;
-    QValueAxis* axisX;
-    QValueAxis* axisY;
+    void initChart();
+    void initAxes();
+    void formatAxes(const ParamBin& bin);
+
+    GraphFrame* m_parent_frame;
+    DropChartView* m_view;
+    QChart* m_chart;
+    std::vector<QLineSeries*> m_line_series_vec;
+    QValueAxis* m_axisX;
+    QValueAxis* m_axisY;
+    QLogValueAxis* m_axislogX;
+    QLogValueAxis* m_axislogY;
+    QList<QValueAxis*> m_axes;
+    QList<QLogValueAxis*> m_logaxes;
+    AxesType m_axes_type;
 };
 
 #endif // MULTITWOCOL_H

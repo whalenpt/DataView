@@ -9,6 +9,7 @@
 #include <string>
 #include <fstream>
 #include <ParamBin/parambin.hpp>
+#include "axesaux.h"
 
 class GraphFrame;
 class QChart;
@@ -17,7 +18,6 @@ class QLineSeries;
 class QValueAxis;
 class QLogValueAxis;
 
-enum class AxesType {Standard,Semilogy,Semilogx,Loglog};
 
 class TwoCol : public QWidget
 {
@@ -41,6 +41,8 @@ private:
     QValueAxis* m_axisY;
     QLogValueAxis* m_axislogX;
     QLogValueAxis* m_axislogY;
+    QList<QValueAxis*> m_axes;
+    QList<QLogValueAxis*> m_logaxes;
     AxesType m_axes_type;
 };
 

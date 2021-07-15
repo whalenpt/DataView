@@ -26,6 +26,7 @@ add_subdirectory(external/ParamBin)
 add_subdirectory(external/pwutils)
 
 set(SOURCE_LIST
+	axesaux.cpp
 	dataaux.cpp
 	dataview.cpp
 	draglistview.cpp
@@ -34,12 +35,12 @@ set(SOURCE_LIST
 	graphframe.cpp
 	threecolstacked.cpp
 	twocol.cpp
-	twocol_log.cpp
 	twocol_m.cpp
 	twocol_m_log.cpp
 )
 
 set(HEADER_LIST
+	axesaux.h
 	dataaux.h
 	dataview.h
 	dataview_global.h
@@ -49,7 +50,6 @@ set(HEADER_LIST
 	graphframe.h
 	threecolstacked.h
 	twocol.h
-	twocol_log.h
 	twocol_m.h
 	twocol_m_log.h
 )

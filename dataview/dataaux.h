@@ -9,7 +9,10 @@
 
 namespace dataaux{
     void twoColFileToSeries(const std::string& fname,QLineSeries& series,ParamBin& bin);
+    void twoColFilesToSeries(const QStringList& fnames,\
+        std::vector<QLineSeries*>& line_series_vec,ParamBin& bin);
     void setSeriesName(const std::string& fname,QLineSeries& series);
+    void setSeriesName(const QString& fname,QLineSeries& series);
     void formatAxisX(const ParamBin& bin,QValueAxis& axis);
     void formatAxisY(const ParamBin& bin,QValueAxis& axis);
     void formatAxisLogX(const ParamBin& bin,QLogValueAxis& axis);

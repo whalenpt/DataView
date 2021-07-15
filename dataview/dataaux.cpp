@@ -34,17 +34,52 @@ void twoColFileToSeries(const std::string& fname,QLineSeries& series,ParamBin& b
            series.append(x[i],y[i]);
     }
 
+    setSeriesName(fname,series);
     bin.set("min_xval",min_xval);
     bin.set("max_xval",max_xval);
     bin.set("min_yval",min_yval);
     bin.set("max_yval",max_yval);
 }
 
-void setSeriesName(const std::string& fname,QLineSeries& series)
+void twoColFilesToSeries(const QStringList& fnames,\
+        std::vector<QLineSeries*>& line_series_vec,ParamBin& bin)
 {
-    QString full_filename = QString::fromStdString(fname);
-    series.setName(fileaux::getLocalFileName(full_filename));
+    for(auto item : line_series_vec)
+        delete item;
+    line_series_vec.clear();
+
+    std::vector<double> min_xvals,max_xvals,min_yvals,max_yvals;
+    QString fname = fnames[0];
+
+    for(auto& fname : fnames){
+        ParamBin single_bin;
+        line_series_vec.push_back(new QLineSeries);
+        twoColFileToSeries(fname.toStdString(),*line_series_vec.back(),single_bin);
+        setSeriesName(fname,*line_series_vec.back());
+        min_xvals.push_back(single_bin.getDbl("min_xval"));
+        max_xvals.push_back(single_bin.getDbl("max_xval"));
+        min_yvals.push_back(single_bin.getDbl("min_yval"));
+        max_yvals.push_back(single_bin.getDbl("max_yval"));
+    }
+    double min_xval = pw::min(min_xvals);
+    double max_xval = pw::max(max_xvals);
+    double min_yval = pw::min(min_yvals);
+    double max_yval = pw::max(max_yvals);
+
+    bin.set("min_xval",min_xval);
+    bin.set("max_xval",max_xval);
+    bin.set("min_yval",min_yval);
+    bin.set("max_yval",max_yval);
 }
+
+void setSeriesName(const std::string& fname,QLineSeries& series) {
+    setSeriesName(QString::fromStdString(fname),series);
+}
+
+void setSeriesName(const QString& fname,QLineSeries& series) {
+    series.setName(fileaux::getLocalFileName(fname));
+}
+
 
 void formatAxisX(const ParamBin& bin,QValueAxis& axis)
 {
