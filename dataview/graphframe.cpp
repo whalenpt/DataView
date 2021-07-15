@@ -10,8 +10,6 @@
 #include <QTextEdit>
 #include <QMessageBox>
 #include <QStackedLayout>
-
-//#include <QDebug>
 #include <vector>
 #include <ParamBin/parambin.hpp>
 #include "fileaux.h"
@@ -22,20 +20,18 @@ GraphFrame::GraphFrame(QWidget* parent) : QFrame(parent)
 {
     setAcceptDrops(true);
 
-    file_textedit = new QTextEdit(this);
-    file_textedit->setReadOnly(true);
-    two_col = new TwoCol(this);
-    three_col = new ThreeColStacked(this);
-    m_two_col = new TwoColM(this);
-    m_log_two_col = new TwoColMLog(this);
+    m_file_textedit = new QTextEdit(this);
+    m_file_textedit->setReadOnly(true);
+    m_twocol = new TwoCol(this);
+    m_threecol = new ThreeColStacked(this);
+    m_twocolM = new TwoColM(this);
 
-    frame_layout = new QStackedLayout();
-    frame_layout->addWidget(file_textedit);
-    frame_layout->addWidget(two_col);
-    frame_layout->addWidget(m_two_col);
-    frame_layout->addWidget(three_col);
-    frame_layout->addWidget(m_log_two_col);
-    setLayout(frame_layout);
+    m_frame_layout = new QStackedLayout();
+    m_frame_layout->addWidget(m_file_textedit);
+    m_frame_layout->addWidget(m_twocol);
+    m_frame_layout->addWidget(m_twocolM);
+    m_frame_layout->addWidget(m_threecol);
+    setLayout(m_frame_layout);
 }
 
 void GraphFrame::dragEnterEvent(QDragEnterEvent *event)
@@ -94,13 +90,12 @@ void GraphFrame::graphMultiFile(const QStringList& filenames)
             return;
         }
     }
-
     if(file_sig == "two_col_data"){
-        m_two_col->graph(filenames);
-        frame_layout->setCurrentWidget(m_two_col);
+        m_twocolM->graph(filenames,AxesType::Standard);
+        m_frame_layout->setCurrentWidget(m_twocolM);
     } else if(file_sig == "two_col_logy_data"){
-        m_log_two_col->graph(filenames);
-        frame_layout->setCurrentWidget(m_log_two_col);
+        m_twocolM->graph(filenames,AxesType::Semilogy);
+        m_frame_layout->setCurrentWidget(m_twocolM);
     }
 }
 
@@ -109,15 +104,15 @@ void GraphFrame::graphOneFile(const std::string& fname){
         fileSignatures[fname] = fileaux::readSignature(fname);
     std::string file_sig = fileSignatures[fname];
     if(file_sig == "two_col_data"){
-        two_col->graph(fname,AxesType::Standard);
-        frame_layout->setCurrentWidget(two_col);
+        m_twocol->graph(fname,AxesType::Standard);
+        m_frame_layout->setCurrentWidget(m_twocol);
     } else if(file_sig == "two_col_logy_data"){
-        two_col->graph(fname,AxesType::Semilogy);
-        frame_layout->setCurrentWidget(two_col);
+        m_twocol->graph(fname,AxesType::Semilogy);
+        m_frame_layout->setCurrentWidget(m_twocol);
     }
     else if(file_sig == "three_col_data"){
-        three_col->graph(fname);
-        frame_layout->setCurrentWidget(three_col);
+        m_threecol->graph(fname);
+        m_frame_layout->setCurrentWidget(m_threecol);
     }
     else
         displayFileText(fname);
@@ -139,7 +134,7 @@ void GraphFrame::displayFileText(const std::string& fname)
         QMessageBox::information(0,"info",file.errorString());
     }
     QTextStream infile(&file);
-    file_textedit->setText(infile.readAll());
-    frame_layout->setCurrentWidget(file_textedit);
+    m_file_textedit->setText(infile.readAll());
+    m_frame_layout->setCurrentWidget(m_file_textedit);
 }
 

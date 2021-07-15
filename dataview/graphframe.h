@@ -8,7 +8,6 @@
 #include "twocol.h"
 #include "threecolstacked.h"
 #include "twocol_m.h"
-#include "twocol_m_log.h"
 
 using StrMap = std::map<std::string,std::string>;
 
@@ -37,12 +36,11 @@ protected:
     void dragMoveEvent(QDragMoveEvent* event) Q_DECL_OVERRIDE;
 
 private:
-    QStackedLayout* frame_layout;
-    QTextEdit* file_textedit;
-    TwoCol* two_col;
-    ThreeColStacked* three_col;
-    TwoColM* m_two_col;
-    TwoColMLog* m_log_two_col;
+    QStackedLayout* m_frame_layout;
+    QTextEdit* m_file_textedit;
+    TwoCol* m_twocol;
+    ThreeColStacked* m_threecol;
+    TwoColM* m_twocolM;
 
     StrMap fileSignatures;
     bool fileSignatureExists(const std::string& fname);
