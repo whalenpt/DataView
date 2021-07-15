@@ -36,17 +36,18 @@ void setAxes(AxesType axes_type,QChart* chart,QLineSeries* series,\
     for(auto item : series->attachedAxes())
         series->detachAxis(item);
 
-    if(axes_type == AxesType::Standard && axes.size() >= 2){
+    if(axes_type == AxesType::Standard){
         chart->addAxis(axes[0],Qt::AlignBottom);
         chart->addAxis(axes[1],Qt::AlignLeft);
         series->attachAxis(axes[0]);
         series->attachAxis(axes[1]);
-    } else if(axes_type == AxesType::Semilogy && axes.size() >= 4) {
+    } else if(axes_type == AxesType::Semilogy) {
+        qDebug() << "Switching to Semilogy";
         chart->addAxis(axes[0],Qt::AlignBottom);
         chart->addAxis(logaxes[1],Qt::AlignLeft);
         series->attachAxis(axes[0]);
         series->attachAxis(logaxes[1]);
-    } else if(axes_type == AxesType::Semilogx && axes.size() >=3) {
+    } else if(axes_type == AxesType::Semilogx) {
         chart->addAxis(logaxes[0],Qt::AlignBottom);
         chart->addAxis(axes[1],Qt::AlignLeft);
         series->attachAxis(logaxes[0]);

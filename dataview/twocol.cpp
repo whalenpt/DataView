@@ -52,7 +52,6 @@ void TwoCol::setAxes(AxesType axes_type) {
         return;
     m_axes_type = axes_type;
     axesaux::setAxes(axes_type,m_chart,m_series,m_axes,m_logaxes);
-
 //    m_chart->removeAxis(m_chart->axes(Qt::Horizontal,m_series).at(0));
 //    m_chart->removeAxis(m_chart->axes(Qt::Vertical,m_series).at(0));
 //    for(auto item : m_series->attachedAxes())
@@ -134,7 +133,7 @@ void TwoCol::graph(const std::string& fname,AxesType axes_type)
     ParamBin bin;
     dataaux::twoColFileToSeries(fname,*m_series,bin);
 //    qDebug() << "AxesType: " << QString::number(static_cast<std::underlying_type<AxesType>::type>(axes_type));
-    std::cout << bin << std::endl;
+//    std::cout << bin << std::endl;
     this->setAxes(axes_type);
     this->formatAxes(bin);
 }
