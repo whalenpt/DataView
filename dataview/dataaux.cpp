@@ -52,14 +52,13 @@ void twoColFilesToSeries(const QStringList& fnames,\
     QString fname = fnames[0];
 
     for(auto& fname : fnames){
-        ParamBin single_bin;
         line_series_vec.push_back(new QLineSeries);
-        twoColFileToSeries(fname.toStdString(),*line_series_vec.back(),single_bin);
+        twoColFileToSeries(fname.toStdString(),*line_series_vec.back(),bin);
         setSeriesName(fname,*line_series_vec.back());
-        min_xvals.push_back(single_bin.getDbl("min_xval"));
-        max_xvals.push_back(single_bin.getDbl("max_xval"));
-        min_yvals.push_back(single_bin.getDbl("min_yval"));
-        max_yvals.push_back(single_bin.getDbl("max_yval"));
+        min_xvals.push_back(bin.getDbl("min_xval"));
+        max_xvals.push_back(bin.getDbl("max_xval"));
+        min_yvals.push_back(bin.getDbl("min_yval"));
+        max_yvals.push_back(bin.getDbl("max_yval"));
     }
     double min_xval = pw::min(min_xvals);
     double max_xval = pw::max(max_xvals);
