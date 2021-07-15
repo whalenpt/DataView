@@ -44,8 +44,6 @@ TwoColM::TwoColM(GraphFrame* parent_frame) : QWidget(parent_frame),
 }
 
 void TwoColM::setAxes(AxesType axes_type) {
-    if(axes_type == m_axes_type)
-        return;
     m_axes_type = axes_type;
     axesaux::setAxes(axes_type,m_chart,m_line_series_vec,m_axes,m_logaxes);
 }
