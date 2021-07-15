@@ -14,9 +14,12 @@ namespace dataaux{
 void twoColFileToSeries(const std::string& fname,QLineSeries& series,ParamBin& bin)
 {
     series.clear();
+    series.setUseOpenGL(true);
     std::vector<double> x;
     std::vector<double> y;
     bin = fileaux::readTwoColDoubles(fname,x,y);
+
+
     double min_xval = pw::min(x);
     double max_xval = pw::max(x);
     double min_yval = pw::min(y);
@@ -33,7 +36,6 @@ void twoColFileToSeries(const std::string& fname,QLineSeries& series,ParamBin& b
         for(unsigned int i = 0; i < x.size(); i++)
            series.append(x[i],y[i]);
     }
-
     setSeriesName(fname,series);
     bin.set("min_xval",min_xval);
     bin.set("max_xval",max_xval);

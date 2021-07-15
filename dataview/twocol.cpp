@@ -52,31 +52,6 @@ void TwoCol::setAxes(AxesType axes_type) {
         return;
     m_axes_type = axes_type;
     axesaux::setAxes(axes_type,m_chart,m_series,m_axes,m_logaxes);
-//    m_chart->removeAxis(m_chart->axes(Qt::Horizontal,m_series).at(0));
-//    m_chart->removeAxis(m_chart->axes(Qt::Vertical,m_series).at(0));
-//    for(auto item : m_series->attachedAxes())
-//        m_series->detachAxis(item);
-//    if(axes_type == AxesType::Standard){
-//        m_chart->addAxis(m_axisX,Qt::AlignBottom);
-//        m_chart->addAxis(m_axisY,Qt::AlignLeft);
-//        m_series->attachAxis(m_axisX);
-//        m_series->attachAxis(m_axisY);
-//    } else if(axes_type == AxesType::Semilogy) {
-//        m_chart->addAxis(m_axisX,Qt::AlignBottom);
-//        m_chart->addAxis(m_axislogY,Qt::AlignLeft);
-//        m_series->attachAxis(m_axisX);
-//        m_series->attachAxis(m_axislogY);
-//    } else if(axes_type == AxesType::Semilogx) {
-//        m_chart->addAxis(m_axislogX,Qt::AlignBottom);
-//        m_chart->addAxis(m_axisY,Qt::AlignLeft);
-//        m_series->attachAxis(m_axislogX);
-//        m_series->attachAxis(m_axisY);
-//    } else if(axes_type == AxesType::Loglog){
-//        m_chart->addAxis(m_axislogX,Qt::AlignBottom);
-//        m_chart->addAxis(m_axislogY,Qt::AlignLeft);
-//        m_series->attachAxis(m_axislogX);
-//        m_series->attachAxis(m_axislogY);
-//    }
 }
 
 void TwoCol::initChart()
@@ -132,8 +107,6 @@ void TwoCol::graph(const std::string& fname,AxesType axes_type)
 {
     ParamBin bin;
     dataaux::twoColFileToSeries(fname,*m_series,bin);
-//    qDebug() << "AxesType: " << QString::number(static_cast<std::underlying_type<AxesType>::type>(axes_type));
-//    std::cout << bin << std::endl;
     this->setAxes(axes_type);
     this->formatAxes(bin);
 }
