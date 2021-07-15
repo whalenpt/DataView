@@ -20,7 +20,6 @@ TwoColM::TwoColM(GraphFrame* parent_frame) : QWidget(parent_frame),
     m_parent_frame(parent_frame)
 {
     setAcceptDrops(true);
-
     m_chart = new QChart();
     m_axisX = new QValueAxis;
     m_axisY = new QValueAxis;
@@ -89,50 +88,22 @@ void TwoColM::formatAxes(const ParamBin& bin)
     }
 }
 
+void TwoColM::clearLineSeries(){
+    for(auto series : m_chart->series())
+        m_chart->removeSeries(series);
+    for(auto series : m_line_series_vec)
+        delete series;
+    m_line_series_vec.clear();
+}
+
 void TwoColM::graph(const QStringList& fnames,AxesType axes_type){
 
     ParamBin bin;
     dataaux::twoColFilesToSeries(fnames,m_line_series_vec,bin);
+    for(auto series : m_line_series_vec)
+        m_chart->addSeries(series);
     this->setAxes(axes_type);
     this->formatAxes(bin);
-
-//    //clearLineSeries();
-//    std::vector<double> min_xval_vec;
-//    std::vector<double> max_xval_vec;
-//    std::vector<double> min_yval_vec;
-//    std::vector<double> max_yval_vec;
-//
-//    ParamBin bin;
-//    for(int i = 0; i < fnames.size(); i++){
-//        QString fname = fnames[i];
-//        double minx,maxx,miny,maxy;
-//        bin = createLineSeries(fname,minx,maxx,miny,maxy);
-//        min_xval_vec.push_back(minx);
-//        max_xval_vec.push_back(maxx);
-//        min_yval_vec.push_back(miny);
-//        max_yval_vec.push_back(maxy);
-//    }
-//    double min_xval = pw::min(min_xval_vec);
-//    double max_xval = pw::max(max_xval_vec);
-//    double min_yval = pw::min(min_yval_vec);
-//    double max_yval = pw::max(max_yval_vec);
-//
-//    axisX->setRange(min_xval,max_xval);
-//    if(bin.inBin("xlabel")){
-//        std::string xlabel = bin.getStr("xlabel");
-//        if(bin.inBin("xunit_str")){
-//            xlabel = xlabel + " (" + bin.getStr("xunit_str") + ")";
-//        }
-//        axisX->setTitleText(QString::fromStdString(xlabel));
-//    }
-//    axisY->setRange(min_yval,max_yval);
-//    if(bin.inBin("ylabel")){
-//        std::string ylabel = bin.getStr("ylabel");
-//        if(bin.inBin("yunit_str")){
-//            ylabel = ylabel + " (" + bin.getStr("yunit_str") + ")";
-//        }
-//        axisY->setTitleText(QString::fromStdString(ylabel));
-//    }
 }
 
 

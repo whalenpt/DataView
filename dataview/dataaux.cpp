@@ -64,6 +64,10 @@ void twoColFilesToSeries(const QStringList& fnames,\
     double max_xval = pw::max(max_xvals);
     double min_yval = pw::min(min_yvals);
     double max_yval = pw::max(max_yvals);
+//    qDebug() << QString("Number of series recorded %1").arg(line_series_vec.size());
+//    qDebug() << "Max xval" << QString::number(max_xval);
+//    qDebug() << "Max yval" << QString::number(max_yval);
+//    qDebug() << "Number of points in series 0: " << QString::number(line_series_vec.back()->points().size());
 
     bin.set("min_xval",min_xval);
     bin.set("max_xval",max_xval);

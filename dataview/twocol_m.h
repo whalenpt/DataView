@@ -29,6 +29,7 @@ private:
     void initChart();
     void initAxes();
     void formatAxes(const ParamBin& bin);
+    void clearLineSeries();
 
     GraphFrame* m_parent_frame;
     DropChartView* m_view;
