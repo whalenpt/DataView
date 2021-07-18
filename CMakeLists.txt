@@ -19,7 +19,7 @@ else()
     message(STATUS "Building static DataView library")
 endif()
 
-add_subdirectory(dataview)
+add_subdirectory(src)
 if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     if(DATAVIEW_DEMOS)
         add_subdirectory(demos)
