@@ -1,7 +1,10 @@
-#include "twocol_m.h"
-#include "fileaux.h"
-#include "dropchartview.h"
-#include "graphframe.h"
+
+
+#include "graphgui/graphtype/twocol_m.h"
+#include "graphgui/graphframe.h"
+#include "graphgui/dropchartview.h"
+#include "graphgui/axesaux.h"
+#include "core/dataaux.h"
 
 #include <QWidget>
 #include <QPainter>
@@ -12,7 +15,6 @@
 #include <QString>
 #include <QStringList>
 #include <QVBoxLayout>
-//#include <QDebug>
 #include <pwutils/pwmath.hpp>
 #include <ParamBin/parambin.hpp>
 

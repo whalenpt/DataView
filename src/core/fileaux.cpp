@@ -1,5 +1,5 @@
 
-#include "fileaux.h"
+#include "core/fileaux.h"
 #include <QMessageBox>
 #include <QString>
 #include <QFileInfo>

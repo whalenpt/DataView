@@ -1,5 +1,10 @@
-#include "graphframe.h"
-#include "draglistview.h"
+
+#include "graphgui/graphframe.h"
+#include "graphgui/graphtype/twocol_m.h"
+#include "graphgui/graphtype/twocol.h"
+#include "graphgui/graphtype/threecolstacked.h"
+#include "listgui/draglistview.h"
+#include "core/fileaux.h"
 
 #include <QWidget>
 #include <QFrame>
@@ -10,10 +15,9 @@
 #include <QTextEdit>
 #include <QMessageBox>
 #include <QStackedLayout>
+
 #include <vector>
 #include <ParamBin/parambin.hpp>
-#include "fileaux.h"
-#include "twocol_m.h"
 
 
 GraphFrame::GraphFrame(QWidget* parent) : QFrame(parent)

@@ -11,9 +11,8 @@
 #include <QCloseEvent>
 #include <filesystem>
 #include "dataview_global.h"
-
-class GraphFrame;
-class DragListView;
+#include "graphgui/graphframe.h"
+#include "listgui/draglistview.h"
 
 class DATAVIEWSHARED_EXPORT DataView : public QDialog
 {

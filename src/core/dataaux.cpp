@@ -1,5 +1,5 @@
-#include "dataaux.h"
-#include "fileaux.h"
+#include "core/dataaux.h"
+#include "core/fileaux.h"
 
 #include <string>
 #include <QString>

@@ -5,18 +5,17 @@
 #include <QStringList>
 #include <QFrame>
 #include <string>
-#include "twocol.h"
-#include "threecolstacked.h"
-#include "twocol_m.h"
 
 using StrMap = std::map<std::string,std::string>;
 
 class TwoCol;
 class ThreeColStacked;
 class TwoColM;
-class TwoColMLog;
 class QTextEdit;
 class QStackedLayout;
+class QDragEnterEvent;
+class QDropEvent;
+class QDragMoveEvent;
 
 class GraphFrame : public QFrame
 {

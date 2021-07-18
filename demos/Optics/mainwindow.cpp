@@ -1,6 +1,6 @@
 
-#include "dataview.h"
 #include "mainwindow.h"
+#include <DataView>
 #include <QVBoxLayout>
 #include <QSettings>
 #include <QCloseEvent>

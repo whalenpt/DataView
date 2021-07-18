@@ -1,7 +1,8 @@
-#include "threecolstacked.h"
-#include "graphframe.h"
-#include "dropchartview.h"
-#include "fileaux.h"
+
+#include "graphgui/graphframe.h"
+#include "graphgui/dropchartview.h"
+#include "graphgui/graphtype/threecolstacked.h"
+#include "core/fileaux.h"
 
 #include <QWidget>
 #include <QChart>
@@ -9,7 +10,6 @@
 #include <QValueAxis>
 #include <QString>
 #include <QVBoxLayout>
-//#include <QDebug>
 #include <vector>
 #include <pwutils/pwmath.hpp>
 #include <ParamBin/parambin.hpp>

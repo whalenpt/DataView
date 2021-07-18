@@ -13,14 +13,17 @@ add_executable(${THIS}
     mainwindow.cpp
     mainwindow.h
 )
-target_include_directories(${THIS}
-    PUBLIC ${CMAKE_SOURCE_DIR}/dataview
-)
 
 target_link_libraries(${THIS}
-    PRIVATE Qt6::Widgets
-    PRIVATE dataview
+    PUBLIC Qt6::Widgets
+    PUBLIC dataview
 )
+
+#target_include_directories(${THIS}
+#    PUBLIC ${CMAKE_SOURCE_DIR}/dataview
+#)
+
+
 
 add_custom_target(copy_assets
 	COMMAND ${CMAKE_COMMAND} -E copy_directory 

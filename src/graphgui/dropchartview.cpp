@@ -1,6 +1,6 @@
 
-#include "dropchartview.h"
-#include "draglistview.h"
+#include "graphgui/dropchartview.h"
+#include "listgui/draglistview.h"
 #include <QChart>
 #include <QWidget>
 #include <QDragEnterEvent>

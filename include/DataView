@@ -1,0 +1,7 @@
+#ifndef DATAVIEW
+#define DATAVIEW
+
+#include "dataview.h"
+
+#endif //DATAVIEW
+

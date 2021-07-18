@@ -1,15 +1,12 @@
-#ifndef TWOCOL_H
-#define TWOCOL_H
+#ifndef TWOCOL_M_H
+#define TWOCOL_M_H
 
 #include <QWidget>
-#include <QDragEnterEvent>
-#include <QDropEvent>
+#include <QString>
 #include <QStringList>
 #include <vector>
-#include <string>
-#include <fstream>
 #include <ParamBin/parambin.hpp>
-#include "axesaux.h"
+#include "graphgui/axesaux.h"
 
 class GraphFrame;
 class QChart;
@@ -18,14 +15,12 @@ class QLineSeries;
 class QValueAxis;
 class QLogValueAxis;
 
-
-class TwoCol : public QWidget
+class TwoColM : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit TwoCol(GraphFrame* parent_frame);
-    void graph(const std::string& fname,AxesType axes_type = AxesType::Standard);
+    explicit TwoColM(GraphFrame* parent_frame);
     void graph(const QStringList& fnames,AxesType axes_type = AxesType::Standard);
     void setAxes(AxesType axes_type);
 
@@ -33,10 +28,12 @@ private:
     void initChart();
     void initAxes();
     void formatAxes(const ParamBin& bin);
+    void clearLineSeries();
+
     GraphFrame* m_parent_frame;
     DropChartView* m_view;
     QChart* m_chart;
-    QLineSeries* m_series;
+    std::vector<QLineSeries*> m_line_series_vec;
     QValueAxis* m_axisX;
     QValueAxis* m_axisY;
     QLogValueAxis* m_axislogX;
@@ -46,5 +43,4 @@ private:
     AxesType m_axes_type;
 };
 
-#endif // TWOCOL_H
-
+#endif // MULTITWOCOL_H
