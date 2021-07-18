@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.18)
 project(DataView VERSION 0.0.1 DESCRIPTION "Qt GUI for visualizing simple data files")
 option(DATAVIEW_STATIC "Build DataView as static (ON) or shared library (OFF)" OFF)
+option(DATAVIEW_DEMOS "Build DataView demos" ON)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -19,5 +20,10 @@ else()
 endif()
 
 add_subdirectory(dataview)
-add_subdirectory(demos)
+if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+    if(DATAVIEW_DEMOS)
+        add_subdirectory(demos)
+    endif()
+endif()
+
 
