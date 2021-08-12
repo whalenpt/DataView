@@ -1,6 +1,7 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef OPTICSMAINWINDOW_H
+#define OPTICSMAINWINDOW_H
 
+#include <QWidget>
 #include <QMainWindow>
 #include <DataView>
 
@@ -18,4 +19,4 @@ private:
     void readSettings();
     void writeSettings();
 };
-#endif // MAINWINDOW_H
+#endif // OPTICSMAINWINDOW_H

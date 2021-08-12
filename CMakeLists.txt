@@ -3,10 +3,6 @@ project(DataView VERSION 0.0.1 DESCRIPTION "Qt GUI for visualizing simple data f
 option(DATAVIEW_STATIC "Build DataView as static (ON) or shared library (OFF)" OFF)
 option(DATAVIEW_DEMOS "Build DataView demos" ON)
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
