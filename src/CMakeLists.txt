@@ -5,23 +5,6 @@ find_package(Qt6 COMPONENTS Gui REQUIRED)
 find_package(Qt6 COMPONENTS Widgets REQUIRED)
 find_package(Qt6 6.1.0 COMPONENTS Charts REQUIRED)
 
-if(NOT TARGET parambin)
-    if(NOT DATAVIEW_STATIC)
-        set(PARAMBIN_STATIC OFF CACHE BOOL "Build ParamBin as static (ON) or shared library (OFF)")
-    else()
-        set(PARAMBIN_STATIC ON CACHE BOOL "Build ParamBin as static (ON) or shared library (OFF)")
-    endif()
-    add_subdirectory(external/ParamBin)
-endif()
-
-if(NOT TARGET pwutils)
-    if(NOT DATAVIEW_STATIC)
-        set(PWUTILS_STATIC OFF CACHE BOOL "Build pwutils as static (ON) or shared library (OFF)")
-    else()
-        set(PWUTILS_STATIC ON CACHE BOOL "Build pwutils as static (ON) or shared library (OFF)")
-    endif()
-    add_subdirectory(external/pwutils)
-endif()
 
 set(SOURCE_LIST
 	dataview.cpp
