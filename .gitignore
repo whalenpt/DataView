@@ -5,7 +5,6 @@
 tests
 data
 etc
-*.sh
 *.json
 [Bb]uild
 Makefile
