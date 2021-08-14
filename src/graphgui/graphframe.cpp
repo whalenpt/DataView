@@ -133,17 +133,28 @@ void GraphFrame::graphFile(const QString& filename){
     pw::DataSignature data_sig = m_data_signatures[fname];
     pw::OperatorSignature op_sig = m_op_signatures[fname];
 
-    m_twocol->graph(filename,file_sig,data_sig,op_sig);
+    qDebug() << "About to call graph";
+    if(file_sig == pw::FileSignature::DAT)
+        qDebug() << "File signature is dat";
+    else if(file_sig == pw::FileSignature::JSON)
+        qDebug() << "File signature is json";
+    else if(file_sig == pw::FileSignature::UNKNOWN)
+        qDebug() << "File signature is unknown";
+
     if(data_sig == pw::DataSignature::XY){
+        qDebug() << "Data signature is XY";
         m_twocol->graph(filename,file_sig,data_sig,op_sig);
         m_frame_layout->setCurrentWidget(m_twocol);
     }
     else if(data_sig == pw::DataSignature::XY_C){
+        qDebug() << "Data signature is XY_C";
         m_threecol->graph(filename,file_sig,data_sig,op_sig);
         m_frame_layout->setCurrentWidget(m_threecol);
     }
-    else
+    else{
+        qDebug() << "Data signature is UNKNOWN";
         displayFileText(filename);
+    }
 }
 
 bool GraphFrame::fileSignatureExists(const QString& fname)

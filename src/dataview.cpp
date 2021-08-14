@@ -64,12 +64,18 @@ void DataView::doubleClickedResponse(QModelIndex index){
     if(!m_list_view->isDir(index)){
         QStringList filelist;
         m_list_view->getFileNames(filelist);
-        if(filelist.empty())
+        if(filelist.empty()){
+            qDebug() << "Filelist is empty";
             return;
-        else if(filelist.size() == 1)
+        }
+        else if(filelist.size() == 1){
+            qDebug() << "One file in filelist";
             m_graph_frame->graphFile(filelist[0]);
-        else
+        }
+        else{
+            qDebug() << "Multiple files in filelist";
             m_graph_frame->graphMultipleFiles(filelist);
+        }
     }
     return;
 }
