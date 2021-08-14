@@ -7,18 +7,25 @@
 #include <QValueAxis>
 #include <QLogValueAxis>
 #include <pwutils/pwmath.hpp>
+#include <pwutils/read/readdat.h>
+#include <pwutils/read/readjson.h>
 #include <ParamBin/parambin.hpp>
 
 namespace dataaux{
 
-void twoColFileToSeries(const std::string& fname,QLineSeries& series,ParamBin& bin)
+ParamBin XYToSeries(const QString& fname,QLineSeries& series,pw::FileSignature filesig)
 {
     series.clear();
     series.setUseOpenGL(true);
     std::vector<double> x;
     std::vector<double> y;
-    bin = fileaux::readTwoColDoubles(fname,x,y);
-
+    ParamBin bin;
+    if(filesig == pw::FileSignature::DAT)
+        bin = ParamBin({dat::readXY(fname.toStdString(),x,y)});
+    else if(filesig == pw::FileSignature::JSON)
+        bin = ParamBin({json::readXY(fname.toStdString(),x,y)});
+    else
+        return ParamBin();
 
     double min_xval = pw::min(x);
     double max_xval = pw::max(x);
@@ -41,10 +48,11 @@ void twoColFileToSeries(const std::string& fname,QLineSeries& series,ParamBin& b
     bin.set("max_xval",max_xval);
     bin.set("min_yval",min_yval);
     bin.set("max_yval",max_yval);
+    return bin;
 }
 
-void twoColFilesToSeries(const QStringList& fnames,\
-        std::vector<QLineSeries*>& line_series_vec,ParamBin& bin)
+ParamBin multiXYToSeries(const QStringList& fnames,\
+        std::vector<QLineSeries*>& line_series_vec,pw::FileSignature filesig)
 {
     for(auto item : line_series_vec)
         delete item;
@@ -53,9 +61,10 @@ void twoColFilesToSeries(const QStringList& fnames,\
     std::vector<double> min_xvals,max_xvals,min_yvals,max_yvals;
     QString fname = fnames[0];
 
+    ParamBin bin;
     for(auto& fname : fnames){
         line_series_vec.push_back(new QLineSeries);
-        twoColFileToSeries(fname.toStdString(),*line_series_vec.back(),bin);
+        bin = XYToSeries(fname,*line_series_vec.back(),filesig);
         setSeriesName(fname,*line_series_vec.back());
         min_xvals.push_back(bin.getDbl("min_xval"));
         max_xvals.push_back(bin.getDbl("max_xval"));
@@ -66,25 +75,17 @@ void twoColFilesToSeries(const QStringList& fnames,\
     double max_xval = pw::max(max_xvals);
     double min_yval = pw::min(min_yvals);
     double max_yval = pw::max(max_yvals);
-//    qDebug() << QString("Number of series recorded %1").arg(line_series_vec.size());
-//    qDebug() << "Max xval" << QString::number(max_xval);
-//    qDebug() << "Max yval" << QString::number(max_yval);
-//    qDebug() << "Number of points in series 0: " << QString::number(line_series_vec.back()->points().size());
 
     bin.set("min_xval",min_xval);
     bin.set("max_xval",max_xval);
     bin.set("min_yval",min_yval);
     bin.set("max_yval",max_yval);
-}
-
-void setSeriesName(const std::string& fname,QLineSeries& series) {
-    setSeriesName(QString::fromStdString(fname),series);
+    return bin;
 }
 
 void setSeriesName(const QString& fname,QLineSeries& series) {
     series.setName(fileaux::getLocalFileName(fname));
 }
-
 
 void formatAxisX(const ParamBin& bin,QValueAxis& axis)
 {

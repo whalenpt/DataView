@@ -64,8 +64,7 @@ void DataView::graphIfFile(QModelIndex index){
     if(!m_list_view->isDir(index)){
         QStringList slist;
         m_list_view->getFileNames(slist);
-        std::string fname = slist[0].toStdString();
-        m_graph_frame->graphOneFile(fname);
+        m_graph_frame->graphOneFile(slist[0]);
     }
     return;
 }

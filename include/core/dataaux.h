@@ -1,17 +1,18 @@
 #ifndef DATAAUX_H
 #define DATAAUX_H
 
-#include <string>
-#include <ParamBin/parambin.hpp>
 #include <QLineSeries>
 #include <QValueAxis>
 #include <QLogValueAxis>
+#include <string>
+#include <ParamBin/parambin.hpp>
+#include <pwutils/pwdefs.h>
 
 namespace dataaux{
-    void twoColFileToSeries(const std::string& fname,QLineSeries& series,ParamBin& bin);
-    void twoColFilesToSeries(const QStringList& fnames,\
-        std::vector<QLineSeries*>& line_series_vec,ParamBin& bin);
-    void setSeriesName(const std::string& fname,QLineSeries& series);
+    ParamBin XYToSeries(const QString& fname,QLineSeries& series,pw::FileSignature filesig);
+    ParamBin multiXYToSeries(const QStringList& fnames,\
+        std::vector<QLineSeries*>& line_series_vec,pw::FileSignature filesig);
+
     void setSeriesName(const QString& fname,QLineSeries& series);
     void formatAxisX(const ParamBin& bin,QValueAxis& axis);
     void formatAxisY(const ParamBin& bin,QValueAxis& axis);

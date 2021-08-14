@@ -5,8 +5,11 @@
 #include <QStringList>
 #include <QFrame>
 #include <string>
+#include <pwutils/pwdefs.h>
 
-using StrMap = std::map<std::string,std::string>;
+using DataSignatureMap = std::map<std::string,pw::DataSignature>;
+using FileSignatureMap = std::map<std::string,pw::FileSignature>;
+using OperatorSignatureMap = std::map<std::string,pw::OperatorSignature>;
 
 class TwoCol;
 class ThreeColStacked;
@@ -22,11 +25,10 @@ class GraphFrame : public QFrame
     Q_OBJECT
 public:
     GraphFrame(QWidget* parent = 0);
-    void displayFileText(const std::string& fname);
+    void displayFileText(const QString& fname);
 
 public slots:
-    void graph(const QStringList& fnames);
-    void graphOneFile(const std::string& fname);
+    void graphOneFile(const QString& fname);
     void graphMultiFile(const QStringList& fnames);
 
 protected:
@@ -40,9 +42,10 @@ private:
     TwoCol* m_twocol;
     ThreeColStacked* m_threecol;
     TwoColM* m_twocolM;
-
-    StrMap fileSignatures;
-    bool fileSignatureExists(const std::string& fname);
+    FileSignatureMap m_file_signatures;
+    DataSignatureMap m_data_signatures;
+    OperatorSignatureMap m_op_signatures;
+    bool fileSignatureExists(const QString& fname);
 };
 
 #endif // GRAPHFRAME_H

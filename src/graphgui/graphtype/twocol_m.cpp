@@ -96,13 +96,24 @@ void TwoColM::clearLineSeries(){
     m_line_series_vec.clear();
 }
 
-void TwoColM::graph(const QStringList& fnames,AxesType axes_type){
+//void TwoColM::graph(const QStringList& fnames,AxesType axes_type){
+void TwoColM::graph(const QStringList& fnames,pw::FileSignature fsig,\
+        pw::DataSignature datasig, pw::OperatorSignature opsig)
+{
+    ParamBin bin = dataaux::multiXYToSeries(fnames,m_line_series_vec,fsig);
 
-    ParamBin bin;
-    dataaux::twoColFilesToSeries(fnames,m_line_series_vec,bin);
     for(auto series : m_line_series_vec)
         m_chart->addSeries(series);
-    this->setAxes(axes_type);
+
+    if(opsig == pw::OperatorSignature::NONE)
+        this->setAxes(AxesType::Standard);
+    else if(opsig == pw::OperatorSignature::LOGY)
+        this->setAxes(AxesType::Semilogy);
+    else if(opsig == pw::OperatorSignature::LOGXLOGY)
+        this->setAxes(AxesType::Loglog);
+    else if(opsig == pw::OperatorSignature::LOGX)
+        this->setAxes(AxesType::Semilogx);
+
     this->formatAxes(bin);
 }
 

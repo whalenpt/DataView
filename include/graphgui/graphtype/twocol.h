@@ -10,6 +10,7 @@
 #include <string>
 #include <fstream>
 #include <ParamBin/parambin.hpp>
+#include <pwutils/pwdefs.h>
 #include "graphgui/axesaux.h"
 
 class GraphFrame;
@@ -26,8 +27,8 @@ class TwoCol : public QWidget
 
 public:
     explicit TwoCol(GraphFrame* parent_frame);
-    void graph(const std::string& fname,AxesType axes_type = AxesType::Standard);
-    void graph(const QStringList& fnames,AxesType axes_type = AxesType::Standard);
+    void graph(const QString& fname,pw::FileSignature filesig,pw::DataSignature datasig,\
+            pw::OperatorSignature opsig);
     void setAxes(AxesType axes_type);
 
 private:

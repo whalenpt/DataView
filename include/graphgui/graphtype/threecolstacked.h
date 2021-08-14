@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <ParamBin/parambin.hpp>
+#include <pwutils/pwdefs.h>
 
 class GraphFrame;
 class DropChartView;
@@ -18,27 +19,26 @@ class ThreeColStacked : public QWidget
     Q_OBJECT
 
 public:
-    explicit ThreeColStacked(GraphFrame* c_parent_frame);
-    void graph(const std::string& fname);
-    void graph(const QStringList& fnames);
+    explicit ThreeColStacked(GraphFrame* parent_frame);
+    void graph(const QString& fname,pw::FileSignature filesig,\
+            pw::DataSignature datasig,\
+            pw::OperatorSignature opsig);
 
 private:
-    GraphFrame* parent_frame;
-    ParamBin readThreeColDoubles(const std::string& fname,std::vector<double>& x,std::vector<double>& y1,
-                                     std::vector<double>& y2);
+    GraphFrame* m_parent_frame;
     QWidget* createThreeColWidget();
-    QWidget* three_col_widget;
+    QWidget* m_three_col_widget;
 
-    QLineSeries* three_col_series1;
-    QLineSeries* three_col_series2;
-    DropChartView* three_col_view1;
-    DropChartView* three_col_view2;
-    QChart* three_col_chart1;
-    QChart* three_col_chart2;
-    QValueAxis* axisX1;
-    QValueAxis* axisX2;
-    QValueAxis* axisY1;
-    QValueAxis* axisY2;
+    QLineSeries* m_three_col_series1;
+    QLineSeries* m_three_col_series2;
+    DropChartView* m_three_col_view1;
+    DropChartView* m_three_col_view2;
+    QChart* m_three_col_chart1;
+    QChart* m_three_col_chart2;
+    QValueAxis* m_axisX1;
+    QValueAxis* m_axisX2;
+    QValueAxis* m_axisY1;
+    QValueAxis* m_axisY2;
 };
 
 #endif // THREECOLSTACKEDGRAPHS_H

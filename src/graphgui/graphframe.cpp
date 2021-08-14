@@ -18,6 +18,8 @@
 
 #include <vector>
 #include <ParamBin/parambin.hpp>
+#include <pwutils/pwdefs.h>
+#include <pwutils/read/readfile.h>
 
 
 GraphFrame::GraphFrame(QWidget* parent) : QFrame(parent)
@@ -55,7 +57,12 @@ void GraphFrame::dropEvent(QDropEvent* event)
         QDataStream data_stream(&file_data,QIODevice::ReadOnly);
         QStringList filenames;
         data_stream >> filenames;
-        graph(filenames);
+        if(filenames.empty())
+            return;
+        else if(filenames.size() == 1)
+            graphOneFile(filenames[0]);
+        else
+            graphMultiFile(filenames);
     }
 }
 
@@ -64,76 +71,91 @@ void GraphFrame::dragMoveEvent(QDragMoveEvent *event)
     event->acceptProposedAction();
 }
 
-void GraphFrame::graph(const QStringList& fnames){
-    if(fnames.isEmpty())
-        return;
-    if(fnames.length() == 1)
-        graphOneFile(fnames[0].toStdString());
-    else
-        graphMultiFile(fnames);
-}
-
 void GraphFrame::graphMultiFile(const QStringList& filenames)
 {
     if(filenames.size() < 2)
         return;
 
-    std::string file_sig;
-    std::string fname = filenames[0].toStdString();
-    if(!fileSignatureExists(fname))
-        fileSignatures[fname] = fileaux::readSignature(fname);
-    file_sig = fileSignatures[fname];
+    std::string fname(filenames[0].toStdString());
+    if(!fileSignatureExists(filenames[0])){
+        m_file_signatures[fname] = pw::fileSignature(fname);
+        m_data_signatures[fname] = pw::dataSignature(fname,m_file_signatures[fname]);
+        m_op_signatures[fname] = pw::operatorSignature(fname,m_file_signatures[fname]);
+    }
+    pw::FileSignature file_sig = m_file_signatures[fname];
+    pw::DataSignature data_sig = m_data_signatures[fname];
+    pw::OperatorSignature op_sig = m_op_signatures[fname];
 
-    for(int i = 1; i < filenames.size(); i++){
-        std::string fname = filenames[i].toStdString();
-        if(!fileSignatureExists(fname))
-            fileSignatures[fname] = fileaux::readSignature(fname);
-        if(file_sig != fileSignatures[fname]){
+    for(auto i = 1; i < filenames.size(); i++){
+        std::string fname(filenames[i].toStdString());
+        if(!fileSignatureExists(filenames[i])){
+            m_file_signatures[fname] = pw::fileSignature(fname);
+            m_data_signatures[fname] = pw::dataSignature(fname,m_file_signatures[fname]);
+            m_op_signatures[fname] = pw::operatorSignature(fname,m_file_signatures[fname]);
+        }
+
+        if(m_file_signatures[fname] != file_sig){
             QMessageBox::warning(0,"Multiple data file error",
-                "Multiple files must have the same data type be analyzed together.");
+                "Multiple files must have the same file signature be analyzed together.");
+            return;
+        }
+        if(m_data_signatures[fname] != data_sig){
+            QMessageBox::warning(0,"Multiple data file error",
+                "Multiple files must have the same data signature be analyzed together.");
+            return;
+        }
+        if(m_op_signatures[fname] != op_sig){
+            QMessageBox::warning(0,"Multiple data file error",
+                "Multiple files must have the same operator signature be analyzed together.");
             return;
         }
     }
-    if(file_sig == "two_col_data"){
-        m_twocolM->graph(filenames,AxesType::Standard);
+    if(data_sig == pw::DataSignature::XY){
+        m_twocolM->graph(filenames,file_sig,data_sig,op_sig);
         m_frame_layout->setCurrentWidget(m_twocolM);
-    } else if(file_sig == "two_col_logy_data"){
-        m_twocolM->graph(filenames,AxesType::Semilogy);
-        m_frame_layout->setCurrentWidget(m_twocolM);
+    }
+    else{
+        QMessageBox::warning(0,"Multiple data file error",
+                    "Multiple files must have the same file signature be analyzed together.");
+                return;
+        displayFileText(filenames[0]);
     }
 }
 
-void GraphFrame::graphOneFile(const std::string& fname){
-    if(!fileSignatureExists(fname))
-        fileSignatures[fname] = fileaux::readSignature(fname);
-    std::string file_sig = fileSignatures[fname];
-    if(file_sig == "two_col_data"){
-        m_twocol->graph(fname,AxesType::Standard);
-        m_frame_layout->setCurrentWidget(m_twocol);
-    } else if(file_sig == "two_col_logy_data"){
-        m_twocol->graph(fname,AxesType::Semilogy);
+void GraphFrame::graphOneFile(const QString& filename){
+
+    std::string fname(filename.toStdString());
+    if(!fileSignatureExists(filename)){
+        m_file_signatures[fname] = pw::fileSignature(fname);
+        m_data_signatures[fname] = pw::dataSignature(fname,m_file_signatures[fname]);
+        m_op_signatures[fname] = pw::operatorSignature(fname,m_file_signatures[fname]);
+    }
+    pw::FileSignature file_sig = m_file_signatures[fname];
+    pw::DataSignature data_sig = m_data_signatures[fname];
+    pw::OperatorSignature op_sig = m_op_signatures[fname];
+
+    m_twocol->graph(filename,file_sig,data_sig,op_sig);
+    if(data_sig == pw::DataSignature::XY){
+        m_twocol->graph(filename,file_sig,data_sig,op_sig);
         m_frame_layout->setCurrentWidget(m_twocol);
     }
-    else if(file_sig == "three_col_data"){
-        m_threecol->graph(fname);
+    else if(data_sig == pw::DataSignature::XY_C){
+        m_threecol->graph(filename,file_sig,data_sig,op_sig);
         m_frame_layout->setCurrentWidget(m_threecol);
     }
     else
-        displayFileText(fname);
+        displayFileText(filename);
 }
 
-bool GraphFrame::fileSignatureExists(const std::string& fname)
+bool GraphFrame::fileSignatureExists(const QString& fname)
 {
-    std::map<std::string,std::string>::iterator f_itr = fileSignatures.find(fname);
-    if(f_itr != fileSignatures.end())
-        return true;
-    else
-        return false;
+    const auto f_itr = m_file_signatures.find(fname.toStdString());
+    return (f_itr != m_file_signatures.end()) ? true : false;
 }
 
-void GraphFrame::displayFileText(const std::string& fname)
+void GraphFrame::displayFileText(const QString& fname)
 {
-    QFile file(QString::fromStdString(fname));
+    QFile file(fname);
     if(!file.open(QIODevice::ReadOnly)){
         QMessageBox::information(0,"info",file.errorString());
     }

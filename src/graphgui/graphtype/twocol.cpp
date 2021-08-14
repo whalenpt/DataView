@@ -80,13 +80,6 @@ void TwoCol::initAxes()
     m_series->attachAxis(m_axisY);
 }
 
-void TwoCol::graph(const QStringList& fnames,AxesType axes_type){
-    if(fnames.length()>1)
-        qDebug() << QString("TwoCol::graph does not handle multiple file names");
-    else
-        graph(fnames[0].toStdString(),axes_type);
-}
-
 void TwoCol::formatAxes(const ParamBin& bin)
 {
     if(m_axes_type == AxesType::Standard){
@@ -104,11 +97,20 @@ void TwoCol::formatAxes(const ParamBin& bin)
     }
 }
 
-void TwoCol::graph(const std::string& fname,AxesType axes_type)
+void TwoCol::graph(const QString& fname,pw::FileSignature filesig,
+        pw::DataSignature datasig,pw::OperatorSignature opsig)
 {
-    ParamBin bin;
-    dataaux::twoColFileToSeries(fname,*m_series,bin);
-    this->setAxes(axes_type);
+    //dataaux::twoColFileToSeries(fname,*m_series,bin);
+    ParamBin bin = dataaux::XYToSeries(fname,*m_series,filesig);
+    if(opsig == pw::OperatorSignature::NONE)
+        this->setAxes(AxesType::Standard);
+    else if(opsig == pw::OperatorSignature::LOGY)
+        this->setAxes(AxesType::Semilogy);
+    else if(opsig == pw::OperatorSignature::LOGXLOGY)
+        this->setAxes(AxesType::Loglog);
+    else if(opsig == pw::OperatorSignature::LOGX)
+        this->setAxes(AxesType::Semilogx);
+
     this->formatAxes(bin);
 }
 
