@@ -4,3 +4,6 @@
 [submodule "dataview/external/pwutils"]
 	path = external/pwutils
 	url = https://github.com/whalenpt/pwutils.git
+[submodule "external/json"]
+	path = external/json
+	url = https://github.com/nlohmann/json.git
