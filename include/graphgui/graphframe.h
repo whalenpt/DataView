@@ -28,8 +28,8 @@ public:
     void displayFileText(const QString& fname);
 
 public slots:
-    void graphOneFile(const QString& fname);
-    void graphMultiFile(const QStringList& fnames);
+    void graphFile(const QString& fname);
+    void graphMultipleFiles(const QStringList& fnames);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;

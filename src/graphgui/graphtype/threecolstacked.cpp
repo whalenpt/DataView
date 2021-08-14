@@ -36,9 +36,8 @@ QWidget* ThreeColStacked::createThreeColWidget()
 
     m_three_col_view1 = new DropChartView(m_three_col_chart1);
     m_three_col_view1->setRenderHint(QPainter::Antialiasing);
-    connect(m_three_col_view1,SIGNAL(fileDrop(const QStringList&)),
-        m_parent_frame,SLOT(graph(const QStringList&)));
-
+    connect(m_three_col_view1,SIGNAL(fileDrop(const QString&)),
+        m_parent_frame,SLOT(graphFile(const QString&)));
 
     m_three_col_series2 = new QLineSeries();
     m_three_col_chart2 = new QChart();
@@ -46,8 +45,8 @@ QWidget* ThreeColStacked::createThreeColWidget()
     m_three_col_chart2->addSeries(m_three_col_series2);
     m_three_col_view2 = new DropChartView(m_three_col_chart2);
     m_three_col_view2->setRenderHint(QPainter::Antialiasing);
-    connect(m_three_col_view2,SIGNAL(fileDrop(const QStringList&)),
-        m_parent_frame,SLOT(graph(const QStringList&)));
+    connect(m_three_col_view2,SIGNAL(fileDrop(const QString&)),
+        m_parent_frame,SLOT(graphFile(const QString&)));
 
     m_axisX1 = new QValueAxis;
     m_axisX1->setTickCount(4);

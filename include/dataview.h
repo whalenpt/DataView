@@ -24,7 +24,7 @@ public:
     ~DataView();
 
 private slots:
-    void graphIfFile(QModelIndex index);
+    void doubleClickedResponse(QModelIndex index);
     void dir_pushButton_clicked();
 
 private:

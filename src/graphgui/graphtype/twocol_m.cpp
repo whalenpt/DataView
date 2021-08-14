@@ -38,8 +38,8 @@ TwoColM::TwoColM(GraphFrame* parent_frame) : QWidget(parent_frame),
 
     m_view = new DropChartView(m_chart);
     m_view->setRenderHint(QPainter::Antialiasing);
-    connect(m_view,SIGNAL(fileDrop(const QStringList&)),
-            m_parent_frame,SLOT(graph(const QStringList&)));
+    connect(m_view,SIGNAL(fileListDrop(const QStringList&)),
+            m_parent_frame,SLOT(graphMultipleFiles(const QStringList&)));
     QVBoxLayout* vbox = new QVBoxLayout();
     vbox->addWidget(m_view);
     setLayout(vbox);

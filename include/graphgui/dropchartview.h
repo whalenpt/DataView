@@ -23,7 +23,8 @@ protected:
     void dragMoveEvent(QDragMoveEvent* event) Q_DECL_OVERRIDE;
 
 signals:
-    void fileDrop(const QStringList& filenames);
+    void fileListDrop(const QStringList& filenames);
+    void fileDrop(const QString& file);
 
 };
 

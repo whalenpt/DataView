@@ -54,17 +54,22 @@ void DataView::setTargetDirPath(const std::filesystem::path& dirpath) {
 void DataView::init()
 {
     connect(m_list_view,SIGNAL(doubleClicked(QModelIndex)),
-            this,SLOT(graphIfFile(QModelIndex)));
+            this,SLOT(doubleClickedResponse(QModelIndex)));
     m_dir_pushButton->setFocusPolicy(Qt::NoFocus);
     connect(m_dir_pushButton,SIGNAL(clicked(bool)),
             this,SLOT(dir_pushButton_clicked()));
 }
 
-void DataView::graphIfFile(QModelIndex index){
+void DataView::doubleClickedResponse(QModelIndex index){
     if(!m_list_view->isDir(index)){
-        QStringList slist;
-        m_list_view->getFileNames(slist);
-        m_graph_frame->graphOneFile(slist[0]);
+        QStringList filelist;
+        m_list_view->getFileNames(filelist);
+        if(filelist.empty())
+            return;
+        else if(filelist.size() == 1)
+            m_graph_frame->graphFile(filelist[0]);
+        else
+            m_graph_frame->graphMultipleFiles(filelist);
     }
     return;
 }

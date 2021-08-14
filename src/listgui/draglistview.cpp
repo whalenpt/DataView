@@ -10,6 +10,8 @@
 #include <QMessageBox>
 #include <filesystem>
 
+const QString DragListView::StringListMime = QStringLiteral("stringlist");
+
 DragListView::DragListView(const std::filesystem::path& dirpath,QWidget* parent) :
     QListView(parent)
 {
@@ -51,27 +53,32 @@ void DragListView::openDataFile()
 
 void DragListView::startDrag(Qt::DropActions /*supportedActions*/)
 {
-    QByteArray item_data;
-    QDataStream data_stream(&item_data,QIODevice::WriteOnly);
-
-    QStringList slist;
-    getFileNames(slist);
-    data_stream << slist;
+    QStringList filelist;
+    getFileNames(filelist);
+    if(filelist.empty())
+        return;
 
     QMimeData* mime_data = new QMimeData();
-    mime_data->setData(DragListView::fileMimeType(),item_data);
-
+    if(filelist.size() == 1)
+        mime_data->setText(filelist[0]);
+    else {
+        QByteArray item_data;
+        QDataStream data_stream(&item_data,QIODevice::WriteOnly);
+        data_stream << filelist;
+        mime_data->setData(DragListView::StringListMime,item_data);
+    }
     QDrag* drag = new QDrag(this);
     drag->setMimeData(mime_data);
     drag->exec(Qt::CopyAction);
 }
 
-void DragListView::getFileNames(QStringList& slist){
+void DragListView::getFileNames(QStringList& filelist)
+{
     QModelIndexList ilist = selectionModel()->selectedIndexes();
-    foreach(const QModelIndex& index,ilist){
+    for(const auto& index : ilist){
         QString local_file_name = index.data(Qt::DisplayRole).toString();
         std::filesystem::path full_path = m_target_dirpath / std::filesystem::path(local_file_name.toStdString());
-        slist.append(QString::fromStdString(full_path.string()));
+        filelist.append(QString::fromStdString(full_path.string()));
     }
 }
 
@@ -87,6 +94,7 @@ bool DragListView::isDir(QModelIndex& index)
         return true;
     return false;
 }
+
 
 
 

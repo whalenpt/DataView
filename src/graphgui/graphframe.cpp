@@ -43,8 +43,10 @@ GraphFrame::GraphFrame(QWidget* parent) : QFrame(parent)
 void GraphFrame::dragEnterEvent(QDragEnterEvent *event)
 {
     qDebug() << "GraphFrame::dragEnterEvent";
-    if(event->mimeData()->hasFormat(DragListView::fileMimeType()))
+    if(event->mimeData()->hasText() || \
+            event->mimeData()->hasFormat(DragListView::StringListMime)){
         event->accept();
+    }
     else
         event->ignore();
 }
@@ -52,17 +54,14 @@ void GraphFrame::dragEnterEvent(QDragEnterEvent *event)
 void GraphFrame::dropEvent(QDropEvent* event)
 {
     qDebug() << "GraphFrame::dropEvent";
-    if(event->mimeData()->hasFormat(DragListView::fileMimeType())){
-        QByteArray file_data = event->mimeData()->data(DragListView::fileMimeType());
+    if(event->mimeData()->hasText())
+        graphFile(event->mimeData()->text());
+    else if(event->mimeData()->hasFormat(DragListView::StringListMime)){
+        QByteArray file_data = event->mimeData()->data(DragListView::StringListMime);
         QDataStream data_stream(&file_data,QIODevice::ReadOnly);
-        QStringList filenames;
-        data_stream >> filenames;
-        if(filenames.empty())
-            return;
-        else if(filenames.size() == 1)
-            graphOneFile(filenames[0]);
-        else
-            graphMultiFile(filenames);
+        QStringList filelist;
+        data_stream >> filelist;
+        graphMultipleFiles(filelist);
     }
 }
 
@@ -71,7 +70,7 @@ void GraphFrame::dragMoveEvent(QDragMoveEvent *event)
     event->acceptProposedAction();
 }
 
-void GraphFrame::graphMultiFile(const QStringList& filenames)
+void GraphFrame::graphMultipleFiles(const QStringList& filenames)
 {
     if(filenames.size() < 2)
         return;
@@ -122,7 +121,7 @@ void GraphFrame::graphMultiFile(const QStringList& filenames)
     }
 }
 
-void GraphFrame::graphOneFile(const QString& filename){
+void GraphFrame::graphFile(const QString& filename){
 
     std::string fname(filename.toStdString());
     if(!fileSignatureExists(filename)){
