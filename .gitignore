@@ -2,8 +2,6 @@
 *.m
 *.swp
 *.swo
-tests
-data
 etc
 [Bb]uild
 Makefile
