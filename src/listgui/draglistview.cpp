@@ -57,7 +57,7 @@ void DragListView::openDataFile()
         }
         if(count > 3){
             QMessageBox::critical(0,QString("Multiple file open failures"),
-                    QString("Failed to open several specified files. Aborting!");
+                    QString("Failed to open several specified files. Aborting!"));
             return;
         }
     }
