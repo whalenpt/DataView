@@ -1,11 +1,13 @@
 
-L walkoff:                              2.994181        
-Lcsd:                                   0.5             
-Lnl:                                    1.312618        
-Lss:                                    12.362575       
-Primary Scale:                          1.312618        
+L walkoff:                              0.034886        
+Lcsd:                                   0.007879        
+Lds:                                    0.745576        
+Lds<Lnl>:                               105.635591      
+Lnl:                                    0.007058        
+Lss:                                    0.066474        
+Primary Scale:                          0.007058        
 Primary Scale Str:                      $L_{NL}$        
-Propagation Distance[$L_{NL}$]:         2.666427        
+Travel Distance[$L_{NL}$]:              2.833664        
 s:                                      0.106177        
 
 
