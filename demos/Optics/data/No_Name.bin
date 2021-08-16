@@ -1,0 +1,73 @@
+
+Coordinate Dependency:                  T               
+Number of Threads:                      1               
+Simulation Name:                        No Name         
+Target Directory:                       /Users/pmacbook/Simulations/QtUPPE/No_Name
+Travel Distance:                        0.02            
+
+INPUT PULSE:
+
+  Carrier Wavelength:                   0.000001        
+  Intensity:                            5.5e14          
+
+  T:
+
+    Pulse Width:                        5.0e-15         
+    Shape:                              gauss           
+
+MEDIUM:
+
+  Dispersion Model:                     Susceptibility File
+  Maximum Wavelength:                   0.000004        
+  Minimum Wavelength:                   1.9999999999999999e-7
+  Plasma Generation:                    off             
+  Reference Wavelength:                 0.000001        
+  Susceptibility File:                  /Users/pmacbook/Simulations/QtUPPE/No_Name/airchi.tab
+  n2:                                   4.1000000000000001e-20
+
+  SUSCEPTIBLITY:
+
+    File Options:                       airchi.tab      
+
+NUMERICAL GRID:
+
+
+  T:
+
+    Maximum:                            4.0e-14         
+    Minimum:                            -4.0e-14        
+    Number of Points:                   512             
+
+NUMERICAL SOLVER:
+
+  Method:                               ETD35           
+
+  ADAPTIVE STEP:
+
+    Initial Step Size:                  0.0002          
+    Relative Error Tolerance:           0.0001          
+    Step Size Decrement Threshold:      0.85            
+    Step Size Increment Threshold:      1.25            
+
+  ETD:
+
+    Contour Points:                     32              
+    Contour Radius:                     1               
+    Mode Cutoff:                        0.01            
+
+REPORT:
+
+
+  FILES:
+
+    Envelope:                           on              
+    Field:                              on              
+    Peak Intensity:                     on              
+    Spectrum:                           on              
+
+  FREQUENCY:
+
+    Maximum File Reports:               200             
+    Steps Per Output:                   1               
+
+
