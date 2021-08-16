@@ -46,8 +46,20 @@ void DragListView::openDataFile()
         if(ret == QMessageBox::No)
             return;
     } 
+    int count = 0;
     for(auto& item : list){
-        QDesktopServices::openUrl(QUrl::fromLocalFile(item));
+        qDebug() << item;
+        QUrl file = QUrl::fromLocalFile(item);
+        if(!QDesktopServices::openUrl(file)){
+            QMessageBox::information(0,QString("File open failure"),
+                    QString("Failed to open the file %1").arg(item));
+            count++;
+        }
+        if(count > 3){
+            QMessageBox::critical(0,QString("Multiple file open failures"),
+                    QString("Failed to open several specified files. Aborting!");
+            return;
+        }
     }
 }
 
