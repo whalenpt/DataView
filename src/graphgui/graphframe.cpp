@@ -4,7 +4,6 @@
 #include "graphgui/graphtype/twocol.h"
 #include "graphgui/graphtype/threecolstacked.h"
 #include "listgui/draglistview.h"
-#include "core/fileaux.h"
 
 #include <QWidget>
 #include <QFrame>
@@ -138,13 +137,6 @@ void GraphFrame::graphOneFile(const QString& filename){
     pw::FileSignature file_sig = m_file_signatures[fname];
     pw::DataSignature data_sig = m_data_signatures[fname];
     pw::OperatorSignature op_sig = m_op_signatures[fname];
-
-//    if(file_sig == pw::FileSignature::DAT)
-//        qDebug() << "File signature is dat";
-//    else if(file_sig == pw::FileSignature::JSON)
-//        qDebug() << "File signature is json";
-//    else if(file_sig == pw::FileSignature::UNKNOWN)
-//        qDebug() << "File signature is unknown";
 
     if(data_sig == pw::DataSignature::XY){
         m_twocol->graph(filename,file_sig,data_sig,op_sig);

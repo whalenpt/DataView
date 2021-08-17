@@ -14,8 +14,6 @@
 #include <QPainter>
 
 
-//#include <QDebug>
-
 DropChartView::DropChartView(QChart* chart,GraphFrame* graph_frame)
     : QChartView(chart,graph_frame->parentWidget()),
     m_graph_frame(graph_frame)
@@ -30,7 +28,6 @@ void DropChartView::dragEnterEvent(QDragEnterEvent *event)
 {
     if(event->mimeData()->hasText() || \
             event->mimeData()->hasFormat(DragListView::StringListMime)){
-        qDebug() << "DropChartView::dragEnterEvent called.";
         event->accept();
 
     }
@@ -45,12 +42,10 @@ void DropChartView::dragMoveEvent(QDragMoveEvent *event)
 
 void DropChartView::dropEvent(QDropEvent* event)
 {
-    qDebug() << "DropChartView::dropEvent";
     QStringList filenames;
     if(event->mimeData()->hasText())
         filenames.append(event->mimeData()->text());
     else if(event->mimeData()->hasFormat(DragListView::StringListMime)){
-        qDebug() << "DropChartView multi file drop event";
         QByteArray file_data = event->mimeData()->data(DragListView::StringListMime);
         QDataStream data_stream(&file_data,QIODevice::ReadOnly);
         data_stream >> filenames;

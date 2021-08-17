@@ -40,6 +40,7 @@ TwoCol::TwoCol(GraphFrame* parent_frame) : QWidget(parent_frame),
     m_logaxes.append(m_axislogY);
     initAxes();
     setAxes(AxesType::Standard);
+
     QVBoxLayout* vbox = new QVBoxLayout;
     vbox->addWidget(m_view);
     setLayout(vbox);
@@ -90,7 +91,6 @@ void TwoCol::formatAxes(const ParamBin& bin)
 void TwoCol::graph(const QString& fname,pw::FileSignature filesig,
         pw::DataSignature datasig,pw::OperatorSignature opsig)
 {
-    //dataaux::twoColFileToSeries(fname,*m_series,bin);
     ParamBin bin = dataaux::XYToSeries(fname,*m_series,filesig);
     if(opsig == pw::OperatorSignature::NONE)
         this->setAxes(AxesType::Standard);

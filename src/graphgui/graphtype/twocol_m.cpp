@@ -97,6 +97,7 @@ void TwoColM::clearLineSeries(){
 void TwoColM::graph(const QStringList& fnames,pw::FileSignature fsig,\
         pw::DataSignature datasig, pw::OperatorSignature opsig)
 {
+    clearLineSeries();
     ParamBin bin = dataaux::multiXYToSeries(fnames,m_line_series_vec,fsig);
 
     for(auto series : m_line_series_vec)
