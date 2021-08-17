@@ -12,7 +12,7 @@
 #include <filesystem>
 #include "dataview_global.h"
 #include "graphgui/graphframe.h"
-#include "listgui/draglistview.h"
+#include "draglistview.h"
 
 class DATAVIEWSHARED_EXPORT DataView : public QDialog
 {

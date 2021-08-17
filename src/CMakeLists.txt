@@ -12,11 +12,11 @@ find_package(Qt6 6.1.0 COMPONENTS Charts REQUIRED)
 
 set(SOURCE_LIST
 	dataview.cpp
+	draglistview.cpp
+	dropchartview.cpp
 	core/dataaux.cpp
 	core/fileaux.cpp
-	listgui/draglistview.cpp
 	graphgui/axesaux.cpp
-	graphgui/dropchartview.cpp
 	graphgui/graphframe.cpp
 	graphgui/graphtype/threecolstacked.cpp
 	graphgui/graphtype/twocol.cpp
