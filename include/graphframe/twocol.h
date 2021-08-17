@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QList>
+#include <QStringList>
+#include <vector>
 #include <ParamBin/parambin.hpp>
 #include <pwutils/pwdefs.h>
 #include "graphframe/axesaux.h"
@@ -15,24 +17,26 @@ class QValueAxis;
 class QLogValueAxis;
 class DropChartView;
 
-
 class TwoCol : public QWidget
 {
     Q_OBJECT
 
 public:
     explicit TwoCol(GraphFrame* parent_frame);
-    void graph(const QString& fname,pw::FileSignature filesig,pw::DataSignature datasig,\
-            pw::OperatorSignature opsig);
+    void graph(const QStringList& fnames,pw::FileSignature fsig,\
+            pw::DataSignature datasig, pw::OperatorSignature opsig);
     void setAxes(AxesType axes_type);
 
 private:
+    void initChart();
     void initAxes();
     void formatAxes(const ParamBin& bin);
-    QChart* m_chart;
-    DropChartView* m_view;
+    void clearLineSeries();
 
-    QLineSeries* m_series;
+    GraphFrame* m_parent_frame;
+    DropChartView* m_view;
+    QChart* m_chart;
+    std::vector<QLineSeries*> m_line_series_vec;
     QValueAxis* m_axisX;
     QValueAxis* m_axisY;
     QLogValueAxis* m_axislogX;

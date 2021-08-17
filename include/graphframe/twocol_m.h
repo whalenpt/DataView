@@ -22,7 +22,6 @@ class TwoColM : public QWidget
 
 public:
     explicit TwoColM(GraphFrame* parent_frame);
-    //void graph(const QStringList& fnames,AxesType axes_type = AxesType::Standard);
     void graph(const QStringList& fnames,pw::FileSignature fsig,\
             pw::DataSignature datasig, pw::OperatorSignature opsig);
     void setAxes(AxesType axes_type);

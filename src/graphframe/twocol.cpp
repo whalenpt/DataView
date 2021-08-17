@@ -38,6 +38,7 @@ TwoCol::TwoCol(GraphFrame* parent_frame) : QWidget(parent_frame),
     m_axislogY = new QLogValueAxis;
     m_logaxes.append(m_axislogX);
     m_logaxes.append(m_axislogY);
+
     initAxes();
     setAxes(AxesType::Standard);
 
@@ -57,15 +58,15 @@ void TwoCol::initAxes()
 {
     m_axes_type = AxesType::Standard;
     m_axisX->setTickCount(4);
-    m_axisX->setLabelFormat("%.1e");
+    m_axisX->setLabelFormat("%.2e");
     m_chart->addAxis(m_axisX,Qt::AlignBottom);
 
     m_axisY->setTickCount(4);
-    m_axisY->setLabelFormat("%.1e");
+    m_axisY->setLabelFormat("%.2e");
     m_chart->addAxis(m_axisY,Qt::AlignLeft);
 
-    m_axislogX->setLabelFormat("%.1e");
-    m_axislogY->setLabelFormat("%.1e");
+    m_axislogX->setLabelFormat("%.2e");
+    m_axislogY->setLabelFormat("%.2e");
 
     m_series->attachAxis(m_axisX);
     m_series->attachAxis(m_axisY);

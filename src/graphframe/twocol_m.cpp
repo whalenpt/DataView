@@ -18,11 +18,12 @@
 #include <pwutils/pwmath.hpp>
 #include <ParamBin/parambin.hpp>
 
-TwoColM::TwoColM(GraphFrame* parent_frame) : QWidget(parent_frame),
+TwoCol::TwoCol(GraphFrame* parent_frame) : QWidget(parent_frame),
     m_parent_frame(parent_frame)
 {
     setAcceptDrops(true);
     m_chart = new QChart();
+    m_chart->legend()->setVisible(true);
     m_view = new DropChartView(m_chart,parent_frame);
 
     m_axisX = new QValueAxis;
@@ -35,6 +36,7 @@ TwoColM::TwoColM(GraphFrame* parent_frame) : QWidget(parent_frame),
     m_logaxes.append(m_axislogY);
 
     initChart();
+
     initAxes();
     setAxes(AxesType::Standard);
     QVBoxLayout* vbox = new QVBoxLayout();
@@ -42,33 +44,27 @@ TwoColM::TwoColM(GraphFrame* parent_frame) : QWidget(parent_frame),
     setLayout(vbox);
 }
 
-void TwoColM::setAxes(AxesType axes_type) {
+void TwoCol::setAxes(AxesType axes_type) {
     m_axes_type = axes_type;
     axesaux::setAxes(axes_type,m_chart,m_line_series_vec,m_axes,m_logaxes);
 }
 
-void TwoColM::initChart()
-{
-    m_chart->legend()->setVisible(true);
-}
-
-void TwoColM::initAxes()
+void TwoCol::initAxes()
 {
     m_axes_type = AxesType::Standard;
-
     m_axisX->setTickCount(4);
-    m_axisX->setLabelFormat("%.1e");
+    m_axisX->setLabelFormat("%.2e");
     m_chart->addAxis(m_axisX,Qt::AlignBottom);
 
     m_axisY->setTickCount(4);
-    m_axisY->setLabelFormat("%.1e");
+    m_axisY->setLabelFormat("%.2e");
     m_chart->addAxis(m_axisY,Qt::AlignLeft);
 
-    m_axislogX->setLabelFormat("%.1e");
-    m_axislogY->setLabelFormat("%.1e");
+    m_axislogX->setLabelFormat("%.2e");
+    m_axislogY->setLabelFormat("%.2e");
 }
 
-void TwoColM::formatAxes(const ParamBin& bin)
+void TwoCol::formatAxes(const ParamBin& bin)
 {
     if(m_axes_type == AxesType::Standard){
         dataaux::formatAxisX(bin,*m_axisX);
@@ -85,7 +81,7 @@ void TwoColM::formatAxes(const ParamBin& bin)
     }
 }
 
-void TwoColM::clearLineSeries(){
+void TwoCol::clearLineSeries(){
     for(auto series : m_chart->series())
         m_chart->removeSeries(series);
     for(auto series : m_line_series_vec)
@@ -99,7 +95,6 @@ void TwoColM::graph(const QStringList& fnames,pw::FileSignature fsig,\
 {
     clearLineSeries();
     ParamBin bin = dataaux::multiXYToSeries(fnames,m_line_series_vec,fsig);
-
     for(auto series : m_line_series_vec)
         m_chart->addSeries(series);
 

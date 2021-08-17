@@ -59,8 +59,6 @@ ParamBin multiXYToSeries(const QStringList& fnames,\
     line_series_vec.clear();
 
     std::vector<double> min_xvals,max_xvals,min_yvals,max_yvals;
-    QString fname = fnames[0];
-
     ParamBin bin;
     for(auto& fname : fnames){
         line_series_vec.push_back(new QLineSeries);
