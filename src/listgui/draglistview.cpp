@@ -100,7 +100,7 @@ void DragListView::setTargetDirPath(const std::filesystem::path& dirpath) {
     setRootIndex(m_file_model->index(QString::fromStdString(m_target_dirpath.string())));
 }
 
-bool DragListView::isDir(QModelIndex& index)
+bool DragListView::isDir(const QModelIndex& index)
 {
     if(m_file_model->isDir(index))
         return true;

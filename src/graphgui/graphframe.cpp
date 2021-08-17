@@ -28,6 +28,7 @@ GraphFrame::GraphFrame(QWidget* parent) : QFrame(parent)
 
     m_file_textedit = new QTextEdit(this);
     m_file_textedit->setReadOnly(true);
+
     m_twocol = new TwoCol(this);
     m_threecol = new ThreeColStacked(this);
     m_twocolM = new TwoColM(this);
@@ -42,9 +43,9 @@ GraphFrame::GraphFrame(QWidget* parent) : QFrame(parent)
 
 void GraphFrame::dragEnterEvent(QDragEnterEvent *event)
 {
-    qDebug() << "GraphFrame::dragEnterEvent";
     if(event->mimeData()->hasText() || \
             event->mimeData()->hasFormat(DragListView::StringListMime)){
+        qDebug() << "GraphFrame::dragEnterEvent";
         event->accept();
     }
     else
@@ -55,8 +56,9 @@ void GraphFrame::dropEvent(QDropEvent* event)
 {
     qDebug() << "GraphFrame::dropEvent";
     if(event->mimeData()->hasText())
-        graphFile(event->mimeData()->text());
+        graphOneFile(event->mimeData()->text());
     else if(event->mimeData()->hasFormat(DragListView::StringListMime)){
+        qDebug() << "GraphFrame multifile drop event ";
         QByteArray file_data = event->mimeData()->data(DragListView::StringListMime);
         QDataStream data_stream(&file_data,QIODevice::ReadOnly);
         QStringList filelist;
@@ -70,11 +72,21 @@ void GraphFrame::dragMoveEvent(QDragMoveEvent *event)
     event->acceptProposedAction();
 }
 
+void GraphFrame::graphFiles(const QStringList& filenames)
+{
+    if(filenames.empty())
+        return;
+    if(filenames.size() == 1)
+        graphOneFile(filenames.front());
+    else
+        graphMultipleFiles(filenames);
+}
+
 void GraphFrame::graphMultipleFiles(const QStringList& filenames)
 {
-    if(filenames.size() < 2)
-        return;
-
+    qDebug() << filenames.size();
+    for(const auto& item : filenames)
+        qDebug() << item;
     std::string fname(filenames[0].toStdString());
     if(!fileSignatureExists(filenames[0])){
         m_file_signatures[fname] = pw::fileSignature(fname);
@@ -121,8 +133,9 @@ void GraphFrame::graphMultipleFiles(const QStringList& filenames)
     }
 }
 
-void GraphFrame::graphFile(const QString& filename){
+void GraphFrame::graphOneFile(const QString& filename){
 
+    qDebug() << filename;
     std::string fname(filename.toStdString());
     if(!fileSignatureExists(filename)){
         m_file_signatures[fname] = pw::fileSignature(fname);
@@ -133,13 +146,12 @@ void GraphFrame::graphFile(const QString& filename){
     pw::DataSignature data_sig = m_data_signatures[fname];
     pw::OperatorSignature op_sig = m_op_signatures[fname];
 
-    qDebug() << "About to call graph";
-    if(file_sig == pw::FileSignature::DAT)
-        qDebug() << "File signature is dat";
-    else if(file_sig == pw::FileSignature::JSON)
-        qDebug() << "File signature is json";
-    else if(file_sig == pw::FileSignature::UNKNOWN)
-        qDebug() << "File signature is unknown";
+//    if(file_sig == pw::FileSignature::DAT)
+//        qDebug() << "File signature is dat";
+//    else if(file_sig == pw::FileSignature::JSON)
+//        qDebug() << "File signature is json";
+//    else if(file_sig == pw::FileSignature::UNKNOWN)
+//        qDebug() << "File signature is unknown";
 
     if(data_sig == pw::DataSignature::XY){
         qDebug() << "Data signature is XY";

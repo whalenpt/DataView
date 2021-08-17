@@ -20,12 +20,16 @@
 //#include <QDebug>
 
 TwoCol::TwoCol(GraphFrame* parent_frame) : QWidget(parent_frame),
-    m_parent_frame(parent_frame), m_axes_type(AxesType::Standard)
+    m_axes_type(AxesType::Standard)
 {
     setAcceptDrops(true);
+    m_chart = new QChart;
+    m_chart->legend()->setVisible(true);
 
     m_series = new QLineSeries();
-    m_chart = new QChart();
+    m_chart->addSeries(m_series);
+    m_view = new DropChartView(m_chart,parent_frame);
+
     m_axisX = new QValueAxis;
     m_axisY = new QValueAxis;
     m_axes.append(m_axisX);
@@ -34,16 +38,9 @@ TwoCol::TwoCol(GraphFrame* parent_frame) : QWidget(parent_frame),
     m_axislogY = new QLogValueAxis;
     m_logaxes.append(m_axislogX);
     m_logaxes.append(m_axislogY);
-
-    initChart();
     initAxes();
     setAxes(AxesType::Standard);
-
-    m_view = new DropChartView(m_chart);
-    m_view->setRenderHint(QPainter::Antialiasing);
-    connect(m_view,SIGNAL(fileDrop(const QString&)),
-            m_parent_frame,SLOT(graphFile(const QString&)));
-    QVBoxLayout* vbox = new QVBoxLayout();
+    QVBoxLayout* vbox = new QVBoxLayout;
     vbox->addWidget(m_view);
     setLayout(vbox);
 }
@@ -55,16 +52,9 @@ void TwoCol::setAxes(AxesType axes_type) {
     axesaux::setAxes(axes_type,m_chart,m_series,m_axes,m_logaxes);
 }
 
-void TwoCol::initChart()
-{
-    m_chart->legend()->setVisible(true);
-    m_chart->addSeries(m_series);
-}
-
 void TwoCol::initAxes()
 {
     m_axes_type = AxesType::Standard;
-
     m_axisX->setTickCount(4);
     m_axisX->setLabelFormat("%.1e");
     m_chart->addAxis(m_axisX,Qt::AlignBottom);
@@ -113,4 +103,5 @@ void TwoCol::graph(const QString& fname,pw::FileSignature filesig,
 
     this->formatAxes(bin);
 }
+
 

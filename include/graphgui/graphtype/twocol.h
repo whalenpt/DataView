@@ -2,13 +2,7 @@
 #define TWOCOL_H
 
 #include <QWidget>
-#include <QDragEnterEvent>
-#include <QDropEvent>
-#include <QStringList>
 #include <QList>
-#include <vector>
-#include <string>
-#include <fstream>
 #include <ParamBin/parambin.hpp>
 #include <pwutils/pwdefs.h>
 #include "graphgui/axesaux.h"
@@ -19,6 +13,7 @@ class DropChartView;
 class QLineSeries;
 class QValueAxis;
 class QLogValueAxis;
+class DropChartView;
 
 
 class TwoCol : public QWidget
@@ -32,12 +27,11 @@ public:
     void setAxes(AxesType axes_type);
 
 private:
-    void initChart();
     void initAxes();
     void formatAxes(const ParamBin& bin);
-    GraphFrame* m_parent_frame;
-    DropChartView* m_view;
     QChart* m_chart;
+    DropChartView* m_view;
+
     QLineSeries* m_series;
     QValueAxis* m_axisX;
     QValueAxis* m_axisY;

@@ -17,7 +17,7 @@ public:
     void setTargetDirPath(const std::filesystem::path& dirpath);
     void getFileNames(QStringList& filelist);
     static const QString StringListMime;
-    bool isDir(QModelIndex& index);
+    bool isDir(const QModelIndex& index);
 
 protected:
     void startDrag(Qt::DropActions supportedActions) Q_DECL_OVERRIDE;

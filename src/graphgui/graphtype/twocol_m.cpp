@@ -23,6 +23,8 @@ TwoColM::TwoColM(GraphFrame* parent_frame) : QWidget(parent_frame),
 {
     setAcceptDrops(true);
     m_chart = new QChart();
+    m_view = new DropChartView(m_chart,parent_frame);
+
     m_axisX = new QValueAxis;
     m_axisY = new QValueAxis;
     m_axes.append(m_axisX);
@@ -35,11 +37,6 @@ TwoColM::TwoColM(GraphFrame* parent_frame) : QWidget(parent_frame),
     initChart();
     initAxes();
     setAxes(AxesType::Standard);
-
-    m_view = new DropChartView(m_chart);
-    m_view->setRenderHint(QPainter::Antialiasing);
-    connect(m_view,SIGNAL(fileListDrop(const QStringList&)),
-            m_parent_frame,SLOT(graphMultipleFiles(const QStringList&)));
     QVBoxLayout* vbox = new QVBoxLayout();
     vbox->addWidget(m_view);
     setLayout(vbox);

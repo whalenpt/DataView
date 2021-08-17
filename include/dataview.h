@@ -24,7 +24,7 @@ public:
     ~DataView();
 
 private slots:
-    void doubleClickedResponse(QModelIndex index);
+    void doubleClickedResponse(const QModelIndex& index);
     void dir_pushButton_clicked();
 
 private:

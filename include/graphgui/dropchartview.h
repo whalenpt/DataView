@@ -9,13 +9,14 @@ class QDropEvent;
 class QDragMoveEvent;
 class QChart;
 class QWidget;
+class GraphFrame;
 
 class DropChartView : public QChartView
 {
     Q_OBJECT
 
 public:
-    DropChartView(QChart* chart,QWidget* parent=0);
+    DropChartView(QChart* chart,GraphFrame* graph_frame);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
@@ -24,7 +25,9 @@ protected:
 
 signals:
     void fileListDrop(const QStringList& filenames);
-    void fileDrop(const QString& file);
+
+private:
+    GraphFrame* m_graph_frame;
 
 };
 

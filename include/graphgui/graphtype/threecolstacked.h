@@ -5,7 +5,6 @@
 #include <QStringList>
 #include <vector>
 #include <string>
-#include <ParamBin/parambin.hpp>
 #include <pwutils/pwdefs.h>
 
 class GraphFrame;
@@ -28,7 +27,6 @@ private:
     GraphFrame* m_parent_frame;
     QWidget* createThreeColWidget();
     QWidget* m_three_col_widget;
-
     QLineSeries* m_three_col_series1;
     QLineSeries* m_three_col_series2;
     DropChartView* m_three_col_view1;

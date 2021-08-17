@@ -28,8 +28,7 @@ public:
     void displayFileText(const QString& fname);
 
 public slots:
-    void graphFile(const QString& fname);
-    void graphMultipleFiles(const QStringList& fnames);
+    void graphFiles(const QStringList& fnames);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
@@ -46,6 +45,8 @@ private:
     DataSignatureMap m_data_signatures;
     OperatorSignatureMap m_op_signatures;
     bool fileSignatureExists(const QString& fname);
+    void graphOneFile(const QString& fname);
+    void graphMultipleFiles(const QStringList& fnames);
 };
 
 #endif // GRAPHFRAME_H
