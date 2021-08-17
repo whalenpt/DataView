@@ -13,29 +13,29 @@ find_package(Qt6 6.1.0 COMPONENTS Charts REQUIRED)
 set(SOURCE_LIST
 	dataview.cpp
 	draglistview.cpp
-	dropchartview.cpp
 	core/dataaux.cpp
 	core/fileaux.cpp
-	graphgui/axesaux.cpp
-	graphgui/graphframe.cpp
-	graphgui/graphtype/threecolstacked.cpp
-	graphgui/graphtype/twocol.cpp
-	graphgui/graphtype/twocol_m.cpp
+	graphframe/graphframe.cpp
+	graphframe/dropchartview.cpp
+	graphframe/axesaux.cpp
+	graphframe/threecolstacked.cpp
+	graphframe/twocol.cpp
+	graphframe/twocol_m.cpp
 )
 
 set(INCL_DIR "${DataView_SOURCE_DIR}/include")
 set(HEADER_LIST
 	${INCL_DIR}/dataview.h
 	${INCL_DIR}/dataview_global.h
+	${INCL_DIR}/draglistview.h
 	${INCL_DIR}/core/dataaux.h
 	${INCL_DIR}/core/fileaux.h
-	${INCL_DIR}/listgui/draglistview.h
-    ${INCL_DIR}/graphgui/axesaux.h
-	${INCL_DIR}/graphgui/dropchartview.h
-	${INCL_DIR}/graphgui/graphframe.h
-	${INCL_DIR}/graphgui/graphtype/threecolstacked.h
-	${INCL_DIR}/graphgui/graphtype/twocol.h
-	${INCL_DIR}/graphgui/graphtype/twocol_m.h
+	${INCL_DIR}/graphframe/graphframe.h
+	${INCL_DIR}/graphframe/dropchartview.h
+    ${INCL_DIR}/graphframe/axesaux.h
+	${INCL_DIR}/graphframe/threecolstacked.h
+	${INCL_DIR}/graphframe/twocol.h
+	${INCL_DIR}/graphframe/twocol_m.h
 )
 
 add_library(dataview ${SOURCE_LIST} ${HEADER_LIST})
