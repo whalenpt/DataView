@@ -83,6 +83,58 @@ ParamBin multiXYToSeries(const QStringList& fnames,\
     return bin;
 }
 
+ParamBin XY_CToSeries(const QString& fname,QLineSeries& series1,QLineSeries& series2,pw::FileSignature filesig)
+{
+    series1.clear();
+    series1.setUseOpenGL(true);
+    series2.clear();
+    series2.setUseOpenGL(true);
+
+    std::vector<double> x;
+    std::vector<double> y1;
+    std::vector<double> y2;
+    ParamBin bin;
+    if(filesig == pw::FileSignature::DAT)
+        bin = ParamBin({dat::readXY_C(fname.toStdString(),x,y1,y2)});
+    else if(filesig == pw::FileSignature::JSON)
+        bin = ParamBin({json::readXY_C(fname.toStdString(),x,y1,y2)});
+    else
+        return ParamBin();
+
+    double min_xval = pw::min(x);
+    double max_xval = pw::max(x);
+    double min_yval1 = pw::min(y1);
+    double max_yval1 = pw::max(y1);
+    double min_yval2 = pw::min(y2);
+    double max_yval2 = pw::max(y2);
+
+    // Workaround QValueAxis setRange issue handling small numbers
+    if(fabs(max_xval - min_xval) < 1.0e-12){
+       double mult_fact = 1.0e15;
+       min_xval *= mult_fact;
+       max_xval *= mult_fact;
+       for(auto i = 0; i < x.size(); i++){
+           series1.append(mult_fact*x[i],y1[i]);
+           series2.append(mult_fact*x[i],y2[i]);
+       }
+    } else{
+        for(auto i = 0; i < x.size(); i++){
+           series1.append(x[i],y1[i]);
+           series2.append(x[i],y2[i]);
+        }
+    }
+    series1.setName(fileaux::getLocalFileName(fname) + " - real");
+    series2.setName(fileaux::getLocalFileName(fname) + " - imag");
+    bin.set("min_xval",min_xval);
+    bin.set("max_xval",max_xval);
+    bin.set("min_yval1",min_yval1);
+    bin.set("max_yval1",max_yval1);
+    bin.set("min_yval2",min_yval2);
+    bin.set("max_yval2",max_yval2);
+    return bin;
+}
+
+
 void setSeriesName(const QString& fname,QLineSeries& series) {
     series.setName(fileaux::getLocalFileName(fname));
 }

@@ -60,7 +60,6 @@ void DataView::init()
 
 void DataView::doubleClickedResponse(const QModelIndex& index){
     if(!m_list_view->isDir(index)){
-        qDebug() << "Double click response.";
         QStringList filelist;
         m_list_view->getFileNames(filelist);
         m_graph_frame->graphFiles(filelist);

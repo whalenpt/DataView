@@ -45,7 +45,6 @@ void GraphFrame::dragEnterEvent(QDragEnterEvent *event)
 {
     if(event->mimeData()->hasText() || \
             event->mimeData()->hasFormat(DragListView::StringListMime)){
-        qDebug() << "GraphFrame::dragEnterEvent";
         event->accept();
     }
     else
@@ -54,11 +53,9 @@ void GraphFrame::dragEnterEvent(QDragEnterEvent *event)
 
 void GraphFrame::dropEvent(QDropEvent* event)
 {
-    qDebug() << "GraphFrame::dropEvent";
     if(event->mimeData()->hasText())
         graphOneFile(event->mimeData()->text());
     else if(event->mimeData()->hasFormat(DragListView::StringListMime)){
-        qDebug() << "GraphFrame multifile drop event ";
         QByteArray file_data = event->mimeData()->data(DragListView::StringListMime);
         QDataStream data_stream(&file_data,QIODevice::ReadOnly);
         QStringList filelist;
@@ -84,9 +81,6 @@ void GraphFrame::graphFiles(const QStringList& filenames)
 
 void GraphFrame::graphMultipleFiles(const QStringList& filenames)
 {
-    qDebug() << filenames.size();
-    for(const auto& item : filenames)
-        qDebug() << item;
     std::string fname(filenames[0].toStdString());
     if(!fileSignatureExists(filenames[0])){
         m_file_signatures[fname] = pw::fileSignature(fname);
@@ -135,7 +129,6 @@ void GraphFrame::graphMultipleFiles(const QStringList& filenames)
 
 void GraphFrame::graphOneFile(const QString& filename){
 
-    qDebug() << filename;
     std::string fname(filename.toStdString());
     if(!fileSignatureExists(filename)){
         m_file_signatures[fname] = pw::fileSignature(fname);
@@ -154,17 +147,14 @@ void GraphFrame::graphOneFile(const QString& filename){
 //        qDebug() << "File signature is unknown";
 
     if(data_sig == pw::DataSignature::XY){
-        qDebug() << "Data signature is XY";
         m_twocol->graph(filename,file_sig,data_sig,op_sig);
         m_frame_layout->setCurrentWidget(m_twocol);
     }
     else if(data_sig == pw::DataSignature::XY_C){
-        qDebug() << "Data signature is XY_C";
         m_threecol->graph(filename,file_sig,data_sig,op_sig);
         m_frame_layout->setCurrentWidget(m_threecol);
     }
     else{
-        qDebug() << "Data signature is UNKNOWN";
         displayFileText(filename);
     }
 }

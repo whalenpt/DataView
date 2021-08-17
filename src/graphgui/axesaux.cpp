@@ -31,8 +31,6 @@ void setAxes(AxesType axes_type,QChart* chart,QLineSeries* series,\
     for(auto axis : y_axes)
         chart->removeAxis(axis);
 
-//    chart->removeAxis(chart->axes(Qt::Horizontal,series).at(0));
-//    chart->removeAxis(chart->axes(Qt::Vertical,series).at(0));
     for(auto item : series->attachedAxes())
         series->detachAxis(item);
 
@@ -80,8 +78,6 @@ void setAxes(AxesType axes_type,QChart* chart,std::vector<QLineSeries*>& series_
     for(auto axis : y_axes)
         chart->removeAxis(axis);
 
-//    chart->removeAxis(chart->axes(Qt::Horizontal,series).at(0));
-//    chart->removeAxis(chart->axes(Qt::Vertical,series).at(0));
     for(auto series : series_vec)
         for(auto item : series->attachedAxes())
             series->detachAxis(item);
