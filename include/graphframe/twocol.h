@@ -30,7 +30,6 @@ public:
     void setAxes(AxesType axes_type);
 
 private:
-    void initChart();
     void initAxes();
     void formatAxes(const ParamBin& bin);
     void clearLineSeries();

@@ -113,7 +113,7 @@ void GraphFrame::graphMultipleFiles(const QStringList& filenames)
     }
     if(data_sig == pw::DataSignature::XY){
         m_twocol->graph(filenames,file_sig,data_sig,op_sig);
-        m_frame_layout->setCurrentWidget(m_twocolM);
+        m_frame_layout->setCurrentWidget(m_twocol);
     }
     else{
         QMessageBox::warning(0,"Multiple data file error",

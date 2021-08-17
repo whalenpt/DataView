@@ -1,6 +1,6 @@
 
 
-#include "graphframe/twocol_m.h"
+#include "graphframe/twocol.h"
 #include "graphframe/graphframe.h"
 #include "graphframe/dropchartview.h"
 #include "graphframe/axesaux.h"
@@ -34,8 +34,6 @@ TwoCol::TwoCol(GraphFrame* parent_frame) : QWidget(parent_frame),
     m_axislogY = new QLogValueAxis;
     m_logaxes.append(m_axislogX);
     m_logaxes.append(m_axislogY);
-
-    initChart();
 
     initAxes();
     setAxes(AxesType::Standard);
@@ -92,7 +90,7 @@ void TwoCol::clearLineSeries(){
 void TwoCol::graph(const QString& fname,pw::FileSignature fsig,\
         pw::DataSignature datasig, pw::OperatorSignature opsig)
 {
-    graph(QStringList << fname, fsig,datasig,opsig);
+    graph(QStringList({fname}), fsig,datasig,opsig);
 }
 
 //void TwoColM::graph(const QStringList& fnames,AxesType axes_type){
