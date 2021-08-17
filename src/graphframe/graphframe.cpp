@@ -1,6 +1,5 @@
 
 #include "graphframe/graphframe.h"
-#include "graphframe/twocol_m.h"
 #include "graphframe/twocol.h"
 #include "graphframe/threecolstacked.h"
 #include "draglistview.h"
@@ -30,12 +29,10 @@ GraphFrame::GraphFrame(QWidget* parent) : QFrame(parent)
 
     m_twocol = new TwoCol(this);
     m_threecol = new ThreeColStacked(this);
-    m_twocolM = new TwoColM(this);
 
     m_frame_layout = new QStackedLayout();
     m_frame_layout->addWidget(m_file_textedit);
     m_frame_layout->addWidget(m_twocol);
-    m_frame_layout->addWidget(m_twocolM);
     m_frame_layout->addWidget(m_threecol);
     setLayout(m_frame_layout);
 }
@@ -115,7 +112,7 @@ void GraphFrame::graphMultipleFiles(const QStringList& filenames)
         }
     }
     if(data_sig == pw::DataSignature::XY){
-        m_twocolM->graph(filenames,file_sig,data_sig,op_sig);
+        m_twocol->graph(filenames,file_sig,data_sig,op_sig);
         m_frame_layout->setCurrentWidget(m_twocolM);
     }
     else{

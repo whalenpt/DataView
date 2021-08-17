@@ -1,5 +1,6 @@
 
-#include "graphframe/twocol.h"
+
+#include "graphframe/twocol_m.h"
 #include "graphframe/graphframe.h"
 #include "graphframe/dropchartview.h"
 #include "graphframe/axesaux.h"
@@ -11,23 +12,18 @@
 #include <QValueAxis>
 #include <QLogValueAxis>
 #include <QLineSeries>
-#include <QAbstractSeries>
 #include <QString>
+#include <QStringList>
 #include <QVBoxLayout>
-#include <vector>
+#include <pwutils/pwmath.hpp>
 #include <ParamBin/parambin.hpp>
 
-//#include <QDebug>
-
 TwoCol::TwoCol(GraphFrame* parent_frame) : QWidget(parent_frame),
-    m_axes_type(AxesType::Standard)
+    m_parent_frame(parent_frame)
 {
     setAcceptDrops(true);
-    m_chart = new QChart;
+    m_chart = new QChart();
     m_chart->legend()->setVisible(true);
-
-    m_series = new QLineSeries();
-    m_chart->addSeries(m_series);
     m_view = new DropChartView(m_chart,parent_frame);
 
     m_axisX = new QValueAxis;
@@ -39,19 +35,18 @@ TwoCol::TwoCol(GraphFrame* parent_frame) : QWidget(parent_frame),
     m_logaxes.append(m_axislogX);
     m_logaxes.append(m_axislogY);
 
+    initChart();
+
     initAxes();
     setAxes(AxesType::Standard);
-
-    QVBoxLayout* vbox = new QVBoxLayout;
+    QVBoxLayout* vbox = new QVBoxLayout();
     vbox->addWidget(m_view);
     setLayout(vbox);
 }
 
 void TwoCol::setAxes(AxesType axes_type) {
-    if(axes_type == m_axes_type)
-        return;
     m_axes_type = axes_type;
-    axesaux::setAxes(axes_type,m_chart,m_series,m_axes,m_logaxes);
+    axesaux::setAxes(axes_type,m_chart,m_line_series_vec,m_axes,m_logaxes);
 }
 
 void TwoCol::initAxes()
@@ -67,9 +62,6 @@ void TwoCol::initAxes()
 
     m_axislogX->setLabelFormat("%.2e");
     m_axislogY->setLabelFormat("%.2e");
-
-    m_series->attachAxis(m_axisX);
-    m_series->attachAxis(m_axisY);
 }
 
 void TwoCol::formatAxes(const ParamBin& bin)
@@ -89,10 +81,29 @@ void TwoCol::formatAxes(const ParamBin& bin)
     }
 }
 
-void TwoCol::graph(const QString& fname,pw::FileSignature filesig,
-        pw::DataSignature datasig,pw::OperatorSignature opsig)
+void TwoCol::clearLineSeries(){
+    for(auto series : m_chart->series())
+        m_chart->removeSeries(series);
+    for(auto series : m_line_series_vec)
+        delete series;
+    m_line_series_vec.clear();
+}
+
+void TwoCol::graph(const QString& fname,pw::FileSignature fsig,\
+        pw::DataSignature datasig, pw::OperatorSignature opsig)
 {
-    ParamBin bin = dataaux::XYToSeries(fname,*m_series,filesig);
+    graph(QStringList << fname, fsig,datasig,opsig);
+}
+
+//void TwoColM::graph(const QStringList& fnames,AxesType axes_type){
+void TwoCol::graph(const QStringList& fnames,pw::FileSignature fsig,\
+        pw::DataSignature datasig, pw::OperatorSignature opsig)
+{
+    clearLineSeries();
+    ParamBin bin = dataaux::multiXYToSeries(fnames,m_line_series_vec,fsig);
+    for(auto series : m_line_series_vec)
+        m_chart->addSeries(series);
+
     if(opsig == pw::OperatorSignature::NONE)
         this->setAxes(AxesType::Standard);
     else if(opsig == pw::OperatorSignature::LOGY)

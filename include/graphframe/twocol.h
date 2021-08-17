@@ -25,6 +25,8 @@ public:
     explicit TwoCol(GraphFrame* parent_frame);
     void graph(const QStringList& fnames,pw::FileSignature fsig,\
             pw::DataSignature datasig, pw::OperatorSignature opsig);
+    void graph(const QString& fname,pw::FileSignature fsig,\
+            pw::DataSignature datasig, pw::OperatorSignature opsig);
     void setAxes(AxesType axes_type);
 
 private:
