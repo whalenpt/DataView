@@ -7,7 +7,7 @@
 #include <vector>
 #include <ParamBin/parambin.hpp>
 #include <pwutils/pwdefs.h>
-#include "graphgui/axesaux.h"
+#include "graphframe/axesaux.h"
 
 class GraphFrame;
 class QChart;

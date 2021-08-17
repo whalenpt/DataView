@@ -1,5 +1,5 @@
 
-#include "graphgui/axesaux.h"
+#include "graphframe/axesaux.h"
 #include <QChart>
 #include <QAbstractSeries>
 #include <QLineSeries>

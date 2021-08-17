@@ -1,9 +1,9 @@
 
-#include "graphgui/graphframe.h"
-#include "graphgui/graphtype/twocol_m.h"
-#include "graphgui/graphtype/twocol.h"
-#include "graphgui/graphtype/threecolstacked.h"
-#include "listgui/draglistview.h"
+#include "graphframe/graphframe.h"
+#include "graphframe/twocol_m.h"
+#include "graphframe/twocol.h"
+#include "graphframe/threecolstacked.h"
+#include "draglistview.h"
 
 #include <QWidget>
 #include <QFrame>

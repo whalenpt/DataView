@@ -1,8 +1,7 @@
 
-#include "graphgui/graphframe.h"
-#include "graphgui/dropchartview.h"
-#include "graphgui/graphtype/threecolstacked.h"
-#include "core/fileaux.h"
+#include "graphframe/threecolstacked.h"
+#include "graphframe/graphframe.h"
+#include "graphframe/dropchartview.h"
 #include "core/dataaux.h"
 
 #include <QWidget>

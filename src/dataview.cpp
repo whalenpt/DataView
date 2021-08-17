@@ -9,8 +9,8 @@
 #include <filesystem>
 #include <ParamBin/parambin.hpp>
 #include "dataview.h"
-#include "graphgui/graphframe.h"
-#include "listgui/draglistview.h"
+#include "draglistview.h"
+#include "graphframe/graphframe.h"
 
 DataView::DataView(QWidget *parent) :
     QDialog(parent),

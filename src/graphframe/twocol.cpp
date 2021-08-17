@@ -1,8 +1,8 @@
 
-#include "graphgui/graphframe.h"
-#include "graphgui/dropchartview.h"
-#include "graphgui/axesaux.h"
-#include "graphgui/graphtype/twocol.h"
+#include "graphframe/twocol.h"
+#include "graphframe/graphframe.h"
+#include "graphframe/dropchartview.h"
+#include "graphframe/axesaux.h"
 #include "core/dataaux.h"
 
 #include <QWidget>
