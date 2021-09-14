@@ -15,7 +15,6 @@ class DropChartView;
 class QLineSeries;
 class QValueAxis;
 class QLogValueAxis;
-class DropChartView;
 
 class TwoCol : public QWidget
 {

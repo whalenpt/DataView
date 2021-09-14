@@ -2,6 +2,7 @@
 #include "graphframe/graphframe.h"
 #include "graphframe/twocol.h"
 #include "graphframe/threecolstacked.h"
+#include "graphframe/surfacegraph.h"
 #include "draglistview.h"
 
 #include <QWidget>
@@ -29,11 +30,13 @@ GraphFrame::GraphFrame(QWidget* parent) : QFrame(parent)
 
     m_twocol = new TwoCol(this);
     m_threecol = new ThreeColStacked(this);
+    m_surface = new SurfaceGraph(this);
 
     m_frame_layout = new QStackedLayout();
     m_frame_layout->addWidget(m_file_textedit);
     m_frame_layout->addWidget(m_twocol);
     m_frame_layout->addWidget(m_threecol);
+    m_frame_layout->addWidget(m_surface);
     setLayout(m_frame_layout);
 }
 
@@ -117,9 +120,10 @@ void GraphFrame::graphMultipleFiles(const QStringList& filenames)
     }
     else{
         QMessageBox::warning(0,"Multiple data file error",
-                    "Multiple files must have the same file signature be analyzed together.");
-                return;
+                    QString("Data signature %1 not valid for multi-file plots").arg(\
+                        QString::number(static_cast<int>(m_data_signatures[fname]))));
         displayFileText(filenames[0]);
+        return;
     }
 }
 
@@ -142,6 +146,9 @@ void GraphFrame::graphOneFile(const QString& filename){
     else if(data_sig == pw::DataSignature::XY_C){
         m_threecol->graph(filename,file_sig,data_sig,op_sig);
         m_frame_layout->setCurrentWidget(m_threecol);
+    } else if(data_sig == pw::DataSignature::XYZ) {
+        m_surface->graph(filename,file_sig,data_sig,op_sig);
+        m_frame_layout->setCurrentWidget(m_surface);
     }
     else{
         displayFileText(filename);

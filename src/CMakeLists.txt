@@ -8,6 +8,7 @@ find_package(Qt6 COMPONENTS Core REQUIRED)
 find_package(Qt6 COMPONENTS Gui REQUIRED)
 find_package(Qt6 COMPONENTS Widgets REQUIRED)
 find_package(Qt6 6.1.0 COMPONENTS Charts REQUIRED)
+find_package(Qt6 6.1.0 COMPONENTS DataVisualization REQUIRED)
 
 
 set(SOURCE_LIST
@@ -20,6 +21,7 @@ set(SOURCE_LIST
 	graphframe/axesaux.cpp
 	graphframe/threecolstacked.cpp
 	graphframe/twocol.cpp
+	graphframe/surfacegraph.cpp
 )
 
 set(INCL_DIR "${DataView_SOURCE_DIR}/include")
@@ -34,6 +36,7 @@ set(HEADER_LIST
     ${INCL_DIR}/graphframe/axesaux.h
 	${INCL_DIR}/graphframe/threecolstacked.h
 	${INCL_DIR}/graphframe/twocol.h
+	${INCL_DIR}/graphframe/surfacegraph.h
 )
 
 add_library(dataview ${SOURCE_LIST} ${HEADER_LIST})
@@ -51,6 +54,7 @@ target_link_libraries(dataview
 	PRIVATE Qt6::Gui
 	PRIVATE Qt6::Widgets
 	PRIVATE Qt6::Charts
+    PRIVATE Qt6::DataVisualization
 	PUBLIC ParamBin::parambin
 	PUBLIC pw::pwutils
 )

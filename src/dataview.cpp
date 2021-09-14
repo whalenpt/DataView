@@ -41,9 +41,7 @@ DataView::DataView(QWidget *parent) :
     setWindowTitle("Data Analyzer");
 }
 
-DataView::~DataView()
-{
-}
+DataView::~DataView() { }
 
 void DataView::setTargetDirPath(const std::filesystem::path& dirpath) {
     m_target_dirpath = dirpath;
