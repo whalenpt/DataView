@@ -20,6 +20,7 @@ DataView::DataView(QWidget *parent) :
     m_dir_name(new QLabel("Placeholder")),
     m_dir_pushButton(new QPushButton("Choose..."))
 {
+    qputenv("QSG_RHI_BACKEND","opengl");
     setTargetDirPath(m_target_dirpath);
     QHBoxLayout* hbox = new QHBoxLayout();
     hbox->addWidget(new QLabel("Directory Name:"));

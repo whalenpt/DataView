@@ -9,8 +9,6 @@
 #include <pwutils/pwdefs.h>
 
 class GraphFrame;
-class QChart;
-class DropChartView;
 class Q3DSurface;
 class QSurface3DSeries;
 class QSurfaceDataProxy;
@@ -27,8 +25,6 @@ public:
 
 private:
     GraphFrame* m_parent_frame;
-    DropChartView* m_view;
-    QChart* m_chart;
     Q3DSurface* m_graph;
     QSurface3DSeries* m_series;
     QSurfaceDataProxy* m_data_proxy;
@@ -36,6 +32,8 @@ private:
     QList<QList<QSurfaceDataItem>*>* m_data_array;
 
     void clearSeries();
+    void initTest();
+    void initTest2();
 };
 
 

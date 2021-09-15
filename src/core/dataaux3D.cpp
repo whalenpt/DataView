@@ -3,6 +3,7 @@
 #include <pwutils/read/readdat.h>
 #include <pwutils/read/readjson.h>
 #include <pwutils/pwmath.hpp>
+#include <iostream>
 #include <ParamBin/parambin.hpp>
 #include <QSurfaceDataItem>
 #include <QDebug>
@@ -28,8 +29,6 @@ ParamBin XYZToSurfaceDataArray(const QString& fname,\
     qDebug() << "x size is " << QString::number(x.size());
     qDebug() << "y size is " << QString::number(y.size());
     qDebug() << "z size is " << QString::number(z.size());
-    for(auto i = 0; i < x.size(); i++)
-        qDebug() << x[i];
 
     double min_xval = pw::min(x);
     double max_xval = pw::max(x);
@@ -40,35 +39,25 @@ ParamBin XYZToSurfaceDataArray(const QString& fname,\
     double min_zval = pw::min(z);
     double max_zval = pw::max(z);
 
+    double xrange = max_xval-min_xval;
+    double yrange = max_yval-min_yval;
+    double zrange = max_zval-min_zval;
+
 //    // Workaround QValueAxis setRange issue handling small numbers
-//    if(fabs(max_xval - min_xval) < 1.0e-12){
-//       double mult_fact = 1.0e15;
-//       min_xval *= mult_fact;
-//       max_xval *= mult_fact;
-//       for(unsigned int i = 0; i < x.size(); i++)
-//           x[i] *= mult_fact;
-//    }
-//    if(fabs(max_yval - min_yval) < 1.0e-12){
-//       double mult_fact = 1.0e15;
-//       min_yval *= mult_fact;
-//       max_yval *= mult_fact;
-//       for(unsigned int i = 0; i < y.size(); i++)
-//           y[i] *= mult_fact;
-//    }
-
    for(unsigned int i = 0; i < x.size(); i++)
-       x[i] /= (max_xval-min_xval);
+       x[i] /= xrange;
    for(unsigned int i = 0; i < y.size(); i++)
-       y[i] /= (max_yval-min_yval);
+       y[i] /= yrange;
    for(unsigned int i = 0; i < z.size(); i++)
-       z[i] /= (max_zval-min_zval);
+       z[i] /= zrange;
 
-    bin.set("min_xval",min_xval);
-    bin.set("max_xval",max_xval);
-    bin.set("min_yval",min_yval);
-    bin.set("max_yval",max_yval);
-    bin.set("min_zval",min_zval);
-    bin.set("max_zval",max_zval);
+    bin.set("min_xval",min_xval/xrange);
+    bin.set("max_xval",max_xval/xrange);
+    bin.set("min_yval",min_yval/yrange);
+    bin.set("max_yval",max_yval/yrange);
+    bin.set("min_zval",min_zval/zrange);
+    bin.set("max_zval",max_zval/zrange);
+    std::cout << bin << std::endl;
 
     data_array.reserve(x.size());
     for(auto i = 0; i < x.size(); i++){
