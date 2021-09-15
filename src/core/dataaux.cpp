@@ -1,11 +1,10 @@
 #include "core/dataaux.h"
-#include "core/fileaux.h"
-
 #include <string>
 #include <QString>
 #include <QLineSeries>
 #include <QValueAxis>
 #include <QLogValueAxis>
+#include <QFileInfo>
 #include <pwutils/pwmath.hpp>
 #include <pwutils/read/readdat.h>
 #include <pwutils/read/readjson.h>
@@ -93,9 +92,9 @@ ParamBin XY_CToSeries(const QString& fname,QLineSeries& series1,QLineSeries& ser
     std::vector<double> y2;
     ParamBin bin;
     if(filesig == pw::FileSignature::DAT)
-        bin = ParamBin({dat::readXY_C(fname.toStdString(),x,y1,y2)});
+        bin = ParamBin({dat::readXCVY(fname.toStdString(),x,y1,y2)});
     else if(filesig == pw::FileSignature::JSON)
-        bin = ParamBin({json::readXY_C(fname.toStdString(),x,y1,y2)});
+        bin = ParamBin({json::readXCVY(fname.toStdString(),x,y1,y2)});
     else
         return ParamBin();
 
@@ -121,8 +120,8 @@ ParamBin XY_CToSeries(const QString& fname,QLineSeries& series1,QLineSeries& ser
            series2.append(x[i],y2[i]);
         }
     }
-    series1.setName(fileaux::getLocalFileName(fname) + " - real");
-    series2.setName(fileaux::getLocalFileName(fname) + " - imag");
+    series1.setName(getLocalFileName(fname) + " - real");
+    series2.setName(getLocalFileName(fname) + " - imag");
     bin.set("min_xval",min_xval);
     bin.set("max_xval",max_xval);
     bin.set("min_yval1",min_yval1);
@@ -132,9 +131,14 @@ ParamBin XY_CToSeries(const QString& fname,QLineSeries& series1,QLineSeries& ser
     return bin;
 }
 
+QString getLocalFileName(const QString& full_filename)
+{
+    QFileInfo file_info(full_filename);
+    return file_info.fileName();
+}
 
 void setSeriesName(const QString& fname,QLineSeries& series) {
-    series.setName(fileaux::getLocalFileName(fname));
+    series.setName(getLocalFileName(fname));
 }
 
 void formatAxisX(const ParamBin& bin,QValueAxis& axis)

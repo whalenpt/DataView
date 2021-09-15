@@ -15,7 +15,7 @@ set(SOURCE_LIST
 	dataview.cpp
 	draglistview.cpp
 	core/dataaux.cpp
-	core/fileaux.cpp
+	core/dataaux3D.cpp
 	graphframe/graphframe.cpp
 	graphframe/dropchartview.cpp
 	graphframe/axesaux.cpp
@@ -30,7 +30,7 @@ set(HEADER_LIST
 	${INCL_DIR}/dataview_global.h
 	${INCL_DIR}/draglistview.h
 	${INCL_DIR}/core/dataaux.h
-	${INCL_DIR}/core/fileaux.h
+	${INCL_DIR}/core/dataaux3D.h
 	${INCL_DIR}/graphframe/graphframe.h
 	${INCL_DIR}/graphframe/dropchartview.h
     ${INCL_DIR}/graphframe/axesaux.h

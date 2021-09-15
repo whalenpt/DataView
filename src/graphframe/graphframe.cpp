@@ -143,12 +143,15 @@ void GraphFrame::graphOneFile(const QString& filename){
         m_twocol->graph(filename,file_sig,data_sig,op_sig);
         m_frame_layout->setCurrentWidget(m_twocol);
     }
-    else if(data_sig == pw::DataSignature::XY_C){
+    else if(data_sig == pw::DataSignature::XCVY){
         m_threecol->graph(filename,file_sig,data_sig,op_sig);
         m_frame_layout->setCurrentWidget(m_threecol);
     } else if(data_sig == pw::DataSignature::XYZ) {
+        qDebug() << "Found an XYZ dataSignature";
         m_surface->graph(filename,file_sig,data_sig,op_sig);
+        qDebug() << "GraphXYZ data";
         m_frame_layout->setCurrentWidget(m_surface);
+        qDebug() << "Set layout to current widget";
     }
     else{
         displayFileText(filename);

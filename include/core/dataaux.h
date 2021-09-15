@@ -1,12 +1,13 @@
-#ifndef DATAAUX_H
-#define DATAAUX_H
+//dataux.h
+#pragma once
 
-#include <QLineSeries>
-#include <QValueAxis>
-#include <QLogValueAxis>
-#include <string>
+#include <QString>
+#include <vector>
 #include <ParamBin/parambin.hpp>
 #include <pwutils/pwdefs.h>
+class QValueAxis;
+class QLogValueAxis;
+class QLineSeries;
 
 namespace dataaux{
     ParamBin XYToSeries(const QString& fname,QLineSeries& series,pw::FileSignature filesig);
@@ -16,10 +17,10 @@ namespace dataaux{
         std::vector<QLineSeries*>& line_series_vec,pw::FileSignature filesig);
 
     void setSeriesName(const QString& fname,QLineSeries& series);
+    QString getLocalFileName(const QString& full_filename);
     void formatAxisX(const ParamBin& bin,QValueAxis& axis);
     void formatAxisY(const ParamBin& bin,QValueAxis& axis);
     void formatAxisLogX(const ParamBin& bin,QLogValueAxis& axis);
     void formatAxisLogY(const ParamBin& bin,QLogValueAxis& axis);
 }
 
-#endif // DATAAUX_H

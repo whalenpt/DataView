@@ -2,7 +2,7 @@
 #include "graphframe/surfacegraph.h"
 #include "graphframe/graphframe.h"
 #include "graphframe/dropchartview.h"
-#include "core/dataaux.h"
+#include "core/dataaux3D.h"
 
 #include <QChart>
 #include <QLineSeries>
@@ -59,7 +59,8 @@ SurfaceGraph::SurfaceGraph(GraphFrame* parent_frame) : QWidget(parent_frame),
     m_graph->addSeries(m_series);
        
     QVBoxLayout* vbox = new QVBoxLayout();
-    vbox->addWidget(m_view);
+    QWidget* graph_widget = QWidget::createWindowContainer(m_graph);
+    vbox->addWidget(graph_widget);
     setLayout(vbox);
 }
 
@@ -72,7 +73,8 @@ void SurfaceGraph::graph(const QString& fname,pw::FileSignature fsig,\
         pw::DataSignature datasig, pw::OperatorSignature opsig)
 {
     clearSeries();
-    ParamBin bin = dataaux::XYZToSurfaceDataArray(fnames,m_data_array,fsig);
+    ParamBin bin = dataaux3D::XYZToSurfaceDataArray(fname,*m_data_array,fsig);
+    m_data_proxy->resetArray(m_data_array);
 //    graph(QStringList({fname}), fsig,datasig,opsig);
 }
 
