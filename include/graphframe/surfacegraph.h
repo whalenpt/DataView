@@ -26,12 +26,13 @@ public:
     void setMaxPoint2DY(unsigned int points) {m_maxpoint2DY = points;}
 
 private:
-    unsigned int m_maxpoint2DX;
-    unsigned int m_maxpoint2DY;
     GraphFrame* m_parent_frame;
     Q3DSurface* m_graph;
     QSurface3DSeries* m_series;
     QSurfaceDataProxy* m_data_proxy;
+    unsigned int m_maxpoint2DX;
+    unsigned int m_maxpoint2DY;
+
     //QSurfaceDataArray is a typedef for QList<QList<QSurfaceDataItem>*>
     QList<QList<QSurfaceDataItem>*>* m_data_array;
 

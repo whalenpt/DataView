@@ -65,7 +65,8 @@ ParamBin XYZToSurfaceDataArray(const QString& fname,\
     }
 
     // mirror R coordinate if found
-    if(bin.inBin("xcordID") && bin.getStrU("xcordID")=="R"){
+    if((bin.inBin("xcordID") && bin.getStrU("xcordID")=="R") || \
+           (bin.inBin("xcordID") && bin.getStrU("xcordID")=="SR") ){
         auto nr = x.size();
         std::vector<double> xcopy(x.size());
         std::vector<double> zcopy(z.size());
@@ -102,27 +103,27 @@ ParamBin XYZToSurfaceDataArray(const QString& fname,\
     bin.set("min_zval",min_zval);
     bin.set("max_zval",max_zval);
 
-    if(xrange < 1e-3){
+//    if(xrange < 1e-3){
         for(unsigned int i = 0; i < x.size(); i++)
             x[i] /= xrange;
         bin.set("min_xval",min_xval/xrange);
         bin.set("max_xval",max_xval/xrange);
         bin.set("xunit_str","arb.");
-    }
-    if(yrange < 1e-3){
+ //   }
+  //  if(yrange < 1e-3){
         for(unsigned int i = 0; i < y.size(); i++)
             y[i] /= yrange;
         bin.set("min_yval",min_yval/yrange);
         bin.set("max_yval",max_yval/yrange);
         bin.set("yunit_str","arb.");
-    }
-    if(zrange < 1e-3){
+//    }
+//    if(zrange < 1e-3){
         for(unsigned int i = 0; i < z.size(); i++)
             z[i] /= zrange;
         bin.set("min_zval",min_zval/zrange);
         bin.set("max_zval",max_zval/zrange);
         bin.set("zunit_str","arb.");
-    }
+//    }
 
     data_array.reserve(x.size());
     for(auto i = 0; i < x.size(); i++){
