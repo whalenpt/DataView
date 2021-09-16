@@ -21,7 +21,9 @@
 #include <cmath>
 
 SurfaceGraph::SurfaceGraph(GraphFrame* parent_frame) : QWidget(parent_frame),
-    m_parent_frame(parent_frame)
+    m_parent_frame(parent_frame),
+    m_maxpoint2DX(200),
+    m_maxpoint2DY(200)
 {
     setAcceptDrops(true);
     m_graph = new Q3DSurface();
@@ -29,7 +31,9 @@ SurfaceGraph::SurfaceGraph(GraphFrame* parent_frame) : QWidget(parent_frame),
     m_graph->setAxisY(new QValue3DAxis);
     m_graph->setAxisZ(new QValue3DAxis);
     m_graph->setActiveTheme(new Q3DTheme(Q3DTheme::ThemeEbony));
-    m_graph->activeTheme()->setFont(QFont("Times New Roman",24));
+    QFont font = m_graph->activeTheme()->font();
+    font.setPointSize(20);
+    m_graph->activeTheme()->setFont(font);
     m_graph->axisX()->setLabelFormat("%.2e");
     m_graph->axisY()->setLabelFormat("%.2e");
     m_graph->axisZ()->setLabelFormat("%.2e");
@@ -71,7 +75,7 @@ void SurfaceGraph::graph(const QString& fname,pw::FileSignature fsig,\
         pw::DataSignature datasig, pw::OperatorSignature opsig)
 {
     clearSeries();
-    ParamBin bin = dataaux3D::XYZToSurfaceDataArray(fname,*m_data_array,fsig);
+    ParamBin bin = dataaux3D::XYZToSurfaceDataArray(fname,*m_data_array,fsig,m_maxpoint2DX,m_maxpoint2DY);
     m_data_proxy->resetArray(m_data_array);
     m_graph->axisX()->setRange(bin.getDbl("min_yval"),bin.getDbl("max_yval"));
     m_graph->axisY()->setRange(bin.getDbl("min_zval"),bin.getDbl("max_zval"));

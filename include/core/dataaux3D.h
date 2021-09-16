@@ -11,6 +11,6 @@
 namespace dataaux3D{
     ParamBin XYZToSurfaceDataArray(const QString& fname,\
             QList<QList<QSurfaceDataItem>*>& data_array,\
-            pw::FileSignature filesig);
+            pw::FileSignature filesig,unsigned int maxpointX,unsigned int maxpointY);
 }
 

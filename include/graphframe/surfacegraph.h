@@ -22,8 +22,12 @@ public:
     ~SurfaceGraph();
     void graph(const QString& fname,pw::FileSignature fsig,\
             pw::DataSignature datasig, pw::OperatorSignature opsig);
+    void setMaxPoint2DX(unsigned int points) {m_maxpoint2DX = points;}
+    void setMaxPoint2DY(unsigned int points) {m_maxpoint2DY = points;}
 
 private:
+    unsigned int m_maxpoint2DX;
+    unsigned int m_maxpoint2DY;
     GraphFrame* m_parent_frame;
     Q3DSurface* m_graph;
     QSurface3DSeries* m_series;

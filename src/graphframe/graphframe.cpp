@@ -40,6 +40,22 @@ GraphFrame::GraphFrame(QWidget* parent) : QFrame(parent)
     setLayout(m_frame_layout);
 }
 
+void GraphFrame::setMaxPoint2DX(unsigned int points) 
+{
+    m_surface->setMaxPoint2DX(points);
+}
+
+void GraphFrame::setMaxPoint2DY(unsigned int points)
+{
+    m_surface->setMaxPoint2DY(points);
+}
+
+void GraphFrame::setMaxPoint1D(unsigned int points)
+{
+//    m_twocol->setMaxPoint(points);
+}
+
+
 void GraphFrame::dragEnterEvent(QDragEnterEvent *event)
 {
     if(event->mimeData()->hasText() || \

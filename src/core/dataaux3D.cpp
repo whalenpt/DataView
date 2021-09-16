@@ -12,7 +12,7 @@ namespace dataaux3D{
 
 ParamBin XYZToSurfaceDataArray(const QString& fname,\
         QList<QList<QSurfaceDataItem>*>& data_array,\
-        pw::FileSignature filesig)
+        pw::FileSignature filesig,unsigned int maxpointX,unsigned int maxpointY)
 {
     ParamBin bin;
     std::vector<double> x;
@@ -24,6 +24,45 @@ ParamBin XYZToSurfaceDataArray(const QString& fname,\
         bin = ParamBin({json::readXYZ(fname.toStdString(),x,y,z)});
     else
         return ParamBin();
+
+    if(x.size() > maxpointX){
+        auto nx = x.size();
+        unsigned int strideX = static_cast<unsigned int>(x.size()/maxpointX)+1;
+        unsigned int count = 0;
+        for(auto i = 0; i < nx; i+=strideX){
+            x[count] = x[i];
+            count++;
+        }
+        x.resize(count);
+
+        count = 0;
+        for(auto i = 0; i < nx; i+=strideX){
+            for(auto j = 0; j < y.size(); j++){
+                z[count*y.size()+j] = z[i*y.size()+j];
+            }
+            count++;
+        }
+        z.resize(x.size()*y.size());
+    }
+
+    if(y.size() > maxpointY) {
+        auto ny = y.size();
+        unsigned int strideY = static_cast<unsigned int>(y.size()/maxpointY)+1;
+        int count = 0;
+        for(auto i = 0; i < ny; i+=strideY){
+            y[count] = y[i];
+            count++;
+        }
+        y.resize(count);
+        for(auto i = 0; i < x.size(); i++){
+            count = 0;
+            for(auto j = 0; j < ny; j+=strideY){
+                z[i*y.size()+count] = z[i*ny+j];
+                count++;
+            }
+        }
+        z.resize(x.size()*y.size());
+    }
 
     // mirror R coordinate if found
     if(bin.inBin("xcordID") && bin.getStrU("xcordID")=="R"){

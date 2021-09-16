@@ -26,6 +26,9 @@ class GraphFrame : public QFrame
 public:
     GraphFrame(QWidget* parent = 0);
     void displayFileText(const QString& fname);
+    void setMaxPoint1D(unsigned int points);
+    void setMaxPoint2DX(unsigned int points); 
+    void setMaxPoint2DY(unsigned int points);
 
 public slots:
     void graphFiles(const QStringList& fnames);
@@ -47,6 +50,7 @@ private:
     bool fileSignatureExists(const QString& fname);
     void graphOneFile(const QString& fname);
     void graphMultipleFiles(const QStringList& fnames);
+
 };
 
 #endif // GRAPHFRAME_H

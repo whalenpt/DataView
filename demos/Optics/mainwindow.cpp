@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
       m_data_view(new DataView)
 {
     m_data_view->setTargetDirPath(std::filesystem::path("data"));
+    m_data_view->setMaxPoint2DX(100);
+    m_data_view->setMaxPoint2DY(100);
     connect(m_data_view,&DataView::accepted,this,&MainWindow::writeSettings);
     readSettings();
     setCentralWidget(m_data_view);

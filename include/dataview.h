@@ -21,6 +21,9 @@ class DATAVIEWSHARED_EXPORT DataView : public QDialog
 public:
     explicit DataView(QWidget *parent = 0);
     void setTargetDirPath(const std::filesystem::path& path);
+    void setMaxPoint1D(unsigned int points) {m_graph_frame->setMaxPoint1D(points);}
+    void setMaxPoint2DX(unsigned int points) {m_graph_frame->setMaxPoint2DX(points);}
+    void setMaxPoint2DY(unsigned int points) {m_graph_frame->setMaxPoint2DY(points);}
     ~DataView();
 
 private slots:
