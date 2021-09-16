@@ -32,8 +32,6 @@ private:
     QList<QList<QSurfaceDataItem>*>* m_data_array;
 
     void clearSeries();
-    void initTest();
-    void initTest2();
 };
 
 

@@ -25,45 +25,71 @@ ParamBin XYZToSurfaceDataArray(const QString& fname,\
     else
         return ParamBin();
 
-    qDebug() << "in XYZToSurfaceDataArray";
-    qDebug() << "x size is " << QString::number(x.size());
-    qDebug() << "y size is " << QString::number(y.size());
-    qDebug() << "z size is " << QString::number(z.size());
-
+    // mirror R coordinate if found
+    if(bin.inBin("xcordID") && bin.getStrU("xcordID")=="R"){
+        auto nr = x.size();
+        std::vector<double> xcopy(x.size());
+        std::vector<double> zcopy(z.size());
+        std::copy(x.cbegin(),x.cend(),xcopy.begin());
+        std::copy(z.cbegin(),z.cend(),zcopy.begin());
+        x.resize(2*x.size());
+        z.resize(2*z.size());
+        for(auto i = 0; i < nr; i++)
+            x[i] = -xcopy[nr-i-1];
+        for(auto i = 0; i < nr; i++)
+            x[nr+i] = xcopy[i];
+        for(auto i = 0; i < nr; i++)
+            for(auto j = 0; j < y.size(); j++)
+                z[i*y.size()+j] = zcopy[(nr-i-1)*y.size()+j];
+         for(auto i = 0; i < nr; i++)
+            for(auto j = 0; j < y.size(); j++)
+                z[(nr+i)*y.size()+j] = zcopy[i*y.size()+j];
+    }
+           
     double min_xval = pw::min(x);
     double max_xval = pw::max(x);
-
     double min_yval = pw::min(y);
     double max_yval = pw::max(y);
-
     double min_zval = pw::min(z);
     double max_zval = pw::max(z);
-
     double xrange = max_xval-min_xval;
     double yrange = max_yval-min_yval;
     double zrange = max_zval-min_zval;
 
-//    // Workaround QValueAxis setRange issue handling small numbers
-   for(unsigned int i = 0; i < x.size(); i++)
-       x[i] /= xrange;
-   for(unsigned int i = 0; i < y.size(); i++)
-       y[i] /= yrange;
-   for(unsigned int i = 0; i < z.size(); i++)
-       z[i] /= zrange;
+    bin.set("min_xval",min_xval);
+    bin.set("max_xval",max_xval);
+    bin.set("min_yval",min_yval);
+    bin.set("max_yval",max_yval);
+    bin.set("min_zval",min_zval);
+    bin.set("max_zval",max_zval);
 
-    bin.set("min_xval",min_xval/xrange);
-    bin.set("max_xval",max_xval/xrange);
-    bin.set("min_yval",min_yval/yrange);
-    bin.set("max_yval",max_yval/yrange);
-    bin.set("min_zval",min_zval/zrange);
-    bin.set("max_zval",max_zval/zrange);
-    std::cout << bin << std::endl;
+    if(xrange < 1e-3){
+        for(unsigned int i = 0; i < x.size(); i++)
+            x[i] /= xrange;
+        bin.set("min_xval",min_xval/xrange);
+        bin.set("max_xval",max_xval/xrange);
+        bin.set("xunit_str","arb.");
+    }
+    if(yrange < 1e-3){
+        for(unsigned int i = 0; i < y.size(); i++)
+            y[i] /= yrange;
+        bin.set("min_yval",min_yval/yrange);
+        bin.set("max_yval",max_yval/yrange);
+        bin.set("yunit_str","arb.");
+    }
+    if(zrange < 1e-3){
+        for(unsigned int i = 0; i < z.size(); i++)
+            z[i] /= zrange;
+        bin.set("min_zval",min_zval/zrange);
+        bin.set("max_zval",max_zval/zrange);
+        bin.set("zunit_str","arb.");
+    }
 
     data_array.reserve(x.size());
     for(auto i = 0; i < x.size(); i++){
         QList<QSurfaceDataItem>* data_row = new QList<QSurfaceDataItem>(y.size());
         for(auto j = 0; j < y.size(); j++) {
-            (*data_row)[j].setPosition(QVector3D(x[i],y[j],z[i*y.size()+j]));
+            (*data_row)[j].setPosition(QVector3D(y[j],z[i*y.size()+j],x[i]));
         }
         data_array << data_row;
     }
