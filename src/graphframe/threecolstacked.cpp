@@ -12,8 +12,8 @@
 #include <QVBoxLayout>
 #include <vector>
 #include <pwutils/pwmath.hpp>
-#include <pwutils/read/readdat.h>
-#include <pwutils/read/readjson.h>
+#include <pwutils/read/dat.hpp>
+#include <pwutils/read/json.hpp>
 #include <ParamBin/parambin.hpp>
 
 ThreeColStacked::ThreeColStacked(GraphFrame* parent_frame) : QWidget(parent_frame),

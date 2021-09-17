@@ -30,7 +30,17 @@ SurfaceGraph::SurfaceGraph(GraphFrame* parent_frame) : QWidget(parent_frame),
     m_graph->setAxisX(new QValue3DAxis);
     m_graph->setAxisY(new QValue3DAxis);
     m_graph->setAxisZ(new QValue3DAxis);
-    m_graph->setActiveTheme(new Q3DTheme(Q3DTheme::ThemeEbony));
+    m_graph->axisZ()->setTitle("x");
+    m_graph->axisX()->setTitle("y");
+    m_graph->axisY()->setTitle("z");
+    m_graph->axisZ()->setTitleVisible(true);
+    m_graph->axisX()->setTitleVisible(true);
+    m_graph->axisY()->setTitleVisible(true);
+    m_graph->setAspectRatio(1.0);
+    m_graph->setHorizontalAspectRatio(1.0);
+
+    //m_graph->setActiveTheme(new Q3DTheme(Q3DTheme::ThemeEbony));
+    m_graph->setActiveTheme(new Q3DTheme(Q3DTheme::ThemeStoneMoss));
     QFont font = m_graph->activeTheme()->font();
     font.setPointSize(20);
     m_graph->activeTheme()->setFont(font);
@@ -77,22 +87,24 @@ void SurfaceGraph::graph(const QString& fname,pw::FileSignature fsig,\
     clearSeries();
     ParamBin bin = dataaux3D::XYZToSurfaceDataArray(fname,*m_data_array,fsig,m_maxpoint2DX,m_maxpoint2DY);
     m_data_proxy->resetArray(m_data_array);
-    m_graph->axisX()->setRange(bin.getDbl("min_yval"),bin.getDbl("max_yval"));
-    m_graph->axisY()->setRange(bin.getDbl("min_zval"),bin.getDbl("max_zval"));
-    m_graph->axisZ()->setRange(bin.getDbl("min_xval"),bin.getDbl("max_xval"));
+    m_graph->axisX()->setRange(bin.getFloat("min_yval"),bin.getFloat("max_yval"));
+    m_graph->axisY()->setRange(bin.getFloat("min_zval"),bin.getFloat("max_zval"));
+    m_graph->axisZ()->setRange(bin.getFloat("min_xval"),bin.getFloat("max_xval"));
     if(bin.inBin("xlabel")){
         m_graph->axisZ()->setTitle(QString::fromStdString(bin.getStr("xlabel")));
-        m_graph->axisZ()->setTitleVisible(true);
-    }
-    if(bin.inBin("ylabel")){
+    } else
+        m_graph->axisZ()->setTitle("x");
+    if(bin.inBin("ylabel"))
         m_graph->axisX()->setTitle(QString::fromStdString(bin.getStr("ylabel")));
-        m_graph->axisX()->setTitleVisible(true);
-    }
-    if(bin.inBin("zlabel")){
+    else
+        m_graph->axisX()->setTitle("y");
+
+    if(bin.inBin("zlabel"))
         m_graph->axisY()->setTitle(QString::fromStdString(bin.getStr("zlabel")));
-        m_graph->axisY()->setTitleVisible(true);
-    }
+    else
+        m_graph->axisY()->setTitle("z");
 }
+
 
 void SurfaceGraph::clearSeries()
 {

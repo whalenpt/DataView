@@ -1,7 +1,7 @@
 
 #include "core/dataaux3D.h"
-#include <pwutils/read/readdat.h>
-#include <pwutils/read/readjson.h>
+#include <pwutils/read/dat.hpp>
+#include <pwutils/read/json.hpp>
 #include <pwutils/pwmath.hpp>
 #include <iostream>
 #include <ParamBin/parambin.hpp>
@@ -15,13 +15,13 @@ ParamBin XYZToSurfaceDataArray(const QString& fname,\
         pw::FileSignature filesig,unsigned int maxpointX,unsigned int maxpointY)
 {
     ParamBin bin;
-    std::vector<double> x;
-    std::vector<double> y;
-    std::vector<double> z;
+    std::vector<float> x;
+    std::vector<float> y;
+    std::vector<float> z;
     if(filesig == pw::FileSignature::DAT)
-        bin = ParamBin({dat::readXYZ(fname.toStdString(),x,y,z)});
+        bin = ParamBin({dat::readXYZ<float,float,float>(fname.toStdString(),x,y,z)});
     else if(filesig == pw::FileSignature::JSON)
-        bin = ParamBin({json::readXYZ(fname.toStdString(),x,y,z)});
+        bin = ParamBin({json::readXYZ<float,float,float>(fname.toStdString(),x,y,z)});
     else
         return ParamBin();
 
@@ -63,6 +63,7 @@ ParamBin XYZToSurfaceDataArray(const QString& fname,\
         }
         z.resize(x.size()*y.size());
     }
+    std::cout << bin;
 
     // mirror R coordinate if found
     if((bin.inBin("xcordID") && bin.getStrU("xcordID")=="R") || \
@@ -86,15 +87,12 @@ ParamBin XYZToSurfaceDataArray(const QString& fname,\
                 z[(nr+i)*y.size()+j] = zcopy[i*y.size()+j];
     }
            
-    double min_xval = pw::min(x);
-    double max_xval = pw::max(x);
-    double min_yval = pw::min(y);
-    double max_yval = pw::max(y);
-    double min_zval = pw::min(z);
-    double max_zval = pw::max(z);
-    double xrange = max_xval-min_xval;
-    double yrange = max_yval-min_yval;
-    double zrange = max_zval-min_zval;
+    float min_xval = pw::min(x);
+    float max_xval = pw::max(x);
+    float min_yval = pw::min(y);
+    float max_yval = pw::max(y);
+    float min_zval = pw::min(z);
+    float max_zval = pw::max(z);
 
     bin.set("min_xval",min_xval);
     bin.set("max_xval",max_xval);
@@ -103,27 +101,61 @@ ParamBin XYZToSurfaceDataArray(const QString& fname,\
     bin.set("min_zval",min_zval);
     bin.set("max_zval",max_zval);
 
-//    if(xrange < 1e-3){
+    if(bin.inBin("xscale") && bin.getFloat("xscale")>0){
+        float scale = bin.getFloat("xscale");
         for(unsigned int i = 0; i < x.size(); i++)
-            x[i] /= xrange;
-        bin.set("min_xval",min_xval/xrange);
-        bin.set("max_xval",max_xval/xrange);
-        bin.set("xunit_str","arb.");
- //   }
-  //  if(yrange < 1e-3){
+            x[i] /= scale;
+        bin.set("min_xval",min_xval/scale);
+        bin.set("max_xval",max_xval/scale);
+        if(bin.inBin("xscale_str") && bin.inBin("xlabel"))
+            bin.set("xlabel",bin.getStr("xlabel") + " ["\
+                    + bin.getStr("xscale_str") + "]"); 
+    } else{ //normalize
+        float scale = max_xval-min_xval;
+        for(unsigned int i = 0; i < x.size(); i++)
+            x[i] /= scale;
+        bin.set("min_xval",min_xval/scale);
+        bin.set("max_xval",max_xval/scale);
+        if(bin.inBin("xlabel"))
+            bin.set("xlabel",bin.getStr("xlabel") + " [Arb.]");
+    }
+
+    if(bin.inBin("yscale") && bin.getFloat("yscale") > 0){
+        float scale = bin.getFloat("yscale");
         for(unsigned int i = 0; i < y.size(); i++)
-            y[i] /= yrange;
-        bin.set("min_yval",min_yval/yrange);
-        bin.set("max_yval",max_yval/yrange);
-        bin.set("yunit_str","arb.");
-//    }
-//    if(zrange < 1e-3){
+            y[i] /= scale;
+        bin.set("min_yval",min_yval/scale);
+        bin.set("max_yval",max_yval/scale);
+        if(bin.inBin("yscale_str") && bin.inBin("ylabel"))
+            bin.set("ylabel",bin.getStr("ylabel") + " ["\
+                    + bin.getStr("yscale_str") + "]"); 
+    } else{ //normalize
+        float scale = max_yval-min_yval;
+        for(unsigned int i = 0; i < y.size(); i++)
+            y[i] /= scale;
+        bin.set("min_yval",min_yval/scale);
+        bin.set("max_yval",max_yval/scale);
+        if(bin.inBin("ylabel"))
+            bin.set("ylabel",bin.getStr("ylabel") + " [Arb.]");
+    }
+    if(bin.inBin("zscale") && bin.getFloat("zscale")>0){
+        float scale = bin.getFloat("zscale");
         for(unsigned int i = 0; i < z.size(); i++)
-            z[i] /= zrange;
-        bin.set("min_zval",min_zval/zrange);
-        bin.set("max_zval",max_zval/zrange);
-        bin.set("zunit_str","arb.");
-//    }
+            z[i] /= scale;
+        bin.set("min_zval",min_zval/scale);
+        bin.set("max_zval",max_zval/scale);
+        if(bin.inBin("zscale_str") && bin.inBin("zlabel"))
+            bin.set("zlabel",bin.getStr("zlabel") + " ["\
+                    + bin.getStr("zscale_str") + "]"); 
+    } else{ //normalize
+        float scale = max_zval-min_zval;
+        for(unsigned int i = 0; i < z.size(); i++)
+            y[i] /= scale;
+        bin.set("min_zval",min_zval/scale);
+        bin.set("max_zval",max_zval/scale);
+        if(bin.inBin("zlabel"))
+            bin.set("zlabel",bin.getStr("zlabel") + " [Arb.]");
+    }
 
     data_array.reserve(x.size());
     for(auto i = 0; i < x.size(); i++){

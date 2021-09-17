@@ -14,7 +14,7 @@
 	"xunit_str" : "m",
 	"ycordID" : "T",
 	"ylabel" : "t",
-	"yscale" : "0.000000",
+	"yscale" : "1e-12",
 	"yscale_str" : "t_{p}",
 	"yunit_str" : "s",
 	"zcordID" : "E",
