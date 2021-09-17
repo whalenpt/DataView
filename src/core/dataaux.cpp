@@ -30,23 +30,54 @@ ParamBin XYToSeries(const QString& fname,QLineSeries& series,pw::FileSignature f
     float max_xval = pw::max(x);
     float min_yval = pw::min(y);
     float max_yval = pw::max(y);
-
-    // Workaround QValueAxis setRange issue handling small numbers
-    if(fabs(max_xval - min_xval) < 1.0e-12){
-       float mult_fact = 1.0e15;
-       min_xval *= mult_fact;
-       max_xval *= mult_fact;
-       for(unsigned int i = 0; i < x.size(); i++)
-           series.append(mult_fact*x[i],y[i]);
-    } else{
-        for(unsigned int i = 0; i < x.size(); i++)
-           series.append(x[i],y[i]);
-    }
-    setSeriesName(fname,series);
     bin.set("min_xval",min_xval);
     bin.set("max_xval",max_xval);
     bin.set("min_yval",min_yval);
     bin.set("max_yval",max_yval);
+
+    // Workaround QValueAxis setRange issue handling small numbers
+    if(bin.inBin("xscale") && bin.getFloat("xscale")>0){
+        float scale = bin.getFloat("xscale");
+        for(unsigned int i = 0; i < x.size(); i++)
+            x[i] /= scale;
+        bin.set("min_xval",min_xval/scale);
+        bin.set("max_xval",max_xval/scale);
+        if(bin.inBin("xscale_str") && bin.inBin("xlabel"))
+            bin.set("xlabel",bin.getStr("xlabel") + " ["\
+                    + bin.getStr("xscale_str") + "]"); 
+    } else{ //normalize
+        float scale = max_xval-min_xval;
+        for(unsigned int i = 0; i < x.size(); i++)
+            x[i] /= scale;
+        bin.set("min_xval",min_xval/scale);
+        bin.set("max_xval",max_xval/scale);
+        if(bin.inBin("xlabel"))
+            bin.set("xlabel",bin.getStr("xlabel") + " [Arb.]");
+    }
+
+    if(bin.inBin("yscale") && bin.getFloat("yscale") > 0){
+        float scale = bin.getFloat("yscale");
+        for(unsigned int i = 0; i < y.size(); i++)
+            y[i] /= scale;
+        bin.set("min_yval",min_yval/scale);
+        bin.set("max_yval",max_yval/scale);
+        if(bin.inBin("yscale_str") && bin.inBin("ylabel"))
+            bin.set("ylabel",bin.getStr("ylabel") + " ["\
+                    + bin.getStr("yscale_str") + "]"); 
+    } else{ //normalize
+        float scale = max_yval-min_yval;
+        for(unsigned int i = 0; i < y.size(); i++)
+            y[i] /= scale;
+        bin.set("min_yval",min_yval/scale);
+        bin.set("max_yval",max_yval/scale);
+        if(bin.inBin("ylabel"))
+            bin.set("ylabel",bin.getStr("ylabel") + " [Arb.]");
+    }
+
+    for(unsigned int i = 0; i < x.size(); i++)
+        series.append(x[i],y[i]);
+
+    setSeriesName(fname,series);
     return bin;
 }
 
@@ -97,32 +128,61 @@ ParamBin XY_CToSeries(const QString& fname,QLineSeries& series1,QLineSeries& ser
     else
         return ParamBin();
 
-    double min_xval = pw::min(x);
-    double max_xval = pw::max(x);
-//    double min_yval1 = pw::min(y1);
-//    double max_yval1 = pw::max(y1);
-//    double min_yval2 = pw::min(y2);
-//    double max_yval2 = pw::max(y2);
-
-    // Workaround QValueAxis setRange issue handling small numbers
-    if(fabs(max_xval - min_xval) < 1.0e-12){
-       double mult_fact = 1.0e15;
-       min_xval *= mult_fact;
-       max_xval *= mult_fact;
-       for(auto i = 0; i < x.size(); i++){
-           series1.append(mult_fact*x[i],y[i].real());
-           series2.append(mult_fact*x[i],y[i].imag());
-       }
-    } else{
-        for(auto i = 0; i < x.size(); i++){
-           series1.append(x[i],y[i].real());
-           series2.append(x[i],y[i].imag());
-        }
-    }
-    series1.setName(getLocalFileName(fname) + " - real");
-    series2.setName(getLocalFileName(fname) + " - imag");
+    float min_xval = pw::min(x);
+    float max_xval = pw::max(x);
+    float min_yval = abs(pw::min(y));
+    float max_yval = abs(pw::max(y));
     bin.set("min_xval",min_xval);
     bin.set("max_xval",max_xval);
+    bin.set("min_yval",min_yval);
+    bin.set("max_yval",max_yval);
+
+    // Workaround QValueAxis setRange issue handling small numbers
+    if(bin.inBin("xscale") && bin.getFloat("xscale")>0){
+        float scale = bin.getFloat("xscale");
+        for(unsigned int i = 0; i < x.size(); i++)
+            x[i] /= scale;
+        bin.set("min_xval",min_xval/scale);
+        bin.set("max_xval",max_xval/scale);
+        if(bin.inBin("xscale_str") && bin.inBin("xlabel"))
+            bin.set("xlabel",bin.getStr("xlabel") + " ["\
+                    + bin.getStr("xscale_str") + "]"); 
+    } else{ //normalize
+        float scale = max_xval-min_xval;
+        for(unsigned int i = 0; i < x.size(); i++)
+            x[i] /= scale;
+        bin.set("min_xval",min_xval/scale);
+        bin.set("max_xval",max_xval/scale);
+        if(bin.inBin("xlabel"))
+            bin.set("xlabel",bin.getStr("xlabel") + " [Arb.]");
+    }
+
+    if(bin.inBin("yscale") && bin.getFloat("yscale") > 0){
+        float scale = bin.getFloat("yscale");
+        for(unsigned int i = 0; i < y.size(); i++)
+            y[i] /= scale;
+        bin.set("min_yval",min_yval/scale);
+        bin.set("max_yval",max_yval/scale);
+        if(bin.inBin("yscale_str") && bin.inBin("ylabel"))
+            bin.set("ylabel",bin.getStr("ylabel") + " ["\
+                    + bin.getStr("yscale_str") + "]"); 
+    } else{ //normalize
+        float scale = max_yval-min_yval;
+        for(unsigned int i = 0; i < y.size(); i++)
+            y[i] /= scale;
+        bin.set("min_yval",min_yval/scale);
+        bin.set("max_yval",max_yval/scale);
+        if(bin.inBin("ylabel"))
+            bin.set("ylabel",bin.getStr("ylabel") + " [Arb.]");
+    }
+
+    for(auto i = 0; i < x.size(); i++){
+       series1.append(x[i],y[i].real());
+       series2.append(x[i],y[i].imag());
+    }
+
+    series1.setName(getLocalFileName(fname) + " - real");
+    series2.setName(getLocalFileName(fname) + " - imag");
     return bin;
 }
 
