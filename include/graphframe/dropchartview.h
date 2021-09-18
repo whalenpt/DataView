@@ -1,5 +1,5 @@
-#ifndef DROPCHARTVIEW_H
-#define DROPCHARTVIEW_H
+// dropchartview
+#pragma once
 
 #include <QChartView>
 #include <QStringList>
@@ -31,5 +31,4 @@ private:
 
 };
 
-#endif // DROPCHARTVIEW_H
 

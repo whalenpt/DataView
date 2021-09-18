@@ -2,15 +2,15 @@
 #include "graphframe/surfacewidget.h"
 #include "graphframe/graphframe.h"
 #include "graphframe/dropchartview.h"
+#include "draglistview.h"
 #include "core/dataaux3D.h"
+
 
 #include <QChart>
 #include <QLineSeries>
 #include <QString>
 #include <QStringList>
 #include <QVBoxLayout>
-#include <pwutils/pwmath.hpp>
-#include <ParamBin/parambin.hpp>
 #include <Q3DSurface>
 #include <QSurfaceDataProxy>
 #include <QSurface3DSeries>
@@ -18,22 +18,67 @@
 #include <Q3DTheme>
 #include <Q3DCamera>
 #include <QFont>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QDragMoveEvent>
+#include <QMimeData>
+#include <QByteArray>
+#include <QDataStream>
+#include <QWidget>
+
 #include <cmath>
+#include <pwutils/pwmath.hpp>
+#include <ParamBin/parambin.hpp>
+
+ListDropWidget::ListDropWidget(QWidget* widget,GraphFrame* parent_frame) 
+{
+    setAcceptDrops(true);
+    connect(this,&ListDropWidget::fileListDrop,
+            parent_frame,&GraphFrame::graphFiles);
+    QVBoxLayout* vbox = new QVBoxLayout;
+    vbox->addWidget(widget);
+    setLayout(vbox);
+}
+
+void ListDropWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+    if(event->mimeData()->hasText() || \
+            event->mimeData()->hasFormat(DragListView::StringListMime)){
+        event->accept();
+    }
+    else
+        event->ignore();
+}
+
+void ListDropWidget::dragMoveEvent(QDragMoveEvent *event)
+{
+    event->acceptProposedAction();
+}
+
+void ListDropWidget::dropEvent(QDropEvent* event)
+{
+    QStringList filenames;
+    if(event->mimeData()->hasText())
+        filenames.append(event->mimeData()->text());
+    else if(event->mimeData()->hasFormat(DragListView::StringListMime)){
+        QByteArray file_data = event->mimeData()->data(DragListView::StringListMime);
+        QDataStream data_stream(&file_data,QIODevice::ReadOnly);
+        data_stream >> filenames;
+    } else
+        return;
+    emit fileListDrop(filenames);
+}
+
+
 
 SurfaceWidget::SurfaceWidget(GraphFrame* parent_frame) :
     m_parent_frame(parent_frame)
 {
-    setAcceptDrops(true);
     QHBoxLayout* hbox = new QHBoxLayout();
     QVBoxLayout* vbox = new QVBoxLayout();
+    m_surface_graph = new SurfaceGraph(parent_frame);
 
-    Q3DSurface* graph = new Q3DSurface();
-    m_surface_graph = new SurfaceGraph(graph);
-
-    QWidget* graph_widget = QWidget::createWindowContainer(graph);
-    graph_widget->setFocusPolicy(Qt::StrongFocus);
-
-    hbox->addWidget(graph_widget);
+    hbox->addWidget(m_surface_graph);
     hbox->addLayout(vbox);
     vbox->setAlignment(Qt::AlignTop);
     setLayout(hbox);
@@ -43,8 +88,10 @@ SurfaceWidget::~SurfaceWidget()
 { }
 
 
-SurfaceGraph::SurfaceGraph(Q3DSurface* graph) :
-    m_graph(graph),
+SurfaceGraph::SurfaceGraph(GraphFrame* parent_frame,QWidget* parent_widget) : 
+    QWidget(parent_widget),
+    m_parent_frame(parent_frame),
+    m_graph(new Q3DSurface()),
     m_maxpoint2DX(200),
     m_maxpoint2DY(200)
 {
@@ -89,12 +136,17 @@ SurfaceGraph::SurfaceGraph(Q3DSurface* graph) :
     m_graph->addSeries(m_series);
     m_graph->scene()->activeCamera()->setCameraPreset(Q3DCamera::CameraPresetIsometricLeft);
     m_data_array = new QSurfaceDataArray;
+
+    QWidget* widget = QWidget::createWindowContainer(m_graph);
+    ListDropWidget* graph_widget = new ListDropWidget(widget,m_parent_frame);
+    graph_widget->setFocusPolicy(Qt::StrongFocus);
+    QVBoxLayout* vbox = new QVBoxLayout();
+    vbox->addWidget(graph_widget);
+    setLayout(vbox);
 }
 
 SurfaceGraph::~SurfaceGraph()
-{
-    delete m_graph;
-}
+{ }
 
 void SurfaceGraph::graph(const QString& fname,pw::FileSignature fsig,\
         pw::DataSignature datasig, pw::OperatorSignature opsig)
@@ -132,6 +184,7 @@ void SurfaceGraph::clearSeries()
     m_z.clear();
     m_data_array = new QSurfaceDataArray;
 }
+
 
 
 
