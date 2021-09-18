@@ -7,8 +7,8 @@
 #include <vector>
 #include <ParamBin/parambin.hpp>
 #include <pwutils/pwdefs.h>
+#include "dropwidget.h"
 #include "graphframe/axesaux.h"
-#include "graphframe/dropchartview.h"
 
 class GraphFrame;
 class QChart;

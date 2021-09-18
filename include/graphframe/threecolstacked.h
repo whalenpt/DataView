@@ -1,5 +1,5 @@
-#ifndef THREECOLSTACKED_H
-#define THREECOLSTACKED_H
+// threecolstacked.h
+#pragma once
 
 #include <QWidget>
 #include <QStringList>
@@ -40,4 +40,3 @@ private:
     QValueAxis* m_axisY2;
 };
 
-#endif // THREECOLSTACKEDGRAPHS_H

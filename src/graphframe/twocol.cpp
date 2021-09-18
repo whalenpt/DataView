@@ -1,8 +1,8 @@
 
 
+#include "dropwidget.h"
 #include "graphframe/twocol.h"
 #include "graphframe/graphframe.h"
-#include "graphframe/dropchartview.h"
 #include "graphframe/axesaux.h"
 #include "core/dataaux.h"
 

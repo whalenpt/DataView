@@ -1,7 +1,7 @@
 
+#include "dropwidget.h"
 #include "graphframe/threecolstacked.h"
 #include "graphframe/graphframe.h"
-#include "graphframe/dropchartview.h"
 #include "core/dataaux.h"
 
 #include <QWidget>

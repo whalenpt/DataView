@@ -1,7 +1,7 @@
 
 #include "graphframe/surfacewidget.h"
 #include "graphframe/graphframe.h"
-#include "graphframe/dropchartview.h"
+#include "dropwidget.h"
 #include "draglistview.h"
 #include "core/dataaux3D.h"
 

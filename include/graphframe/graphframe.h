@@ -6,7 +6,7 @@
 #include <QFrame>
 #include <string>
 #include <pwutils/pwdefs.h>
-#include "graphframe/dropchartview.h"
+#include "dropwidget.h"
 
 using DataSignatureMap = std::map<std::string,pw::DataSignature>;
 using FileSignatureMap = std::map<std::string,pw::FileSignature>;

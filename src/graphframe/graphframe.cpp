@@ -3,14 +3,14 @@
 #include "graphframe/twocol.h"
 #include "graphframe/threecolstacked.h"
 #include "graphframe/surfacewidget.h"
-#include "graphframe/dropchartview.h"
-#include "draglistview.h"
+#include "dropwidget.h"
 
 #include <QWidget>
 #include <QFrame>
 #include <QTextEdit>
 #include <QMessageBox>
 #include <QStackedLayout>
+#include <QFile>
 
 #include <vector>
 #include <ParamBin/parambin.hpp>

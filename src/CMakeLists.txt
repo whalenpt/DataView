@@ -14,10 +14,10 @@ set(CMAKE_AUTORCC ON)
 set(SOURCE_LIST
 	dataview.cpp
 	draglistview.cpp
+	dropwidget.cpp
 	core/dataaux.cpp
 	core/dataaux3D.cpp
 	graphframe/graphframe.cpp
-	graphframe/dropchartview.cpp
 	graphframe/axesaux.cpp
 	graphframe/threecolstacked.cpp
 	graphframe/twocol.cpp
@@ -29,10 +29,10 @@ set(HEADER_LIST
 	${INCL_DIR}/dataview.h
 	${INCL_DIR}/dataview_global.h
 	${INCL_DIR}/draglistview.h
+	${INCL_DIR}/dropwidget.h
 	${INCL_DIR}/core/dataaux.h
 	${INCL_DIR}/core/dataaux3D.h
 	${INCL_DIR}/graphframe/graphframe.h
-	${INCL_DIR}/graphframe/dropchartview.h
     ${INCL_DIR}/graphframe/axesaux.h
 	${INCL_DIR}/graphframe/threecolstacked.h
 	${INCL_DIR}/graphframe/twocol.h
