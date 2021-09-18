@@ -9,15 +9,18 @@
 #include <QDebug>
 
 namespace dataaux3D{
+//ParamBin XYZToSurfaceDataArray(const QString& fname,\
+//        QList<QList<QSurfaceDataItem>*>& data_array,\
+//        pw::FileSignature filesig,unsigned int maxpointX,unsigned int maxpointY)
 
-ParamBin XYZToSurfaceDataArray(const QString& fname,\
-        QList<QList<QSurfaceDataItem>*>& data_array,\
+ParamBin readXYZData(const QString& fname,\
+        std::vector<float>& x,std::vector<float>& y,std::vector<float>& z,\
         pw::FileSignature filesig,unsigned int maxpointX,unsigned int maxpointY)
 {
+    x.clear();
+    y.clear();
+    z.clear();
     ParamBin bin;
-    std::vector<float> x;
-    std::vector<float> y;
-    std::vector<float> z;
     if(filesig == pw::FileSignature::DAT)
         bin = ParamBin({dat::readXYZ<float,float,float>(fname.toStdString(),x,y,z)});
     else if(filesig == pw::FileSignature::JSON)
@@ -63,7 +66,7 @@ ParamBin XYZToSurfaceDataArray(const QString& fname,\
         }
         z.resize(x.size()*y.size());
     }
-    std::cout << bin;
+//    std::cout << bin;
 
     // mirror R coordinate if found
     if((bin.inBin("xcordID") && bin.getStrU("xcordID")=="R") || \
@@ -100,6 +103,32 @@ ParamBin XYZToSurfaceDataArray(const QString& fname,\
     bin.set("max_yval",max_yval);
     bin.set("min_zval",min_zval);
     bin.set("max_zval",max_zval);
+    return bin;
+}
+
+void fillSurfaceDataItems(QList<QList<QSurfaceDataItem>*>& data_array,\
+    const std::vector<float>& x,const std::vector<float>& y,const std::vector<float>& z)
+{
+    data_array.reserve(x.size());
+    for(auto i = 0; i < x.size(); i++){
+        QList<QSurfaceDataItem>* data_row = new QList<QSurfaceDataItem>(y.size());
+        for(auto j = 0; j < y.size(); j++) {
+            (*data_row)[j].setPosition(QVector3D(y[j],z[i*y.size()+j],x[i]));
+        }
+        data_array << data_row;
+    }
+}
+
+//    data_array.reserve(x.size());
+//    for(auto i = 0; i < x.size(); i++){
+//        QList<QSurfaceDataItem>* data_row = new QList<QSurfaceDataItem>(y.size());
+//        for(auto j = 0; j < y.size(); j++) {
+//            (*data_row)[j].setPosition(QVector3D(y[j],z[i*y.size()+j],x[i]));
+//        }
+//        data_array << data_row;
+//    }
+
+
 
 //    if(bin.inBin("xscale") && bin.getFloat("xscale")>0){
 //        float scale = bin.getFloat("xscale");
@@ -157,16 +186,7 @@ ParamBin XYZToSurfaceDataArray(const QString& fname,\
 //            bin.set("zlabel",bin.getStr("zlabel") + " [Arb.]");
 //    }
 
-    data_array.reserve(x.size());
-    for(auto i = 0; i < x.size(); i++){
-        QList<QSurfaceDataItem>* data_row = new QList<QSurfaceDataItem>(y.size());
-        for(auto j = 0; j < y.size(); j++) {
-            (*data_row)[j].setPosition(QVector3D(y[j],z[i*y.size()+j],x[i]));
-        }
-        data_array << data_row;
-    }
-    return bin;
-}
+
 
 }
 

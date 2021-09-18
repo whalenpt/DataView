@@ -32,8 +32,9 @@ private:
     QSurfaceDataProxy* m_data_proxy;
     unsigned int m_maxpoint2DX;
     unsigned int m_maxpoint2DY;
-    std::vector<double> x;
-    std::vector<double> y;
+    std::vector<float> m_x;
+    std::vector<float> m_y;
+    std::vector<float> m_z;
 
     //QSurfaceDataArray is a typedef for QList<QList<QSurfaceDataItem>*>
     QList<QList<QSurfaceDataItem>*>* m_data_array;

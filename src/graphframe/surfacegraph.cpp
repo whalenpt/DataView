@@ -85,11 +85,13 @@ void SurfaceGraph::graph(const QString& fname,pw::FileSignature fsig,\
         pw::DataSignature datasig, pw::OperatorSignature opsig)
 {
     clearSeries();
-    ParamBin bin = dataaux3D::XYZToSurfaceDataArray(fname,*m_data_array,fsig,m_maxpoint2DX,m_maxpoint2DY);
+    ParamBin bin = dataaux3D::readXYZData(fname,m_x,m_y,m_z,fsig,m_maxpoint2DX,m_maxpoint2DY);
+    dataaux3D::fillSurfaceDataItems(*m_data_array,m_x,m_y,m_z);
     m_data_proxy->resetArray(m_data_array);
-    m_graph->axisX()->setRange(bin.getFloat("min_yval"),bin.getFloat("max_yval"));
-    m_graph->axisY()->setRange(bin.getFloat("min_zval"),bin.getFloat("max_zval"));
-    m_graph->axisZ()->setRange(bin.getFloat("min_xval"),bin.getFloat("max_xval"));
+//    m_graph->axisX()->setRange(bin.getFloat("min_yval"),bin.getFloat("max_yval"));
+//    m_graph->axisY()->setRange(bin.getFloat("min_zval"),bin.getFloat("max_zval"));
+//    m_graph->axisZ()->setRange(bin.getFloat("min_xval"),bin.getFloat("max_xval"));
+
     if(bin.inBin("xlabel")){
         m_graph->axisZ()->setTitle(QString::fromStdString(bin.getStr("xlabel")));
     } else
