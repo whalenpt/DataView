@@ -77,13 +77,9 @@ void ThreeColStacked::graph(const QString& fname,pw::FileSignature filesig,\
 {
     ParamBin bin = dataaux::XY_CToSeries(fname,*m_three_col_series1,*m_three_col_series2,filesig);
     dataaux::formatAxisX(bin,*m_axisX1);
-    bin.set("min_yval",bin.getDbl("min_yval1"));
-    bin.set("max_yval",bin.getDbl("max_yval1"));
     dataaux::formatAxisY(bin,*m_axisY1);
 
     dataaux::formatAxisX(bin,*m_axisX2);
-    bin.set("min_yval",bin.getDbl("min_yval2"));
-    bin.set("max_yval",bin.getDbl("max_yval2"));
     dataaux::formatAxisY(bin,*m_axisY2);
 
     m_axisY1->setTickCount(6);
