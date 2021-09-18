@@ -36,7 +36,7 @@ SurfaceGraph::SurfaceGraph(GraphFrame* parent_frame) : QWidget(parent_frame),
     m_graph->axisZ()->setTitleVisible(true);
     m_graph->axisX()->setTitleVisible(true);
     m_graph->axisY()->setTitleVisible(true);
-    m_graph->setAspectRatio(1.0);
+    m_graph->setAspectRatio(2.0);
     m_graph->setHorizontalAspectRatio(1.0);
 
     //m_graph->setActiveTheme(new Q3DTheme(Q3DTheme::ThemeEbony));
