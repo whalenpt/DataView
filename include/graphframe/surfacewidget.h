@@ -13,6 +13,7 @@ class GraphFrame;
 class Q3DSurface;
 class QSurface3DSeries;
 class QSurfaceDataProxy;
+class QSlider;
 
 class SurfaceGraph : public QWidget
 {
@@ -25,6 +26,12 @@ public:
             pw::DataSignature datasig, pw::OperatorSignature opsig);
     void setMaxPoint2DX(unsigned int points) {m_maxpoint2DX = points;}
     void setMaxPoint2DY(unsigned int points) {m_maxpoint2DY = points;}
+    void setRangeX(float minX,float maxX);
+    void setRangeY(float minY,float maxY);
+    float minX() const;
+    float maxX() const;
+    float minY() const;
+    float maxY() const;
 
 private:
     GraphFrame* m_parent_frame;
@@ -53,33 +60,22 @@ public:
     void setMaxPoint2DX(unsigned int points) {m_surface_graph->setMaxPoint2DX(points);}
     void setMaxPoint2DY(unsigned int points) {m_surface_graph->setMaxPoint2DY(points);}
     void graph(const QString& fname,pw::FileSignature fsig,\
-            pw::DataSignature datasig, pw::OperatorSignature opsig) {m_surface_graph->graph(fname,fsig,datasig,opsig);}
+            pw::DataSignature datasig, pw::OperatorSignature opsig);
 
 private:
     GraphFrame* m_parent_frame;
     SurfaceGraph* m_surface_graph;
+    QSlider* m_axisMinSliderX;
+    QSlider* m_axisMaxSliderX;
+    QSlider* m_axisMinSliderY;
+    QSlider* m_axisMaxSliderY;
+
+    void changeMinX(int min);
+    void changeMaxX(int max);
+    void changeMinY(int min);
+    void changeMaxY(int max);
+
 };
-
-
-
-
-//class ListDropWidget : public QWidget
-//{
-//    Q_OBJECT
-//
-//public:
-//    explicit ListDropWidget(QWidget* widget,GraphFrame* parent_frame);
-//    ~ListDropWidget() {};
-//
-//protected:
-//    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
-//    void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
-//    void dragMoveEvent(QDragMoveEvent* event) Q_DECL_OVERRIDE;
-//
-//signals:
-//    void fileListDrop(const QStringList& filenames);
-//
-//};
 
 
 

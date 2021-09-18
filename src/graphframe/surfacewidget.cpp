@@ -38,38 +38,129 @@ SurfaceWidget::SurfaceWidget(GraphFrame* parent_frame) :
 
     QVBoxLayout* vbox = new QVBoxLayout();
 
-    QSlider* axisMinSliderX = new QSlider(Qt::Horizontal);
-    axisMinSliderX->setMinimum(0);
-    axisMinSliderX->setTickInterval(1);
-    axisMinSliderX->setEnabled(true);
-    QSlider* axisMaxSliderX = new QSlider(Qt::Horizontal);
-    axisMaxSliderX->setMinimum(1);
-    axisMaxSliderX->setTickInterval(1);
-    axisMaxSliderX->setEnabled(true);
-    QSlider* axisMinSliderZ = new QSlider(Qt::Horizontal);
-    axisMinSliderX->setMinimum(0);
-    axisMinSliderX->setTickInterval(1);
-    axisMinSliderX->setEnabled(true);
-    QSlider* axisMaxSliderZ = new QSlider(Qt::Horizontal);
-    axisMaxSliderX->setMinimum(1);
-    axisMaxSliderX->setTickInterval(1);
-    axisMaxSliderX->setEnabled(true);
-
+    m_axisMinSliderX = new QSlider(Qt::Horizontal);
+    m_axisMinSliderX->setMinimum(0);
+    m_axisMinSliderX->setMaximum(99);
+    m_axisMinSliderX->setValue(0);
+    m_axisMinSliderX->setTickInterval(20);
+    m_axisMinSliderX->setEnabled(true);
+    m_axisMaxSliderX = new QSlider(Qt::Horizontal);
+    m_axisMaxSliderX->setMinimum(1);
+    m_axisMaxSliderX->setMaximum(100);
+    m_axisMaxSliderX->setValue(100);
+    m_axisMaxSliderX->setTickInterval(20);
+    m_axisMaxSliderX->setEnabled(true);
+    m_axisMinSliderY = new QSlider(Qt::Horizontal);
+    m_axisMinSliderY->setMinimum(0);
+    m_axisMinSliderY->setMaximum(99);
+    m_axisMinSliderY->setValue(0);
+    m_axisMinSliderY->setTickInterval(20);
+    m_axisMinSliderY->setEnabled(true);
+    m_axisMaxSliderY = new QSlider(Qt::Horizontal);
+    m_axisMaxSliderY->setMinimum(1);
+    m_axisMaxSliderY->setMaximum(100);
+    m_axisMaxSliderY->setValue(100);
+    m_axisMaxSliderY->setTickInterval(20);
+    m_axisMaxSliderY->setEnabled(true);
 
     vbox->addWidget(new QLabel(QStringLiteral("Column Range")));
-    vbox->addWidget(axisMinSliderX);
-    vbox->addWidget(axisMaxSliderX);
+    vbox->addWidget(m_axisMinSliderY);
+    vbox->addWidget(m_axisMaxSliderY);
     vbox->addWidget(new QLabel(QStringLiteral("Row Range")));
-    vbox->addWidget(axisMinSliderZ);
-    vbox->addWidget(axisMaxSliderZ);
+    vbox->addWidget(m_axisMinSliderX);
+    vbox->addWidget(m_axisMaxSliderX);
     vbox->setAlignment(Qt::AlignTop);
 
     hbox->addLayout(vbox);
     setLayout(hbox);
+
+    connect(m_axisMinSliderX,&QSlider::valueChanged,\
+            this,&SurfaceWidget::changeMinX);
+    connect(m_axisMaxSliderX,&QSlider::valueChanged,\
+            this,&SurfaceWidget::changeMaxX);
+    connect(m_axisMinSliderY,&QSlider::valueChanged,\
+            this,&SurfaceWidget::changeMinY);
+    connect(m_axisMaxSliderY,&QSlider::valueChanged,\
+            this,&SurfaceWidget::changeMaxY);
+
 }
+
+void SurfaceWidget::changeMinX(int min)
+{
+    int max = m_axisMaxSliderX->value();
+    if(min >= max){
+        max = min+1;
+        m_axisMaxSliderX->setValue(max);
+    }
+    float minVal = m_surface_graph->minX();
+    float maxVal = m_surface_graph->maxX();
+
+    m_surface_graph->setRangeX(minVal+(min/100.0)*(maxVal-minVal),\
+            maxVal-(100-max)*(maxVal-minVal)/100.0);
+}
+
+void SurfaceWidget::changeMaxX(int max)
+{
+    int min = m_axisMinSliderX->value();
+    if(max <= min){
+        min = max-1;
+        m_axisMinSliderX->setValue(min);
+    }
+    float minVal = m_surface_graph->minX();
+    float maxVal = m_surface_graph->maxX();
+    m_surface_graph->setRangeX(minVal+(min/100.0)*(maxVal-minVal),\
+            maxVal-(100-max)*(maxVal-minVal)/100.0);
+}
+
+void SurfaceWidget::changeMinY(int min)
+{
+    int max = m_axisMaxSliderY->value();
+    if(min >= max){
+        max = min+1;
+        m_axisMaxSliderY->setValue(max);
+    }
+    float minVal = m_surface_graph->minY();
+    float maxVal = m_surface_graph->maxY();
+    m_surface_graph->setRangeY(minVal+(min/100.0)*(maxVal-minVal),\
+            maxVal-(100-max)*(maxVal-minVal)/100.0);
+}
+
+void SurfaceWidget::changeMaxY(int max)
+{
+    int min = m_axisMinSliderY->value();
+    if(max <= min){
+        min = max-1;
+        m_axisMinSliderY->setValue(min);
+    }
+    float minVal = m_surface_graph->minY();
+    float maxVal = m_surface_graph->maxY();
+    m_surface_graph->setRangeY(minVal+(min/100.0)*(maxVal-minVal),\
+            maxVal-(100-max)*(maxVal-minVal)/100.0);
+}
+
 
 SurfaceWidget::~SurfaceWidget()
 { }
+
+void SurfaceWidget::graph(const QString& fname,pw::FileSignature fsig,\
+            pw::DataSignature datasig, pw::OperatorSignature opsig) {
+
+    m_surface_graph->graph(fname,fsig,datasig,opsig);
+    int min = m_axisMinSliderX->value();
+    int max = m_axisMaxSliderX->value();
+    float minX = m_surface_graph->minX();
+    float maxX = m_surface_graph->maxX();
+    m_surface_graph->setRangeX(minX+(min/100.0)*(maxX-minX),\
+            maxX-(100-max)*(maxX-minX)/100.0);
+
+    min = m_axisMinSliderY->value();
+    max = m_axisMaxSliderY->value();
+    float minY = m_surface_graph->minY();
+    float maxY = m_surface_graph->maxY();
+    m_surface_graph->setRangeY(minY+(min/100.0)*(maxY-minY),\
+            maxY-(100-max)*(maxY-minY)/100.0);
+}
+
 
 
 SurfaceGraph::SurfaceGraph(GraphFrame* parent_frame,QWidget* parent_widget) : 
@@ -135,16 +226,71 @@ SurfaceGraph::SurfaceGraph(GraphFrame* parent_frame,QWidget* parent_widget) :
 SurfaceGraph::~SurfaceGraph()
 { }
 
+float SurfaceGraph::minX() const
+{
+    if(m_x.empty())
+        return 0.0;
+    return m_x[0];
+}
+
+float SurfaceGraph::maxX() const
+{
+    if(m_x.empty())
+        return 0.0;
+    return m_x.back();
+}
+
+float SurfaceGraph::minY() const
+{
+    if(m_y.empty())
+        return 0.0;
+    return m_y[0];
+}
+
+float SurfaceGraph::maxY() const
+{
+    if(m_y.empty())
+        return 0.0;
+    return m_y.back();
+}
+
+
+void SurfaceGraph::setRangeX(float minX,float maxX)
+{
+    if(minX >= maxX)
+        return;
+    if(minX < m_x.front())
+        minX = m_x.front();
+    if(maxX > m_x.back())
+        maxX = m_x.back();
+    m_graph->axisZ()->setRange(minX,maxX);
+}
+
+void SurfaceGraph::setRangeY(float minY,float maxY)
+{
+    if(minY >= maxY)
+        return;
+    if(minY < m_y.front())
+        minY = m_y.front();
+    if(maxY > m_y.back())
+        maxY = m_y.back();
+    m_graph->axisX()->setRange(minY,maxY);
+}
+
 void SurfaceGraph::graph(const QString& fname,pw::FileSignature fsig,\
         pw::DataSignature datasig, pw::OperatorSignature opsig)
 {
     clearSeries();
     ParamBin bin = dataaux3D::readXYZData(fname,m_x,m_y,m_z,fsig,m_maxpoint2DX,m_maxpoint2DY);
+    if(m_x.empty() || m_y.empty() || m_z.empty())
+        return;
+
     dataaux3D::fillSurfaceDataItems(*m_data_array,m_x,m_y,m_z);
     m_data_proxy->resetArray(m_data_array);
-    m_graph->axisX()->setRange(bin.getFloat("min_yval"),bin.getFloat("max_yval"));
+
+    m_graph->axisX()->setRange(m_y[0],m_y.back());
+    m_graph->axisZ()->setRange(m_x[0],m_x.back());
     m_graph->axisY()->setRange(bin.getFloat("min_zval"),bin.getFloat("max_zval"));
-    m_graph->axisZ()->setRange(bin.getFloat("min_xval"),bin.getFloat("max_xval"));
 
     if(bin.inBin("xlabel")){
         m_graph->axisZ()->setTitle(QString::fromStdString(bin.getStr("xlabel")));
