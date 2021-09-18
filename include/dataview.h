@@ -1,5 +1,5 @@
-#ifndef DATAVIEW_H
-#define DATAVIEW_H
+// dataview.h
+#pragma once
 
 #include <QDialog>
 #include <QWidget>
@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QModelIndex>
 #include <QCloseEvent>
+#include <QChart>
 #include <filesystem>
 #include "dataview_global.h"
 #include "graphframe/graphframe.h"
@@ -41,4 +42,5 @@ private:
     void init();
 };
 
-#endif // DATAVIEW_H
+
+

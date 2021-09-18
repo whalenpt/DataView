@@ -3,14 +3,11 @@
 #include "graphframe/twocol.h"
 #include "graphframe/threecolstacked.h"
 #include "graphframe/surfacewidget.h"
+#include "graphframe/dropchartview.h"
 #include "draglistview.h"
 
 #include <QWidget>
 #include <QFrame>
-#include <QDragEnterEvent>
-#include <QDropEvent>
-#include <QDragMoveEvent>
-#include <QMimeData>
 #include <QTextEdit>
 #include <QMessageBox>
 #include <QStackedLayout>
@@ -21,10 +18,9 @@
 #include <pwutils/read/readfile.h>
 
 
-GraphFrame::GraphFrame(QWidget* parent) : QFrame(parent)
+GraphFrame::GraphFrame(QWidget* parent) : DropFrame(parent)
 {
     setAcceptDrops(true);
-
     m_file_textedit = new QTextEdit(this);
     m_file_textedit->setReadOnly(true);
 
@@ -38,6 +34,9 @@ GraphFrame::GraphFrame(QWidget* parent) : QFrame(parent)
     m_frame_layout->addWidget(m_threecol);
     m_frame_layout->addWidget(m_surface);
     setLayout(m_frame_layout);
+
+    connect(this,&DropFrame::fileDrop,
+            this,&GraphFrame::graphFiles);
 }
 
 void GraphFrame::setMaxPoint2DX(unsigned int points) 
@@ -55,34 +54,6 @@ void GraphFrame::setMaxPoint1D(unsigned int points)
 //    m_twocol->setMaxPoint(points);
 }
 
-
-void GraphFrame::dragEnterEvent(QDragEnterEvent *event)
-{
-    if(event->mimeData()->hasText() || \
-            event->mimeData()->hasFormat(DragListView::StringListMime)){
-        event->accept();
-    }
-    else
-        event->ignore();
-}
-
-void GraphFrame::dropEvent(QDropEvent* event)
-{
-    if(event->mimeData()->hasText())
-        graphOneFile(event->mimeData()->text());
-    else if(event->mimeData()->hasFormat(DragListView::StringListMime)){
-        QByteArray file_data = event->mimeData()->data(DragListView::StringListMime);
-        QDataStream data_stream(&file_data,QIODevice::ReadOnly);
-        QStringList filelist;
-        data_stream >> filelist;
-        graphMultipleFiles(filelist);
-    }
-}
-
-void GraphFrame::dragMoveEvent(QDragMoveEvent *event)
-{
-    event->acceptProposedAction();
-}
 
 void GraphFrame::graphFiles(const QStringList& filenames)
 {

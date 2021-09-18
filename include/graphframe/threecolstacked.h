@@ -12,6 +12,7 @@ class DropChartView;
 class QLineSeries;
 class QChart;
 class QValueAxis;
+class QChartView;
 
 class ThreeColStacked : public QWidget
 {

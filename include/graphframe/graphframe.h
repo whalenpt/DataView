@@ -1,11 +1,12 @@
-#ifndef GRAPHFRAME_H
-#define GRAPHFRAME_H
+// graphframe.h
+#pragma once
 
 #include <QWidget>
 #include <QStringList>
 #include <QFrame>
 #include <string>
 #include <pwutils/pwdefs.h>
+#include "graphframe/dropchartview.h"
 
 using DataSignatureMap = std::map<std::string,pw::DataSignature>;
 using FileSignatureMap = std::map<std::string,pw::FileSignature>;
@@ -16,11 +17,8 @@ class ThreeColStacked;
 class SurfaceWidget;
 class QTextEdit;
 class QStackedLayout;
-class QDragEnterEvent;
-class QDropEvent;
-class QDragMoveEvent;
 
-class GraphFrame : public QFrame
+class GraphFrame : public DropFrame
 {
     Q_OBJECT
 public:
@@ -32,11 +30,6 @@ public:
 
 public slots:
     void graphFiles(const QStringList& fnames);
-
-protected:
-    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
-    void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
-    void dragMoveEvent(QDragMoveEvent* event) Q_DECL_OVERRIDE;
 
 private:
     QStackedLayout* m_frame_layout;
@@ -50,7 +43,5 @@ private:
     bool fileSignatureExists(const QString& fname);
     void graphOneFile(const QString& fname);
     void graphMultipleFiles(const QStringList& fnames);
-
 };
 
-#endif // GRAPHFRAME_H

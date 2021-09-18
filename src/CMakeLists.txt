@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.18)
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
-
 find_package(Qt6 COMPONENTS Core REQUIRED)
 find_package(Qt6 COMPONENTS Gui REQUIRED)
 find_package(Qt6 COMPONENTS Widgets REQUIRED)
-find_package(Qt6 6.1.0 COMPONENTS Charts REQUIRED)
-find_package(Qt6 6.1.0 COMPONENTS DataVisualization REQUIRED)
+find_package(Qt6 6.1.2 COMPONENTS Charts REQUIRED)
+find_package(Qt6 6.1.2 COMPONENTS DataVisualization REQUIRED)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
 
 
 set(SOURCE_LIST
@@ -50,11 +50,11 @@ target_include_directories(dataview PUBLIC
 )
 
 target_link_libraries(dataview
-	PRIVATE Qt6::Core
-	PRIVATE Qt6::Gui
-	PRIVATE Qt6::Widgets
-	PRIVATE Qt6::Charts
-    PRIVATE Qt6::DataVisualization
+	PUBLIC Qt6::Core
+	PUBLIC Qt6::Gui
+	PUBLIC Qt6::Widgets
+	PUBLIC Qt6::Charts
+    PUBLIC Qt6::DataVisualization
 	PUBLIC ParamBin::parambin
 	PUBLIC pw::pwutils
 )

@@ -30,46 +30,6 @@
 #include <pwutils/pwmath.hpp>
 #include <ParamBin/parambin.hpp>
 
-ListDropWidget::ListDropWidget(QWidget* widget,GraphFrame* parent_frame) 
-{
-    setAcceptDrops(true);
-    connect(this,&ListDropWidget::fileListDrop,
-            parent_frame,&GraphFrame::graphFiles);
-    QVBoxLayout* vbox = new QVBoxLayout;
-    vbox->addWidget(widget);
-    setLayout(vbox);
-}
-
-void ListDropWidget::dragEnterEvent(QDragEnterEvent *event)
-{
-    if(event->mimeData()->hasText() || \
-            event->mimeData()->hasFormat(DragListView::StringListMime)){
-        event->accept();
-    }
-    else
-        event->ignore();
-}
-
-void ListDropWidget::dragMoveEvent(QDragMoveEvent *event)
-{
-    event->acceptProposedAction();
-}
-
-void ListDropWidget::dropEvent(QDropEvent* event)
-{
-    QStringList filenames;
-    if(event->mimeData()->hasText())
-        filenames.append(event->mimeData()->text());
-    else if(event->mimeData()->hasFormat(DragListView::StringListMime)){
-        QByteArray file_data = event->mimeData()->data(DragListView::StringListMime);
-        QDataStream data_stream(&file_data,QIODevice::ReadOnly);
-        data_stream >> filenames;
-    } else
-        return;
-    emit fileListDrop(filenames);
-}
-
-
 
 SurfaceWidget::SurfaceWidget(GraphFrame* parent_frame) :
     m_parent_frame(parent_frame)
@@ -137,8 +97,7 @@ SurfaceGraph::SurfaceGraph(GraphFrame* parent_frame,QWidget* parent_widget) :
     m_graph->scene()->activeCamera()->setCameraPreset(Q3DCamera::CameraPresetIsometricLeft);
     m_data_array = new QSurfaceDataArray;
 
-    QWidget* widget = QWidget::createWindowContainer(m_graph);
-    ListDropWidget* graph_widget = new ListDropWidget(widget,m_parent_frame);
+    QWidget* graph_widget = QWidget::createWindowContainer(m_graph);
     graph_widget->setFocusPolicy(Qt::StrongFocus);
     QVBoxLayout* vbox = new QVBoxLayout();
     vbox->addWidget(graph_widget);

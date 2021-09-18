@@ -61,23 +61,25 @@ private:
 };
 
 
-class ListDropWidget : public QWidget
-{
-    Q_OBJECT
 
-public:
-    explicit ListDropWidget(QWidget* widget,GraphFrame* parent_frame);
-    ~ListDropWidget() {};
 
-protected:
-    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
-    void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
-    void dragMoveEvent(QDragMoveEvent* event) Q_DECL_OVERRIDE;
-
-signals:
-    void fileListDrop(const QStringList& filenames);
-
-};
+//class ListDropWidget : public QWidget
+//{
+//    Q_OBJECT
+//
+//public:
+//    explicit ListDropWidget(QWidget* widget,GraphFrame* parent_frame);
+//    ~ListDropWidget() {};
+//
+//protected:
+//    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
+//    void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
+//    void dragMoveEvent(QDragMoveEvent* event) Q_DECL_OVERRIDE;
+//
+//signals:
+//    void fileListDrop(const QStringList& filenames);
+//
+//};
 
 
 

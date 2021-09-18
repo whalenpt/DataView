@@ -1,5 +1,5 @@
-#ifndef TWOCOL_H
-#define TWOCOL_H
+// twocol.h
+#pragma once
 
 #include <QWidget>
 #include <QList>
@@ -8,15 +8,15 @@
 #include <ParamBin/parambin.hpp>
 #include <pwutils/pwdefs.h>
 #include "graphframe/axesaux.h"
+#include "graphframe/dropchartview.h"
 
 class GraphFrame;
 class QChart;
-class DropChartView;
 class QLineSeries;
 class QValueAxis;
 class QLogValueAxis;
 
-class TwoCol : public QWidget
+class TwoCol : public DropWidget
 {
     Q_OBJECT
 
@@ -46,5 +46,4 @@ private:
     AxesType m_axes_type;
 };
 
-#endif // TWOCOL_H
 

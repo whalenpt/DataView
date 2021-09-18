@@ -9,6 +9,7 @@
 #include <QWidget>
 #include <QPainter>
 #include <QChart>
+#include <QChartView>
 #include <QValueAxis>
 #include <QLogValueAxis>
 #include <QLineSeries>
@@ -18,13 +19,14 @@
 #include <pwutils/pwmath.hpp>
 #include <ParamBin/parambin.hpp>
 
-TwoCol::TwoCol(GraphFrame* parent_frame) : QWidget(parent_frame),
+TwoCol::TwoCol(GraphFrame* parent_frame) : 
+    DropWidget(parent_frame),
     m_parent_frame(parent_frame)
 {
-    setAcceptDrops(true);
     m_chart = new QChart();
     m_chart->legend()->setVisible(true);
     m_view = new DropChartView(m_chart,parent_frame);
+    connect(m_view,&DropChartView::fileDrop,parent_frame,&GraphFrame::graphFiles);
 
     m_axisX = new QValueAxis;
     m_axisY = new QValueAxis;
@@ -40,6 +42,9 @@ TwoCol::TwoCol(GraphFrame* parent_frame) : QWidget(parent_frame),
     QVBoxLayout* vbox = new QVBoxLayout();
     vbox->addWidget(m_view);
     setLayout(vbox);
+
+    connect(this,&DropWidget::fileDrop,
+            parent_frame,&GraphFrame::graphFiles);
 }
 
 void TwoCol::setAxes(AxesType axes_type) {

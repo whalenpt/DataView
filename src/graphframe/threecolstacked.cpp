@@ -6,6 +6,7 @@
 
 #include <QWidget>
 #include <QChart>
+#include <QChartView>
 #include <QLineSeries>
 #include <QValueAxis>
 #include <QString>
@@ -33,13 +34,19 @@ QWidget* ThreeColStacked::createThreeColWidget()
     m_three_col_chart1->legend()->show();
     m_three_col_series1 = new QLineSeries();
     m_three_col_chart1->addSeries(m_three_col_series1);
+
     m_three_col_view1 = new DropChartView(m_three_col_chart1,m_parent_frame);
+    connect(m_three_col_view1,&DropChartView::fileDrop,
+            m_parent_frame,&GraphFrame::graphFiles);
 
     m_three_col_series2 = new QLineSeries();
     m_three_col_chart2 = new QChart();
     m_three_col_chart2->legend()->show();
     m_three_col_chart2->addSeries(m_three_col_series2);
+
     m_three_col_view2 = new DropChartView(m_three_col_chart2,m_parent_frame);
+    connect(m_three_col_view2,&DropChartView::fileDrop,
+            m_parent_frame,&GraphFrame::graphFiles);
 
     m_axisX1 = new QValueAxis;
     m_axisX1->setTickCount(4);
