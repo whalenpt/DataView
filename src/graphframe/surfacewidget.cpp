@@ -10,6 +10,7 @@
 #include <QLineSeries>
 #include <QString>
 #include <QStringList>
+#include <QStringLiteral>
 #include <QVBoxLayout>
 #include <Q3DSurface>
 #include <QSurfaceDataProxy>
@@ -18,13 +19,9 @@
 #include <Q3DTheme>
 #include <Q3DCamera>
 #include <QFont>
-#include <QDragEnterEvent>
-#include <QDropEvent>
-#include <QDragMoveEvent>
-#include <QMimeData>
-#include <QByteArray>
-#include <QDataStream>
 #include <QWidget>
+#include <QSlider>
+#include <QLabel>
 
 #include <cmath>
 #include <pwutils/pwmath.hpp>
@@ -35,12 +32,39 @@ SurfaceWidget::SurfaceWidget(GraphFrame* parent_frame) :
     m_parent_frame(parent_frame)
 {
     QHBoxLayout* hbox = new QHBoxLayout();
-    QVBoxLayout* vbox = new QVBoxLayout();
     m_surface_graph = new SurfaceGraph(parent_frame);
 
     hbox->addWidget(m_surface_graph);
-    hbox->addLayout(vbox);
+
+    QVBoxLayout* vbox = new QVBoxLayout();
+
+    QSlider* axisMinSliderX = new QSlider(Qt::Horizontal);
+    axisMinSliderX->setMinimum(0);
+    axisMinSliderX->setTickInterval(1);
+    axisMinSliderX->setEnabled(true);
+    QSlider* axisMaxSliderX = new QSlider(Qt::Horizontal);
+    axisMaxSliderX->setMinimum(1);
+    axisMaxSliderX->setTickInterval(1);
+    axisMaxSliderX->setEnabled(true);
+    QSlider* axisMinSliderZ = new QSlider(Qt::Horizontal);
+    axisMinSliderX->setMinimum(0);
+    axisMinSliderX->setTickInterval(1);
+    axisMinSliderX->setEnabled(true);
+    QSlider* axisMaxSliderZ = new QSlider(Qt::Horizontal);
+    axisMaxSliderX->setMinimum(1);
+    axisMaxSliderX->setTickInterval(1);
+    axisMaxSliderX->setEnabled(true);
+
+
+    vbox->addWidget(new QLabel(QStringLiteral("Column Range")));
+    vbox->addWidget(axisMinSliderX);
+    vbox->addWidget(axisMaxSliderX);
+    vbox->addWidget(new QLabel(QStringLiteral("Row Range")));
+    vbox->addWidget(axisMinSliderZ);
+    vbox->addWidget(axisMaxSliderZ);
     vbox->setAlignment(Qt::AlignTop);
+
+    hbox->addLayout(vbox);
     setLayout(hbox);
 }
 
@@ -98,6 +122,10 @@ SurfaceGraph::SurfaceGraph(GraphFrame* parent_frame,QWidget* parent_widget) :
     m_data_array = new QSurfaceDataArray;
 
     QWidget* graph_widget = QWidget::createWindowContainer(m_graph);
+    QSize screen_size = m_graph->screen()->size();
+    graph_widget->setMinimumSize(QSize(screen_size.width()/3.0,screen_size.height()/2.4));
+    graph_widget->setMaximumSize(screen_size);
+    graph_widget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     graph_widget->setFocusPolicy(Qt::StrongFocus);
     QVBoxLayout* vbox = new QVBoxLayout();
     vbox->addWidget(graph_widget);
