@@ -2,7 +2,7 @@
 #include "graphframe/graphframe.h"
 #include "graphframe/twocol.h"
 #include "graphframe/threecolstacked.h"
-#include "graphframe/surfacegraph.h"
+#include "graphframe/surfacewidget.h"
 #include "draglistview.h"
 
 #include <QWidget>
@@ -30,7 +30,7 @@ GraphFrame::GraphFrame(QWidget* parent) : QFrame(parent)
 
     m_twocol = new TwoCol(this);
     m_threecol = new ThreeColStacked(this);
-    m_surface = new SurfaceGraph(this);
+    m_surface = new SurfaceWidget(this);
 
     m_frame_layout = new QStackedLayout();
     m_frame_layout->addWidget(m_file_textedit);

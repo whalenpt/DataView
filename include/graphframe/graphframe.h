@@ -13,7 +13,7 @@ using OperatorSignatureMap = std::map<std::string,pw::OperatorSignature>;
 
 class TwoCol;
 class ThreeColStacked;
-class SurfaceGraph;
+class SurfaceWidget;
 class QTextEdit;
 class QStackedLayout;
 class QDragEnterEvent;
@@ -43,7 +43,7 @@ private:
     QTextEdit* m_file_textedit;
     TwoCol* m_twocol;
     ThreeColStacked* m_threecol;
-    SurfaceGraph* m_surface;
+    SurfaceWidget* m_surface;
     FileSignatureMap m_file_signatures;
     DataSignatureMap m_data_signatures;
     OperatorSignatureMap m_op_signatures;

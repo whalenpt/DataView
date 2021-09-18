@@ -1,5 +1,5 @@
 
-#include "graphframe/surfacegraph.h"
+#include "graphframe/surfacewidget.h"
 #include "graphframe/graphframe.h"
 #include "graphframe/dropchartview.h"
 #include "core/dataaux3D.h"
@@ -20,13 +20,34 @@
 #include <QFont>
 #include <cmath>
 
-SurfaceGraph::SurfaceGraph(GraphFrame* parent_frame) : QWidget(parent_frame),
-    m_parent_frame(parent_frame),
+SurfaceWidget::SurfaceWidget(GraphFrame* parent_frame) :
+    m_parent_frame(parent_frame)
+{
+    setAcceptDrops(true);
+    QHBoxLayout* hbox = new QHBoxLayout();
+    QVBoxLayout* vbox = new QVBoxLayout();
+
+    Q3DSurface* graph = new Q3DSurface();
+    m_surface_graph = new SurfaceGraph(graph);
+
+    QWidget* graph_widget = QWidget::createWindowContainer(graph);
+    graph_widget->setFocusPolicy(Qt::StrongFocus);
+
+    hbox->addWidget(graph_widget);
+    hbox->addLayout(vbox);
+    vbox->setAlignment(Qt::AlignTop);
+    setLayout(hbox);
+}
+
+SurfaceWidget::~SurfaceWidget()
+{ }
+
+
+SurfaceGraph::SurfaceGraph(Q3DSurface* graph) :
+    m_graph(graph),
     m_maxpoint2DX(200),
     m_maxpoint2DY(200)
 {
-    setAcceptDrops(true);
-    m_graph = new Q3DSurface();
     m_graph->setAxisX(new QValue3DAxis);
     m_graph->setAxisY(new QValue3DAxis);
     m_graph->setAxisZ(new QValue3DAxis);
@@ -67,13 +88,7 @@ SurfaceGraph::SurfaceGraph(GraphFrame* parent_frame) : QWidget(parent_frame),
     m_series->setColorStyle(Q3DTheme::ColorStyleRangeGradient);
     m_graph->addSeries(m_series);
     m_graph->scene()->activeCamera()->setCameraPreset(Q3DCamera::CameraPresetIsometricLeft);
-
     m_data_array = new QSurfaceDataArray;
-    QVBoxLayout* vbox = new QVBoxLayout();
-    QWidget* graph_widget = QWidget::createWindowContainer(m_graph);
-    graph_widget->setFocusPolicy(Qt::StrongFocus);
-    vbox->addWidget(graph_widget);
-    setLayout(vbox);
 }
 
 SurfaceGraph::~SurfaceGraph()
@@ -88,9 +103,9 @@ void SurfaceGraph::graph(const QString& fname,pw::FileSignature fsig,\
     ParamBin bin = dataaux3D::readXYZData(fname,m_x,m_y,m_z,fsig,m_maxpoint2DX,m_maxpoint2DY);
     dataaux3D::fillSurfaceDataItems(*m_data_array,m_x,m_y,m_z);
     m_data_proxy->resetArray(m_data_array);
-//    m_graph->axisX()->setRange(bin.getFloat("min_yval"),bin.getFloat("max_yval"));
-//    m_graph->axisY()->setRange(bin.getFloat("min_zval"),bin.getFloat("max_zval"));
-//    m_graph->axisZ()->setRange(bin.getFloat("min_xval"),bin.getFloat("max_xval"));
+    m_graph->axisX()->setRange(bin.getFloat("min_yval"),bin.getFloat("max_yval"));
+    m_graph->axisY()->setRange(bin.getFloat("min_zval"),bin.getFloat("max_zval"));
+    m_graph->axisZ()->setRange(bin.getFloat("min_xval"),bin.getFloat("max_xval"));
 
     if(bin.inBin("xlabel")){
         m_graph->axisZ()->setTitle(QString::fromStdString(bin.getStr("xlabel")));
@@ -112,6 +127,9 @@ void SurfaceGraph::clearSeries()
 {
     // m_data_proxy clears (deletes) m_data_array 
     m_data_proxy->resetArray(nullptr);
+    m_x.clear();
+    m_y.clear();
+    m_z.clear();
     m_data_array = new QSurfaceDataArray;
 }
 

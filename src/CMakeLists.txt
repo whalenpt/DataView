@@ -21,7 +21,7 @@ set(SOURCE_LIST
 	graphframe/axesaux.cpp
 	graphframe/threecolstacked.cpp
 	graphframe/twocol.cpp
-	graphframe/surfacegraph.cpp
+	graphframe/surfacewidget.cpp
 )
 
 set(INCL_DIR "${DataView_SOURCE_DIR}/include")
@@ -36,7 +36,7 @@ set(HEADER_LIST
     ${INCL_DIR}/graphframe/axesaux.h
 	${INCL_DIR}/graphframe/threecolstacked.h
 	${INCL_DIR}/graphframe/twocol.h
-	${INCL_DIR}/graphframe/surfacegraph.h
+	${INCL_DIR}/graphframe/surfacewidget.h
 )
 
 add_library(dataview ${SOURCE_LIST} ${HEADER_LIST})
