@@ -5,7 +5,6 @@
 #include "draglistview.h"
 #include "core/dataaux3D.h"
 
-
 #include <QChart>
 #include <QLineSeries>
 #include <QString>
@@ -16,12 +15,16 @@
 #include <QSurfaceDataProxy>
 #include <QSurface3DSeries>
 #include <QValue3DAxis>
+#include <QValue3DAxisFormatter>
+#include <QLogValue3DAxisFormatter>
 #include <Q3DTheme>
 #include <Q3DCamera>
 #include <QFont>
 #include <QWidget>
 #include <QSlider>
 #include <QLabel>
+#include <QCheckBox>
+#include <QMessageBox>
 
 #include <cmath>
 #include <pwutils/pwmath.hpp>
@@ -69,6 +72,12 @@ SurfaceWidget::SurfaceWidget(GraphFrame* parent_frame) :
     vbox->addWidget(new QLabel(QStringLiteral("Row Range")));
     vbox->addWidget(m_axisMinSliderX);
     vbox->addWidget(m_axisMaxSliderX);
+
+    QCheckBox* log_check_box = new QCheckBox("Logarithmic",this);
+    connect(log_check_box,&QCheckBox::stateChanged,\
+            [this](int state) {m_surface_graph->setLogData(state ? true : false);});
+    vbox->addWidget(log_check_box);
+
     vbox->setAlignment(Qt::AlignTop);
 
     hbox->addLayout(vbox);
@@ -82,8 +91,8 @@ SurfaceWidget::SurfaceWidget(GraphFrame* parent_frame) :
             this,&SurfaceWidget::changeMinY);
     connect(m_axisMaxSliderY,&QSlider::valueChanged,\
             this,&SurfaceWidget::changeMaxY);
-
 }
+
 
 void SurfaceWidget::changeMinX(int min)
 {
@@ -168,7 +177,9 @@ SurfaceGraph::SurfaceGraph(GraphFrame* parent_frame,QWidget* parent_widget) :
     m_parent_frame(parent_frame),
     m_graph(new Q3DSurface()),
     m_maxpoint2DX(200),
-    m_maxpoint2DY(200)
+    m_maxpoint2DY(200),
+    m_log_data(false),
+    m_log_decades(10)
 {
     m_graph->setAxisX(new QValue3DAxis);
     m_graph->setAxisY(new QValue3DAxis);
@@ -182,7 +193,6 @@ SurfaceGraph::SurfaceGraph(GraphFrame* parent_frame,QWidget* parent_widget) :
     m_graph->setAspectRatio(2.0);
     m_graph->setHorizontalAspectRatio(1.0);
 
-    //m_graph->setActiveTheme(new Q3DTheme(Q3DTheme::ThemeEbony));
     m_graph->setActiveTheme(new Q3DTheme(Q3DTheme::ThemeStoneMoss));
     QFont font = m_graph->activeTheme()->font();
     font.setPointSize(20);
@@ -225,6 +235,28 @@ SurfaceGraph::SurfaceGraph(GraphFrame* parent_frame,QWidget* parent_widget) :
 
 SurfaceGraph::~SurfaceGraph()
 { }
+
+void SurfaceGraph::setLogData(bool val)
+{
+    if(val == m_log_data)
+        return;
+
+    m_log_data = val;
+    clearSeries();
+    if(val){
+        setModelXYLOGZ();
+//        m_data_proxy->resetArray(m_data_array);
+        m_graph->axisY()->setFormatter(new QLogValue3DAxisFormatter);
+    }
+    else{
+        setModelXYZ();
+//        m_data_proxy->resetArray(m_data_array);
+        m_graph->axisY()->setFormatter(new QValue3DAxisFormatter);
+    }
+    m_data_proxy->resetArray(m_data_array);
+    setDefaultRangeZ();
+    qDebug() << "Exit setLogData";
+}
 
 float SurfaceGraph::minX() const
 {
@@ -277,21 +309,45 @@ void SurfaceGraph::setRangeY(float minY,float maxY)
     m_graph->axisX()->setRange(minY,maxY);
 }
 
-void SurfaceGraph::graph(const QString& fname,pw::FileSignature fsig,\
-        pw::DataSignature datasig, pw::OperatorSignature opsig)
+void SurfaceGraph::setRangeZ(float minZ,float maxZ)
 {
-    clearSeries();
-    ParamBin bin = dataaux3D::readXYZData(fname,m_x,m_y,m_z,fsig,m_maxpoint2DX,m_maxpoint2DY);
-    if(m_x.empty() || m_y.empty() || m_z.empty())
+    if(minZ >= maxZ)
         return;
+    float min_val = pw::min(m_z);
+    if(minZ < min_val)
+        minZ = min_val;
+    float max_val = pw::max(m_z);
+    if(maxZ > max_val)
+        maxZ = max_val;
+    m_graph->axisY()->setRange(minZ,maxZ);
+}
 
-    dataaux3D::fillSurfaceDataItems(*m_data_array,m_x,m_y,m_z);
-    m_data_proxy->resetArray(m_data_array);
+void SurfaceGraph::setRangeXY(float minX,float maxX,float minY,float maxY)
+{
+    setRangeX(minX,maxX);
+    setRangeY(minY,maxY);
+}
 
-    m_graph->axisX()->setRange(m_y[0],m_y.back());
-    m_graph->axisZ()->setRange(m_x[0],m_x.back());
-    m_graph->axisY()->setRange(bin.getFloat("min_zval"),bin.getFloat("max_zval"));
+void SurfaceGraph::setDefaultRange()
+{
+    setRangeXY(m_x.front(),m_x.back(),m_y.front(),m_y.back());
+    setDefaultRangeZ();
+}
 
+void SurfaceGraph::setDefaultRangeZ()
+{
+    float max_zval = pw::max(m_z);
+    if(m_log_data){
+        float min_zval = pow(10,-static_cast<float>(m_log_decades))*max_zval;
+        setRangeZ(min_zval,max_zval);
+    } else{
+        float min_zval = pw::min(m_z);
+        setRangeZ(min_zval,max_zval);
+    }
+}
+
+void SurfaceGraph::setLabels(const ParamBin& bin)
+{    
     if(bin.inBin("xlabel")){
         m_graph->axisZ()->setTitle(QString::fromStdString(bin.getStr("xlabel")));
     } else
@@ -307,15 +363,80 @@ void SurfaceGraph::graph(const QString& fname,pw::FileSignature fsig,\
         m_graph->axisY()->setTitle("z");
 }
 
+void SurfaceGraph::graph(const QString& fname,pw::FileSignature fsig,\
+        pw::DataSignature datasig, pw::OperatorSignature opsig)
+{
+    if(datasig != pw::DataSignature::XYZ)
+        return;
+
+    m_fname = fname;
+    m_fsig = fsig;
+    m_datasig = datasig;
+    m_opsig = opsig;
+
+    clearData();
+    ParamBin bin = dataaux3D::readXYZData(fname,m_x,m_y,m_z,fsig,m_maxpoint2DX,m_maxpoint2DY);
+    if(m_x.empty() || m_y.empty() || m_z.empty())
+        return;
+
+    clearSeries();
+    if(m_log_data){
+        setModelXYLOGZ();
+        float max_zval = bin.getFloat("max_zval");
+        float min_zval = pow(10,-static_cast<float>(m_log_decades))*max_zval;
+        bin.set("min_zval",min_zval);
+    }
+    else
+        setModelXYZ();
+    m_data_proxy->resetArray(m_data_array);
+    setDefaultRange();
+    setLabels(bin);
+}
+
+void SurfaceGraph::setModelXYZ()
+{
+    m_data_array->reserve(m_x.size());
+    for(auto i = 0; i < m_x.size(); i++){
+        QList<QSurfaceDataItem>* data_row = new QList<QSurfaceDataItem>(m_y.size());
+        for(auto j = 0; j < m_y.size(); j++) {
+            (*data_row)[j].setPosition(QVector3D(m_y[j],m_z[i*m_y.size()+j],m_x[i]));
+        }
+        *m_data_array << data_row;
+    }
+}
+
+void SurfaceGraph::setModelXYLOGZ()
+{
+    m_data_array->reserve(m_x.size());
+    float max_zval = pw::max(m_z);
+    float min_zval = pow(10,-static_cast<float>(m_log_decades))*max_zval;
+
+    for(auto i = 0; i < m_x.size(); i++){
+        QList<QSurfaceDataItem>* data_row = new QList<QSurfaceDataItem>(m_y.size());
+        for(auto j = 0; j < m_y.size(); j++) {
+            double zval = m_z[i*m_y.size()+j];
+            if(zval < min_zval)
+                zval = min_zval;
+            (*data_row)[j].setPosition(QVector3D(m_y[j],zval,m_x[i]));
+        }
+        *m_data_array << data_row;
+    }
+}
+
+
 
 void SurfaceGraph::clearSeries()
 {
     // m_data_proxy clears (deletes) m_data_array 
     m_data_proxy->resetArray(nullptr);
+    m_data_array = new QSurfaceDataArray;
+}
+
+void SurfaceGraph::clearData()
+{
     m_x.clear();
     m_y.clear();
     m_z.clear();
-    m_data_array = new QSurfaceDataArray;
 }
 
 

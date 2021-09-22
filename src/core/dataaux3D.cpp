@@ -3,6 +3,7 @@
 #include <pwutils/read/dat.hpp>
 #include <pwutils/read/json.hpp>
 #include <pwutils/pwmath.hpp>
+#include <cmath>
 #include <iostream>
 #include <ParamBin/parambin.hpp>
 #include <QSurfaceDataItem>
@@ -66,7 +67,6 @@ ParamBin readXYZData(const QString& fname,\
         }
         z.resize(x.size()*y.size());
     }
-//    std::cout << bin;
 
     // mirror R coordinate if found
     if((bin.inBin("xcordID") && bin.getStrU("xcordID")=="R") || \
@@ -106,19 +106,22 @@ ParamBin readXYZData(const QString& fname,\
     return bin;
 }
 
-void fillSurfaceDataItems(QList<QList<QSurfaceDataItem>*>& data_array,\
-    const std::vector<float>& x,const std::vector<float>& y,const std::vector<float>& z)
-{
-    data_array.reserve(x.size());
-    for(auto i = 0; i < x.size(); i++){
-        QList<QSurfaceDataItem>* data_row = new QList<QSurfaceDataItem>(y.size());
-        for(auto j = 0; j < y.size(); j++) {
-            (*data_row)[j].setPosition(QVector3D(y[j],z[i*y.size()+j],x[i]));
-        }
-        data_array << data_row;
-    }
-}
-
+//void logData(std::vector<float>& z,unsigned int decades,ParamBin& bin){
+//    std::cout << decades << std::endl;
+//    float max_zval = pw::max(z);
+//    float min_zval = std::max(1e-7,pow(10,-static_cast<float>(decades))*max_zval);
+//    std::cout << min_zval << std::endl;
+//    std::cout << max_zval << std::endl;
+//    for(auto i = 0; i < z.size(); i++){
+//        if(z[i] > min_zval)
+//            z[i] = log10(z[i]);
+//        else
+//            z[i] = min_zval;
+//    }
+//    bin.set("min_zval",min_zval);
+//    bin.set("max_zval",max_zval);
+//}
+//
 //    data_array.reserve(x.size());
 //    for(auto i = 0; i < x.size(); i++){
 //        QList<QSurfaceDataItem>* data_row = new QList<QSurfaceDataItem>(y.size());

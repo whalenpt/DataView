@@ -8,12 +8,14 @@
 #include <QSurfaceDataItem>
 #include <vector>
 #include <pwutils/pwdefs.h>
+#include <ParamBin/parambin.hpp>
 
 class GraphFrame;
 class Q3DSurface;
 class QSurface3DSeries;
 class QSurfaceDataProxy;
 class QSlider;
+class QLogValue3DAxisFormatter;
 
 class SurfaceGraph : public QWidget
 {
@@ -28,10 +30,19 @@ public:
     void setMaxPoint2DY(unsigned int points) {m_maxpoint2DY = points;}
     void setRangeX(float minX,float maxX);
     void setRangeY(float minY,float maxY);
+    void setRangeZ(float minZ,float maxZ);
+    void setRangeXY(float minX,float maxX,float minY,float maxY);
+    void setDefaultRange();
+    void setDefaultRangeZ();
+    void setLabels(const ParamBin& bin);
     float minX() const;
     float maxX() const;
     float minY() const;
     float maxY() const;
+
+public slots:
+    void setLogData(bool val);
+
 
 private:
     GraphFrame* m_parent_frame;
@@ -47,7 +58,19 @@ private:
     //QSurfaceDataArray is a typedef for QList<QList<QSurfaceDataItem>*>
     QList<QList<QSurfaceDataItem>*>* m_data_array;
 
+    QString m_fname;
+    pw::FileSignature m_fsig;
+    pw::DataSignature m_datasig;
+    pw::OperatorSignature m_opsig;
+    QLogValue3DAxisFormatter* m_log_formatter;
+
+    bool m_log_data;
+    unsigned int m_log_decades;
+    void setModelXYZ();
+    void setModelXYLOGZ();
     void clearSeries();
+    void clearData();
+
 };
 
 class SurfaceWidget : public QWidget

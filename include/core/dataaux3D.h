@@ -15,7 +15,6 @@ namespace dataaux3D{
     ParamBin readXYZData(const QString& fname,\
         std::vector<float>& x,std::vector<float>& y,std::vector<float>& z,\
             pw::FileSignature filesig,unsigned int maxpointX,unsigned int maxpointY);
-    void fillSurfaceDataItems(QList<QList<QSurfaceDataItem>*>& data_array,\
-        const std::vector<float>& x,const std::vector<float>& y,const std::vector<float>& z);
+
 }
 
